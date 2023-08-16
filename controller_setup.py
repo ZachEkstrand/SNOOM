@@ -2,13 +2,9 @@ import pygame as pg
 
 class XBController:
     def __init__(self, game):
-        print(pg.joystick.init())
         self.joysticks = [pg.joystick.Joystick(i) for i in range(pg.joystick.get_count())]
-        print(self.joysticks)
         self.controller = self.joysticks[0]
-        print(self.controller.init())
         self.inputs = [0, 0, 0, 0, 0, 0, 0, 0]
-        print(self.inputs)
 
     def read_controller_inputs(self):
         self.inputs[0] = self.controller.get_axis(0)

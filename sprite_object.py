@@ -3,8 +3,10 @@ import os
 from collections import deque
 from settings import *
 
+path = 'resources/sprites/'
+
 class SpriteObject:
-    def __init__(self, game, path='resources/sprites/static_sprites/candy_cane.png',
+    def __init__(self, game, path=path +'static_sprites/blank.png',
                  pos=(10.5, 3.5), scale=0.6, shift=0.5):
         self.game = game
         self.x, self.y = pos
@@ -23,16 +25,6 @@ class SpriteObject:
         proj_width, proj_height = proj * self.IMAGE_RATIO, proj
         
         image = pg.transform.scale(self.image, (proj_width, proj_height))
-
-        
-        rv1 = 0.6
-        rv2 = 1.8
-        wv1 = 0
-        wv2 = 255
-
-        self.transparency = ((wv1 -wv2) / (rv1 -rv2)) * (self.norm_dist -rv1) +wv1
-        
-        image.set_alpha(int(self.transparency))
 
         self.sprite_half_width = proj_width // 2
         height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
@@ -61,7 +53,34 @@ class SpriteObject:
     def update(self):
         self.get_sprite()
 
-class Tree(SpriteObject):
+class Decoration(SpriteObject):
+    def __init__(self, game, path=path +'static_sprites/candy_cane.png',
+                 pos=(1, 1), scale=0.6, shift=0.5):
+        super().__init__(game, path, pos, scale, shift)
+
+    def get_sprite_projection(self):
+        proj = SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
+        proj_width, proj_height = proj * self.IMAGE_RATIO, proj
+        
+        image = pg.transform.scale(self.image, (proj_width, proj_height))
+
+        
+        rv1 = 0.6
+        rv2 = 1.8
+        wv1 = 0
+        wv2 = 255
+
+        self.transparency = ((wv1 -wv2) / (rv1 -rv2)) * (self.norm_dist -rv1) +wv1
+        
+        image.set_alpha(int(self.transparency))
+
+        self.sprite_half_width = proj_width // 2
+        height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
+        pos = self.screen_x -self.sprite_half_width, HALF_HEIGHT -proj_height // 2 +height_shift
+
+        self.game.ray_casting.objects_to_render.append((self.norm_dist, image, pos))
+
+class Tree(Decoration):
     def __init__(self, game, path='resources/sprites/static_sprites/tree.png',
                  pos=(1, 1), scale=2, shift=-0.2):
         super().__init__(game, path, pos, scale, shift)
