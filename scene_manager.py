@@ -2,6 +2,7 @@ class SceneManager:
     def __init__(self, game):
         self.game = game
         self.current_scene = 'title_screen'
+        self.quit = False
         self.selected_button = 0
         self.A_down = False
         self.menu_button_down = False
@@ -52,13 +53,17 @@ class SceneManager:
             self.change_scene('pause_menu')
 
     def title_screen_update(self):
-        if self.selected_button > 1:
+        if self.selected_button > 2:
             self.selected_button = 0
         if self.selected_button < 0:
-            self.selected_button = 1
+            self.selected_button = 2
         elif self.A_down:
             if self.selected_button == 0:
                 self.change_scene('arena')
+            if self.selected_button == 1:
+                pass #self.change_scene('leaderboard')
+            if self.selected_button == 2:
+                self.quit = True
 
     def pause_menu_update(self):
         game = self.game

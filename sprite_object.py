@@ -63,7 +63,6 @@ class Decoration(SpriteObject):
         proj_width, proj_height = proj * self.IMAGE_RATIO, proj
         
         image = pg.transform.scale(self.image, (proj_width, proj_height))
-
         
         rv1 = 0.6
         rv2 = 1.8

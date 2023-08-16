@@ -1,14 +1,14 @@
 import pygame as pg
 from settings import *
 
+path = 'resources/textures/'
+
 class ObjectRenderer:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
         self.player = game.player
         self.scene_manager = game.scene_manager
-        self.path = 'resources/textures/'
-        path = self.path
         # title_screen
         self.selected_button = 0
         self.title_image_scale = 3
@@ -54,11 +54,11 @@ class ObjectRenderer:
 
     def load_wall_textures(self):
         return {
-            1:self.get_texture(self.path +'1.png'),
-            2:self.get_texture(self.path +'2.png'),
-            3:self.get_texture(self.path +'3.png'),
-            4:self.get_texture(self.path +'4.png'),
-            5:self.get_texture(self.path +'5.png')
+            1:self.get_texture(path +'1.png'),
+            2:self.get_texture(path +'2.png'),
+            3:self.get_texture(path +'3.png'),
+            4:self.get_texture(path +'4.png'),
+            5:self.get_texture(path +'5.png')
         }
     
     
@@ -75,8 +75,11 @@ class ObjectRenderer:
             blit(self.start_button_shadow, (self.center_on_x(132 * self.button_font_size), 297))
         if self.scene_manager.selected_button == 1:
             blit(self.leaderboard_button_shadow, (self.center_on_x(157 * self.button_font_size), 387))
+        if self.scene_manager.selected_button == 2:
+            blit(self.quit_shadow, (self.center_on_x(57 * self.button_font_size), 477))
         blit(self.start_button_image, (self.center_on_x(130 * self.button_font_size), 300))
         blit(self.leaderboard_button_image, (self.center_on_x(155 * self.button_font_size), 390))
+        blit(self.quit_image, (self.center_on_x(55 * self.button_font_size), 480))
 
     @staticmethod
     def center_on_x(x):

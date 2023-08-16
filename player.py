@@ -64,16 +64,15 @@ class Player:
         self.angle %= math.tau
 
         # D-pad
-
         if self.game.signal_manager.Permissions['D-pad']:
             if self.game.signal_manager.Permissions['up_pad'] and self.XBC.inputs[4][1] == 1:
-                self.game.scene_manager.selected_button += 1
+                self.game.scene_manager.selected_button -= 1
                 self.game.signal_manager.Permissions['up_pad'] = False
             if self.XBC.inputs[4][1] != 1:
                 self.game.signal_manager.Permissions['up_pad'] = True
 
             if self.game.signal_manager.Permissions['down_pad'] and self.XBC.inputs[4][1] == -1:
-                self.game.scene_manager.selected_button -= 1
+                self.game.scene_manager.selected_button += 1
                 self.game.signal_manager.Permissions['down_pad'] = False
             if self.XBC.inputs[4][1] != -1:
                 self.game.signal_manager.Permissions['down_pad'] = True
