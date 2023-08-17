@@ -18,6 +18,7 @@ class Game:
         )
         self.clock = pg.time.Clock()
         self.delta_time = 1
+        self.del_queue = []
         self.new_game()
 
     def new_game(self):
@@ -59,8 +60,12 @@ class Game:
                 sys.exit()
 
     def update(self):
+        self.del_queue = []
         self.player.update()
         self.scene_manager.update_scene()
+        for i in range(len(self.del_queue)):
+            print(self.del_queue[i])
+            del self.del_queue[i]
         self.delta_time = self.clock.tick(FPS)
 
     def draw(self):

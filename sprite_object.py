@@ -6,7 +6,7 @@ from settings import *
 path = 'resources/sprites/'
 
 class SpriteObject:
-    def __init__(self, game, path=path +'static_sprites/blank.png',
+    def __init__(self, game, path=path +'static_sprites/candy_cane.png',
                  pos=(10.5, 3.5), scale=0.6, shift=0.5):
         self.game = game
         self.x, self.y = pos
@@ -68,7 +68,7 @@ class Decoration(SpriteObject):
         rv2 = 1.8
         wv1 = 0
         wv2 = 255
-
+        print(self.norm_dist)
         self.transparency = ((wv1 -wv2) / (rv1 -rv2)) * (self.norm_dist -rv1) +wv1
         
         image.set_alpha(int(self.transparency))
@@ -80,12 +80,29 @@ class Decoration(SpriteObject):
         self.game.ray_casting.objects_to_render.append((self.norm_dist, image, pos))
 
 class Tree(Decoration):
-    def __init__(self, game, path='resources/sprites/static_sprites/tree.png',
+    def __init__(self, game, path=path +'static_sprites/tree.png',
                  pos=(1, 1), scale=2, shift=-0.2):
         super().__init__(game, path, pos, scale, shift)
 
+class Snowpile(SpriteObject):
+    def __init__(self, game, path=path +'static_sprites/snowpile.png',
+                 pos=(1, 1), scale=1, shift=0.12):
+        super().__init__(game, path, pos, scale, shift)
+        self.collected = False
+
+    def update(self):
+        super().update()
+        self.check_collision_on_player()
+
+    def check_collision_on_player(self):
+        if not self.collected:
+            if self.norm_dist < 1:
+                self.game.player.ammo += 3
+                self.collected = True
+                self.game.del_queue.append(self)
+
 class AnimatedSprite(SpriteObject):
-    def __init__(self, game, path='resources/sprites/animated_sprites/red_light/0.png',
+    def __init__(self, game, path=path +'animated_sprites/red_light/0.png',
                  pos=(10.5, 3.5), scale=0.7, shift=0.27, animation_time=120):
         super().__init__(game, path, pos, scale, shift)
         self.animation_time = animation_time
