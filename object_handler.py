@@ -5,6 +5,7 @@ class ObjectHandler:
     def __init__(self, game):
         self.game = game
         self.sprite_list = []
+        self.del_queue = []
         self.place_objects()
 
     def place_objects(self):
@@ -19,4 +20,11 @@ class ObjectHandler:
         self.sprite_list.append(sprite)
 
     def update(self):
-        [sprite.update() for sprite in self.sprite_list]
+        del_indexes = []
+        for i, sprite in enumerate(self.sprite_list):
+            if sprite in self.del_queue:
+                del_indexes.append(i)
+            else:
+                sprite.update()
+        for i in del_indexes:
+            del self.sprite_list[i]

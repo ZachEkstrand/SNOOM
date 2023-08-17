@@ -67,6 +67,8 @@ class SceneManager:
 
     def pause_menu_update(self):
         game = self.game
+        game.ray_casting.update()
+        game.object_handler.update()
         if self.selected_button > 1:
             self.selected_button = 0
         if self.selected_button < 0:
@@ -76,8 +78,6 @@ class SceneManager:
                 self.change_scene('arena')
             if self.selected_button == 1:
                 self.change_scene('title_screen')
-        game.ray_casting.update()
-        game.object_handler.update()
 
     def draw_scene(self):
         game = self.game

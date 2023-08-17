@@ -63,9 +63,6 @@ class Game:
         self.del_queue = []
         self.player.update()
         self.scene_manager.update_scene()
-        for i in range(len(self.del_queue)):
-            print(self.del_queue[i])
-            del self.del_queue[i]
         self.delta_time = self.clock.tick(FPS)
 
     def draw(self):
