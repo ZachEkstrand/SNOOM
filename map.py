@@ -21,7 +21,7 @@ class Map:
         for i in range(self.rows):
             row = []
             for j in range(self.cols):
-                row.append(3)
+                row.append(random.choice([1, 2, 3]))
             self.map_grid.append(row)
 
     def cut_out_shapes(self):
