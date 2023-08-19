@@ -1,12 +1,21 @@
 import random
 from sprite_object import *
+from npc import *
 
 class ObjectHandler:
     def __init__(self, game):
         self.game = game
         self.sprite_list = []
+        self.npc_list = []
         self.del_queue = []
+        self.npc_positions = {}
+
+        self.npc_num = 20
+        self.npc_types = [NPC]
+        self.weights = [100]
+
         self.place_objects()
+        self.spawn_npc()
 
     def place_objects(self):
         for pos in self.game.map.space_indexes:
@@ -18,6 +27,16 @@ class ObjectHandler:
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
+        
+    def spawn_npc(self):
+        for i in range(self.npc_num):
+            npc = random.choices(self.npc_types, self.weights)[0]
+            x, y = random.choice(self.game.map.space_indexes)
+            self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))
+        self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
+
+    def add_npc(self, npc):
+        self.npc_list.append(npc)
 
     def update(self):
         del_indexes = []
@@ -28,3 +47,5 @@ class ObjectHandler:
                 sprite.update()
         for i in del_indexes:
             del self.sprite_list[i]
+
+        [npc.update() for npc in self.npc_list]

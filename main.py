@@ -10,6 +10,7 @@ from player import *
 from object_renderer import *
 from ray_casting import *
 from object_handler import *
+from pathfinding import *
 
 class Game:
     def __init__(self):
@@ -30,6 +31,7 @@ class Game:
         self.object_renderer = ObjectRenderer(self)
         self.ray_casting = RayCasting(self)
         self.object_handler = ObjectHandler(self)
+        self.pathfinding = Pathfinding(self)
 
     def reset_game(self):
         del self.map

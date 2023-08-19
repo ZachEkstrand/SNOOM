@@ -26,7 +26,7 @@ class ObjectRenderer:
         self.wall_textures = self.load_wall_textures()
         self.digit_images = [self.get_texture(f'{path}digits/{i}.png', [self.digit_size] * 2) for i in range(11)]
         self.digits = dict(zip(map(str, range(11)), self.digit_images))
-        self.sky_image = self.get_texture(path +'sky.jpg', (WIDTH, HALF_HEIGHT))
+        self.sky_image = self.get_texture(path +'sky.png', (WIDTH, HALF_HEIGHT))
         self.tree_horizon = self.get_texture(path +'unnamed.png', (WIDTH, HALF_HEIGHT))
         self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
         self.blood_screen = self.get_texture(path +'blood_screen.png', RES)
