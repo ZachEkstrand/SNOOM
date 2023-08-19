@@ -18,10 +18,11 @@ class Map:
         self.print_map()
 
     def create_blank_map(self):
+        wall_weight = 30
         for i in range(self.rows):
             row = []
             for j in range(self.cols):
-                row.append(random.choice([1, 2, 3]))
+                row.append(random.choices([1, 2, 3, 4, 5, 6, 7, 8], [wall_weight, wall_weight, wall_weight, wall_weight, 1, 1, 1, 1])[0])
             self.map_grid.append(row)
 
     def cut_out_shapes(self):

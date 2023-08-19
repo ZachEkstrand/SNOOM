@@ -47,5 +47,5 @@ class ObjectHandler:
                 sprite.update()
         for i in del_indexes:
             del self.sprite_list[i]
-
+        self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
         [npc.update() for npc in self.npc_list]

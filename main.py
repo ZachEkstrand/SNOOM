@@ -41,6 +41,7 @@ class Game:
         del self.object_renderer
         del self.ray_casting
         del self.object_handler
+        del self.pathfinding
         self.map = Map(self)
         self.signal_manager = SignalManager(self)
         self.scene_manager = SceneManager(self)
@@ -48,6 +49,7 @@ class Game:
         self.object_renderer = ObjectRenderer(self)
         self.ray_casting = RayCasting(self)
         self.object_handler = ObjectHandler(self)
+        self.pathfinding = Pathfinding(self)
 
     def run(self):
         pg.display.flip()

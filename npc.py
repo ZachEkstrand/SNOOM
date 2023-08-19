@@ -13,10 +13,10 @@ class NPC(AnimatedSprite): #elf cadet
         self.walk_images = self.get_images(path +'/walk')
 
         self.point_give = 7
-        self.attack_dist = 3
+        self.attack_dist = random.randint(3, 6)
         self.attack_delay = 180
         self.speed = 0.025
-        self.size = 20
+        self.size = 10
         self.health = 100
         self.attack_damage = 10
         self.alive = True
@@ -48,7 +48,7 @@ class NPC(AnimatedSprite): #elf cadet
                 self.animate(self.walk_images)
                 self.movement()
             else:
-                pass#change to default image
+                pass#change to idle image
         else:
             self.animate_death()
 
@@ -152,8 +152,8 @@ class NPC(AnimatedSprite): #elf cadet
 
     def movement(self):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.player.map_pos)
-
         next_x, next_y = next_pos
+
         if next_pos not in self.game.object_handler.npc_positions:
             angle = math.atan2(next_y +0.5 -self.y, next_x +0.5 -self.x)
             dx = math.cos(angle) * self.speed
@@ -161,14 +161,17 @@ class NPC(AnimatedSprite): #elf cadet
             self.check_wall_collision(dx, dy)
 
     def check_wall_collision(self, dx, dy):
-        scale = PLAYER_SIZE_SCALE / self.game.delta_time
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):
             self.x += dx
-        if self.check_wall(int(self.x), int(self.y +dy * scale)):
+        if self.check_wall(int(self.x), int(self.y +dy * self.size)):
             self.y += dy
 
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.map_diction
     
     def animate_death(self):
-        pass
+        if not self.alive:
+            if self.animation_trigger and self.frame_counter < len(self.death_images) -1:
+                self.death_images.rotate(-1)
+                self.images = self.death_images[0]
+                self.frame_counter += 1
