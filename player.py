@@ -8,7 +8,7 @@ class Player:
         self.XBC = game.XBC
 
         self.x, self.y = game.map.player_pos
-        self.angle = PLAYER_ANGLE
+        self.angle = game.map.player_angle
         self.health = PLAYER_MAX_HEALTH
         self.score = 0
         self.ammo = PLAYER_STARTING_AMMO

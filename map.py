@@ -134,8 +134,8 @@ class Map:
         if self.is_not_border(x, y):
             try:
                 self.map_grid[y][x] = False
-                if [x, y] not in self.space_indexes:
-                    self.space_indexes.append([x, y])
+                if (x, y) not in self.space_indexes:
+                    self.space_indexes.append((x, y))
             except:
                 print('Destroy Error:', (x, y))
 
@@ -149,6 +149,13 @@ class Map:
         self.player_spawn_x = self.space_indexes[0][0]
         self.player_spawn_y = self.space_indexes[0][1]
         self.player_pos = self.player_spawn_x +0.5, self.player_spawn_y +0.5
+
+        if (self.player_spawn_x +1, self.player_spawn_y) in self.space_indexes:
+            self.map_grid[self.player_spawn_y][self.player_spawn_x -1] = 9
+            self.player_angle = 0
+        else:
+            self.map_grid[self.player_spawn_y -1][self.player_spawn_x] = 9
+            self.player_angle = 1.5
 
     def get_map(self):
         for j, row in enumerate(self.map_grid):

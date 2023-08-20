@@ -9,6 +9,7 @@ class ObjectHandler:
         self.npc_list = []
         self.del_queue = []
         self.npc_positions = {}
+        self.restricted_area = [(i, j) for i in range(int(self.game.player.x), int(self.game.player.x) +2) for j in range(int(self.game.player.y) -1, int(self.game.player.y) +2)]
 
         self.npc_num = 20
         self.npc_types = [NPC]
@@ -19,6 +20,8 @@ class ObjectHandler:
 
     def place_objects(self):
         for pos in self.game.map.space_indexes:
+            if pos in self.restricted_area:
+                continue
             pos = (pos[0] +0.5, pos[1] +0.5)
             create_object = random.choices([True, False], [3, 97])[0]
             if create_object:
@@ -31,7 +34,10 @@ class ObjectHandler:
     def spawn_npc(self):
         for i in range(self.npc_num):
             npc = random.choices(self.npc_types, self.weights)[0]
-            x, y = random.choice(self.game.map.space_indexes)
+            pos = random.choice(self.game.map.space_indexes)
+            while pos in self.restricted_area:
+                pos = random.choice(self.game.map.space_indexes)
+            x, y = pos
             self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))
         self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
 

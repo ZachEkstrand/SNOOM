@@ -26,9 +26,11 @@ class NPC(AnimatedSprite): #elf cadet
         self.player_search_trigger = False
 
     def update(self):
-        self.check_animation_time()
+        if self.game.scene_manager.current_scene == 'pause_menu': pass 
+        else: self.check_animation_time()
         self.get_sprite()
-        self.run_logic()
+        if self.game.scene_manager.current_scene == 'pause_menu': pass
+        else: self.run_logic()
 
     def run_logic(self):
         if self.alive:

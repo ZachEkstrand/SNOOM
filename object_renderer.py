@@ -23,7 +23,7 @@ class ObjectRenderer:
         self.digit_size = 90
         self.sky_offset = 0
         self.tree_offset = 0
-        self.wall_textures = self.load_wall_textures()
+        self.wall_textures = {i:self.get_texture(path +f'{i}.png') for i in range(1, 10)}
         self.sky_image = self.get_texture(path +'sky.png', (WIDTH, HALF_HEIGHT))
         self.tree_horizon = self.get_texture(path +'unnamed.png', (WIDTH, HALF_HEIGHT))
         self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
@@ -48,20 +48,6 @@ class ObjectRenderer:
         self.row = 0
         self.done_button_image = self.get_texture(path +'done.png', (60 * 1.5, 19 * 1.5))
         self.selected_letter_highlight = self.get_texture(path +'select.png', (40 * self.general_font_size, 46 * self.general_font_size))
-        
-
-    def load_wall_textures(self):
-        return {
-            1:self.get_texture(path +'1.png'),
-            2:self.get_texture(path +'2.png'),
-            3:self.get_texture(path +'3.png'),
-            4:self.get_texture(path +'4.png'),
-            5:self.get_texture(path +'5.png'),
-            6:self.get_texture(path +'6.png'),
-            7:self.get_texture(path +'7.png'),
-            8:self.get_texture(path +'8.png')
-        }
-    
     
     @staticmethod
     def get_texture(path, res=(TEXTURE_SIZE, TEXTURE_SIZE)):
