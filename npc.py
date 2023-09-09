@@ -128,13 +128,13 @@ class NPC(AnimatedSprite): #elf cadet
         return int(self.x), int(self.y)
     
     def check_hit_in_npc(self):
-        pass
-        #for pos in self.game.object_handler.player_projectile_pos:
-            #snowball_x, snowball_y = pos
+        for snowball in self.game.object_handler.player_projectile_pos:
+            print(snowball)
+            #snowball_x, snowball_y = snowball
             #dx = self.x -snowball_x
             #dy = self.y -snowball_y
             #dist_between_self_snowball = math.hypot(dx, dy)
-            #if dist_between_self_snowball < 0.2:
+            #if dist_between_self_snowball < self.size:
                 #self.pain = True
                 #self.health -= self.game.weapon.damage
                 #self.check_health()
