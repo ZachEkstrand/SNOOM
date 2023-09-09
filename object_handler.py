@@ -1,6 +1,7 @@
 import random
 from sprite_object import *
 from npc import *
+from weapon import *
 
 class ObjectHandler:
     def __init__(self, game):
@@ -19,6 +20,7 @@ class ObjectHandler:
         self.spawn_npc()
 
     def place_objects(self):
+        self.weapon = Weapon(self.game)
         for pos in self.game.map.space_indexes:
             if pos in self.restricted_area:
                 continue
@@ -55,3 +57,4 @@ class ObjectHandler:
             del self.sprite_list[i]
         self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
         [npc.update() for npc in self.npc_list]
+        self.weapon.update()

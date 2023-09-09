@@ -88,9 +88,12 @@ class ObjectRenderer:
         pg.draw.rect(self.screen, FLOOR_COLOR, (0, HALF_HEIGHT, WIDTH, HEIGHT))
     
     def render_game_objects(self):
+        blit = self.screen.blit
         list_objects = sorted(self.game.ray_casting.objects_to_render, key=lambda t: t[0], reverse=True)
         for depth, image, pos in list_objects:
-            self.screen.blit(image, pos)
+            blit(image, pos)
+
+        blit(self.game.object_handler.weapon.image, (0, 0))
     
     def draw_pause_menu(self):
         blit = self.screen.blit

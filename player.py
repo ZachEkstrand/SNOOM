@@ -13,6 +13,7 @@ class Player:
         self.score = 0
         self.ammo = PLAYER_STARTING_AMMO
         self.rot_speed = 0
+        self.shooting = False
 
     def update(self):
         self.emit_signal(self.read_controller_inputs) #False if in victory state
@@ -92,18 +93,21 @@ class Player:
             if self.XBC.inputs[7] != 1:
                 self.game.scene_manager.menu_button_down = False
                 self.game.signal_manager.Permissions['menu_button'] = True
-
+        
         # trigger
         if round(self.XBC.inputs[3]) == 1:
-            self.emit_signal(self.controller_fire)
-            self.game.signal_manager.Permissions['Player.controller_fire'] = False
-        if round(self.XBC.inputs[3]) == 0 and self.game.scene_manager.current_scene == 'arena':
-            self.game.signal_manager.Permissions['Player.controller_fire'] = True
+            self.emit_signal(self.attack)
+        if (round(self.XBC.inputs[3]) == -1) and (self.shooting == False) and (self.game.scene_manager.current_scene == 'arena'):
+            self.game.signal_manager.Permissions['Player.attack'] = True
 
         self.check_wall_collision(dx, dy)
 
-    def controller_fire(self):
-        pass
+    def attack(self):
+        if self.ammo > 0:
+            self.game.signal_manager.Permissions['Player.attack'] = False
+            self.ammo -= 1
+            self.shooting = True
+            #spawn snowball
 
     def check_wall_collision(self, dx, dy):
         scale = PLAYER_SIZE_SCALE / self.game.delta_time
