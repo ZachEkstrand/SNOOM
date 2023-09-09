@@ -17,6 +17,7 @@ class Game:
         pg.init()
         self.screen = pg.display.set_mode(RES, #pg.FULLSCREEN
         )
+        pg.mouse.set_visible(False)
         self.clock = pg.time.Clock()
         self.delta_time = 1
         self.del_queue = []

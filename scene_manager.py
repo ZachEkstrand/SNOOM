@@ -15,7 +15,7 @@ class SceneManager:
         self.menu_button_down = False
 
         if scene_name == 'title_screen':
-            self.game.signal_manager.Permissions['Player.controller_fire'] = False
+            self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
             self.game.signal_manager.Permissions['D-pad'] = True
             self.game.signal_manager.Permissions['up_pad'] = True
@@ -23,14 +23,14 @@ class SceneManager:
             self.game.signal_manager.Permissions['main_buttons'] = True
             self.game.reset_game()
         if scene_name == 'arena':
-            self.game.signal_manager.Permissions['Player.controller_fire'] = True
+            self.game.signal_manager.Permissions['Player.attack'] = True
             self.game.signal_manager.Permissions['joysticks'] = True
             self.game.signal_manager.Permissions['D-pad'] = False
             self.game.signal_manager.Permissions['up_pad'] = False
             self.game.signal_manager.Permissions['down_pad'] = False
             self.game.signal_manager.Permissions['main_buttons'] = True
         if scene_name == 'pause_menu':
-            self.game.signal_manager.Permissions['Player.controller_fire'] = False
+            self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
             self.game.signal_manager.Permissions['D-pad'] = True
             self.game.signal_manager.Permissions['up_pad'] = True

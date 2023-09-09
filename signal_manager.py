@@ -6,7 +6,7 @@ class SignalManager:
         self.Permissions = {
             'XBController.read_controller_inputs':True,
             'Player.xbc_inputs':True,
-            'Player.controller_fire':False,
+            'Player.attack':False,
             'joysticks':False,
             'D-pad':True,
             'up_pad':True,
@@ -20,4 +20,5 @@ class SignalManager:
         if self.Permissions[method.__qualname__]:
             method()
         else:
-            print(self.Permissions[method.__qualname__])
+            pass
+            #print(self.Permissions[method.__qualname__])
