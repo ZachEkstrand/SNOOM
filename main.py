@@ -1,6 +1,5 @@
 import sys
 import pygame as pg
-import asyncio
 from settings import *
 from map import *
 from controller_setup import *
