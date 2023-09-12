@@ -14,7 +14,7 @@ class ObjectHandler:
         self.restricted_area = [(i, j) for i in range(int(self.game.player.x), int(self.game.player.x) +2) for j in range(int(self.game.player.y) -1, int(self.game.player.y) +2)]
         self.player_projectile_pos = {}
 
-        self.npc_num = 20
+        self.npc_num = 10
         self.npc_types = [NPC]
         self.weights = [100]
 

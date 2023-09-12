@@ -16,7 +16,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.attack_dist = random.randint(3, 6)
         self.attack_delay = 180
         self.speed = 0.025
-        self.size = 10
+        self.size = 15
         self.health = 100
         self.attack_damage = 10
         self.alive = True
@@ -28,7 +28,9 @@ class NPC(AnimatedSprite): #elf cadet
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass 
         else: self.check_animation_time()
+
         self.get_sprite()
+        
         if self.game.scene_manager.current_scene == 'pause_menu': pass
         else: self.run_logic()
 
@@ -129,7 +131,7 @@ class NPC(AnimatedSprite): #elf cadet
     
     def check_hit_in_npc(self):
         for snowball in self.game.object_handler.player_projectile_pos:
-            print(snowball)
+            pass
             #snowball_x, snowball_y = snowball
             #dx = self.x -snowball_x
             #dy = self.y -snowball_y

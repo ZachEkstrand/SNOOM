@@ -3,7 +3,7 @@ from sprite_object import *
 
 class Projectile(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/snowball.png',
-                 pos=(1, 1), scale=0.15, shift=0.12, angle=1, entity='player'):
+                 pos=(1, 1), scale=0.15, shift= -0.04, angle=1, entity='player'):
         super().__init__(game, path, pos, scale, shift)
         self.alive = True
         self.speed = 0.3
@@ -12,7 +12,8 @@ class Projectile(SpriteObject):
 
     def update(self):
         super().update()
-        self.run_logic()
+        if self.game.scene_manager.current_scene == 'pause_menu': pass
+        else: self.run_logic()
 
     def run_logic(self):
         if self.alive:

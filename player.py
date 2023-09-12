@@ -33,34 +33,38 @@ class Player:
         wv1 = 0.001
         wv2 = 0.06
 
+        self.joy_str_0 = 0
+        self.joy_str_1 = 0
+        self.joy_str_2 = 0
+
         # joysticks
         if self.game.signal_manager.Permissions['joysticks']:
             if self.XBC.inputs[1] < -rv1:
-                self.joy1Str = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[1] +rv1) -wv1
-                dx += speed_cos * -self.joy1Str
-                dy += speed_sin * -self.joy1Str
+                self.joy_str_1 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[1] +rv1) -wv1
+                dx += speed_cos * -self.joy_str_1
+                dy += speed_sin * -self.joy_str_1
             if self.XBC.inputs[1] > rv1:
-                self.joy1Str = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[1] -rv1) +wv1
-                dx += -speed_cos * self.joy1Str
-                dy += -speed_sin * self.joy1Str
+                self.joy_str_1 = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[1] -rv1) +wv1
+                dx += -speed_cos * self.joy_str_1
+                dy += -speed_sin * self.joy_str_1
             if self.XBC.inputs[0] < -rv1:
-                self.joy0Str = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[0] +rv1) -wv1
-                dx += speed_sin * -self.joy0Str
-                dy += -speed_cos * -self.joy0Str
+                self.joy_str_0 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[0] +rv1) -wv1
+                dx += speed_sin * -self.joy_str_0
+                dy += -speed_cos * -self.joy_str_0
             if self.XBC.inputs[0] > rv1:
-                self.joy0Str = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[0] -rv1) +wv1
-                dx += -speed_sin * self.joy0Str
-                dy += speed_cos * self.joy0Str
+                self.joy_str_0 = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[0] -rv1) +wv1
+                dx += -speed_sin * self.joy_str_0
+                dy += speed_cos * self.joy_str_0
 
             if self.XBC.inputs[2] > rv1:
-                self.joy2Str = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[2] -rv1) +wv1
-                self.angle += self.joy2Str * LOOK_SENSITIVITY
-                self.rot_speed = self.joy2Str * PLAYER_ROT_SPEED
+                self.joy_str_2 = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[2] -rv1) +wv1
+                self.angle += self.joy_str_2 * LOOK_SENSITIVITY
+                self.rot_speed = self.joy_str_2 * PLAYER_ROT_SPEED
 
             if self.XBC.inputs[2] < -rv1:
-                self.joy2Str = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[2] +rv1) -wv1
-                self.angle += self.joy2Str * LOOK_SENSITIVITY
-                self.rot_speed = self.joy2Str * PLAYER_ROT_SPEED
+                self.joy_str_2 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[2] +rv1) -wv1
+                self.angle += self.joy_str_2 * LOOK_SENSITIVITY
+                self.rot_speed = self.joy_str_2 * PLAYER_ROT_SPEED
 
         self.angle %= math.tau
 

@@ -26,6 +26,7 @@ class ObjectRenderer:
         self.wall_textures = {i:self.get_texture(path +f'{i}.png') for i in range(1, 10)}
         self.sky_image = self.get_texture(path +'sky.png', (WIDTH, HALF_HEIGHT))
         self.tree_horizon = self.get_texture(path +'unnamed.png', (WIDTH, HALF_HEIGHT))
+        self.crosshair_image = self.get_texture(path +'crosshair.png', (31, 31))
         self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
         self.blood_screen = self.get_texture(path +'blood_screen.png', RES)
         self.game_over_image = self.get_texture(path +'game_over.png', RES)
@@ -72,6 +73,10 @@ class ObjectRenderer:
     def center_on_x(x):
         return (WIDTH / 2) -(x / 2)
     
+    @staticmethod
+    def center_on_y(y):
+        return (HEIGHT / 2) -(y / 2)
+    
     def draw_arena(self):
         self.draw_background()
         self.render_game_objects()
@@ -93,10 +98,12 @@ class ObjectRenderer:
         for depth, image, pos in list_objects:
             blit(image, pos)
 
+        blit(self.crosshair_image, (self.center_on_x(31), self.center_on_y(31)))
         blit(self.game.object_handler.weapon.image, (0, 0))
     
     def draw_pause_menu(self):
         blit = self.screen.blit
+
         self.draw_background()
         self.render_game_objects()
         blit(self.background_shade, (0, 0))
