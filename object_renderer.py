@@ -25,7 +25,7 @@ class ObjectRenderer:
         self.tree_offset = 0
         self.wall_textures = {i:self.get_texture(path +f'{i}.png') for i in range(1, 10)}
         self.sky_image = self.get_texture(path +'sky.png', (WIDTH, HALF_HEIGHT))
-        self.tree_horizon = self.get_texture(path +'unnamed.png', (WIDTH, HALF_HEIGHT))
+        self.tree_horizon = self.get_texture(path +'tree_horizon.png', (WIDTH, HALF_HEIGHT))
         self.crosshair_image = self.get_texture(path +'crosshair.png', (31, 31))
         self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
         self.blood_screen = self.get_texture(path +'blood_screen.png', RES)
