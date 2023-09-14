@@ -19,7 +19,6 @@ class Game:
         pg.mouse.set_visible(False)
         self.clock = pg.time.Clock()
         self.delta_time = 1
-        self.del_queue = []
         self.new_game()
 
     def new_game(self):

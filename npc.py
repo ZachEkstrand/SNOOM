@@ -11,6 +11,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.death_images = self.get_images(path +'/death')
         self.pain_images = self.get_images(path +'/pain')
         self.walk_images = self.get_images(path +'/walk')
+        self.idle_images = self.get_images(path +'/idle')
 
         self.point_give = 7
         self.attack_dist = random.randint(3, 6)
@@ -52,7 +53,7 @@ class NPC(AnimatedSprite): #elf cadet
                 self.animate(self.walk_images)
                 self.movement()
             else:
-                pass#change to idle image
+                self.animate(self.idle_images)
         else:
             self.animate_death()
 
@@ -130,16 +131,17 @@ class NPC(AnimatedSprite): #elf cadet
         return int(self.x), int(self.y)
     
     def check_hit_in_npc(self):
+        hitbox = self.size / 70
         for snowball in self.game.object_handler.player_projectile_pos:
-            pass
-            #snowball_x, snowball_y = snowball
-            #dx = self.x -snowball_x
-            #dy = self.y -snowball_y
-            #dist_between_self_snowball = math.hypot(dx, dy)
-            #if dist_between_self_snowball < self.size:
-                #self.pain = True
-                #self.health -= self.game.weapon.damage
-                #self.check_health()
+            snowball_x, snowball_y = self.game.object_handler.player_projectile_pos[snowball]
+            dx = self.x -snowball_x
+            dy = self.y -snowball_y
+            dist_from_snowball = math.hypot(dx, dy)
+            if dist_from_snowball <= hitbox:
+                self.game.object_handler.del_queue.append(snowball)
+                self.pain = True
+                self.health -= PLAYER_DAMAGE
+                self.check_health()
 
     def check_health(self):
         if self.health < 1:
@@ -174,8 +176,7 @@ class NPC(AnimatedSprite): #elf cadet
         return (x, y) not in self.game.map.map_diction
     
     def animate_death(self):
-        if not self.alive:
-            if self.animation_trigger and self.frame_counter < len(self.death_images) -1:
-                self.death_images.rotate(-1)
-                self.images = self.death_images[0]
-                self.frame_counter += 1
+        if (not self.alive) and (self.frame_counter < len(self.death_images) -1):
+            self.death_images.rotate(-1)
+            self.image = self.death_images[0]
+            self.frame_counter += 1
