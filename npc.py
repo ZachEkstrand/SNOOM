@@ -138,7 +138,7 @@ class NPC(AnimatedSprite): #elf cadet
             dy = self.y -snowball_y
             dist_from_snowball = math.hypot(dx, dy)
             if dist_from_snowball <= hitbox:
-                self.game.object_handler.del_queue.append(snowball)
+                snowball.die()
                 self.pain = True
                 self.health -= PLAYER_DAMAGE
                 self.check_health()

@@ -26,7 +26,7 @@ class Map:
             self.map_grid.append(row)
 
     def cut_out_shapes(self):
-        shapeNum = 40
+        shapeNum = random.randint(40, 70)
         self.cut_shape(x=random.randint(1, 30), y=random.randint(1, 30))
         for i in range(shapeNum -1):
             index = random.choice(self.space_indexes)
