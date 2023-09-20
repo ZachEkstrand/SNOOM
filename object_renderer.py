@@ -24,6 +24,7 @@ class ObjectRenderer:
         self.sky_offset = 0
         self.tree_offset = 0
         self.wall_textures = {i:self.get_texture(path +f'{i}.png') for i in range(1, 10)}
+        self.char_sprites_36x38 = [self.get_texture(f'{path}chars/doom-nightmare-{i}.png', (36 * 2.5, 38 * 2.5)) for i in range(41)]
         self.sky_image = self.get_texture(path +'sky.png', (WIDTH, HALF_HEIGHT))
         self.tree_horizon = self.get_texture(path +'tree_horizon.png', (WIDTH, HALF_HEIGHT))
         self.crosshair_image = self.get_texture(path +'crosshair.png', (31, 31))
@@ -41,7 +42,7 @@ class ObjectRenderer:
         self.general_font_size = 2.5
         self.header_font_size = 3.4
         self.highscores_image = self.get_texture(path +'highscores.png', (152 * self.header_font_size, 19 * self.header_font_size))
-        self.char_sprites = [self.get_texture(f'{path}chars/doom-nightmare-{i}.png', (18 * self.general_font_size, 19 * self.general_font_size)) for i in range(41)]
+        self.char_sprites_18x19 = [self.get_texture(f'{path}chars/doom-nightmare-{i}.png', (18 * self.general_font_size, 19 * self.general_font_size)) for i in range(41)]
         # username input
         self.letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
         self.username = []
@@ -80,6 +81,7 @@ class ObjectRenderer:
     def draw_arena(self):
         self.draw_background()
         self.render_game_objects()
+        self.draw_HUD()
 
     def draw_background(self):
         blit = self.screen.blit
@@ -100,6 +102,42 @@ class ObjectRenderer:
 
         blit(self.crosshair_image, (self.center_on_x(31), self.center_on_y(31)))
         blit(self.game.object_handler.weapon.image, (0, 0))
+
+    def draw_HUD(self):
+        self.draw_health()
+        self.draw_score()
+        self.draw_ammo()
+
+    def draw_health(self):
+        health = str(self.game.player.health)
+        cmsg = self.convert_string_to_font(health +'%')
+        for i, num in enumerate(cmsg):
+            self.screen.blit(self.char_sprites_36x38[num], (36 * i * self.general_font_size, 10))
+
+    def draw_score(self):
+        score = str(self.game.player.score)
+        cmsg = self.convert_string_to_font(score)
+        i = len(cmsg)
+        for num in cmsg:
+            self.screen.blit(self.char_sprites_18x19[num], (WIDTH -(18 * i * self.general_font_size), 10))
+            i -= 1
+
+    def draw_ammo(self):
+        blit = self.screen.blit
+        ammo = str(self.game.player.ammo)
+        cmsg = self.convert_string_to_font(ammo)
+        i = len(cmsg)
+        for num in cmsg:
+            blit(self.char_sprites_36x38[num], (WIDTH -(30 * i * self.general_font_size) -10, 500))
+            i -= 1
+        i = len(cmsg)
+        cmsg = self.convert_string_to_font('X')
+        if i == 2:
+            blit(self.char_sprites_18x19[cmsg[0]], (820, 525))
+            blit(self.snowball_image, (755, 515))
+        if i == 1:
+            blit(self.char_sprites_18x19[cmsg[0]], (820 +(30 * self.general_font_size) -10, 525))
+            blit(self.snowball_image,(755 +(30 * self.general_font_size) -10, 515))
     
     def draw_pause_menu(self):
         blit = self.screen.blit
@@ -113,3 +151,91 @@ class ObjectRenderer:
             blit(self.quit_shadow, (self.center_on_x(57 * self.button_font_size), 337))
         blit(self.resume_image, (self.center_on_x(96 * self.button_font_size), 240))
         blit(self.quit_image, (self.center_on_x(55 * self.button_font_size), 340))
+
+    @staticmethod
+    def convert_string_to_font(msg):
+        cmsg = []
+        for char in msg:
+            if char == '0':
+                cmsg.append(0)
+            if char == '1':
+                cmsg.append(1)
+            if char == '2':
+                cmsg.append(2)
+            if char == '3':
+                cmsg.append(3)
+            if char == '4':
+                cmsg.append(4)
+            if char == '5':
+                cmsg.append(5)
+            if char == '6':
+                cmsg.append(6)
+            if char == '7':
+                cmsg.append(7)
+            if char == '8':
+                cmsg.append(8)
+            if char == '9':
+                cmsg.append(9)
+            if char == 'A':
+                cmsg.append(10)
+            if char == 'B':
+                cmsg.append(11)
+            if char == 'C':
+                cmsg.append(12)
+            if char == 'D':
+                cmsg.append(13)
+            if char == 'E':
+                cmsg.append(14)
+            if char == 'F':
+                cmsg.append(15)
+            if char == 'G':
+                cmsg.append(16)
+            if char == 'H':
+                cmsg.append(17)
+            if char == 'I':
+                cmsg.append(18)
+            if char == 'J':
+                cmsg.append(19)
+            if char == 'K':
+                cmsg.append(20)
+            if char == 'L':
+                cmsg.append(21)
+            if char == 'M':
+                cmsg.append(22)
+            if char == 'N':
+                cmsg.append(23)
+            if char == 'O':
+                cmsg.append(24)
+            if char == 'P':
+                cmsg.append(25)
+            if char == 'Q':
+                cmsg.append(26)
+            if char == 'R':
+                cmsg.append(27)
+            if char == 'S':
+                cmsg.append(28)
+            if char == 'T':
+                cmsg.append(29)
+            if char == 'U':
+                cmsg.append(30)
+            if char == 'V':
+                cmsg.append(31)
+            if char == 'W':
+                cmsg.append(32)
+            if char == 'X':
+                cmsg.append(33)
+            if char == 'Y':
+                cmsg.append(34)
+            if char == 'Z':
+                cmsg.append(35)
+            if char == '%':
+                cmsg.append(36)
+            if char == '-':
+                cmsg.append(37)
+            if char == '(':
+                cmsg.append(38)
+            if char == ')':
+                cmsg.append(39)
+            if char == ' ':
+                cmsg.append(40)
+        return cmsg
