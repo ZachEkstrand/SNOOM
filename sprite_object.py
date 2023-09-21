@@ -20,10 +20,6 @@ class SpriteObject:
         self.SPRITE_SCALE = scale
         self.SPRITE_HEIGHT_SHIFT = shift
 
-    @property
-    def pos(self):
-        return (self.x, self.y)
-
     def get_sprite_projection(self):
         proj = SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
         proj_width, proj_height = proj * self.IMAGE_RATIO, proj
@@ -82,6 +78,10 @@ class Decoration(SpriteObject):
         pos = self.screen_x -self.sprite_half_width, HALF_HEIGHT -proj_height // 2 +height_shift
 
         self.game.ray_casting.objects_to_render.append((self.norm_dist, image, pos))
+
+    @property
+    def pos(self):
+        return (self.x, self.y)
 
 class Tree(Decoration):
     def __init__(self, game, path=path +'static_sprites/tree.png',

@@ -134,10 +134,10 @@ class ObjectRenderer:
         cmsg = self.convert_string_to_font('X')
         if i == 2:
             blit(self.char_sprites_18x19[cmsg[0]], (820, 525))
-            blit(self.snowball_image, (755, 515))
+            blit(self.snowball_image, (745, 515))
         if i == 1:
             blit(self.char_sprites_18x19[cmsg[0]], (820 +(30 * self.general_font_size) -10, 525))
-            blit(self.snowball_image,(755 +(30 * self.general_font_size) -10, 515))
+            blit(self.snowball_image,(745 +(30 * self.general_font_size) -10, 515))
     
     def draw_pause_menu(self):
         blit = self.screen.blit

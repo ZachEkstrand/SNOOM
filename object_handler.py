@@ -62,7 +62,22 @@ class ObjectHandler:
         for i in del_indexes:
             del self.sprite_list[i]
 
+        self.check_ammo()
+
         self.player_projectile_pos = {snowball:snowball.pos for snowball in self.sprite_list if isinstance(snowball, Projectile) and snowball.alive and snowball.entity == 'player'}
-        #self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
+        self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
+        self.decoration_pos = [sprite.pos for sprite in self.sprite_list if isinstance(sprite, Decoration)]
         [npc.update() for npc in self.npc_list]
         self.weapon.update()
+    
+    def check_ammo(self):
+        snowpile_count = len([sprite for sprite in self.sprite_list if isinstance(sprite, Snowpile)])
+        if self.game.player.ammo == 0 and snowpile_count < 2:
+            self.respawn_snowpiles()
+
+    def respawn_snowpiles(self):
+        for i in range(3):
+            random_pos = random.choice(self.game.map.space_indexes)
+            while random_pos in self.decoration_pos:
+                random_pos = random.choice(self.game.map.space_indexes)
+            self.add_sprite(Snowpile(self.game, pos=random_pos))
