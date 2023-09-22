@@ -20,6 +20,8 @@ class NPC(AnimatedSprite): #elf cadet
         self.size = 15
         self.health = 100
         self.attack_damage = 10
+        self.attack_frame_counter = 0
+        self.attack_frame_num = len(self.attack_images)
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
@@ -44,8 +46,7 @@ class NPC(AnimatedSprite): #elf cadet
             elif self.ray_cast_value:
                 self.player_search_trigger = True
                 if self.dist < self.attack_dist:
-                    self.animate(self.attack_images)
-                    self.attack()
+                    self.animate_attack()
                 else:
                     self.animate(self.walk_images)
                     self.movement()
@@ -153,8 +154,15 @@ class NPC(AnimatedSprite): #elf cadet
         if self.animation_trigger:
             self.pain = False
 
-    def attack(self):
-        pass
+    def animate_attack(self):
+        if self.animation_trigger:
+            self.attack_images.rotate(-1)
+            self.image = self.attack_images[0]
+            self.attack_frame_counter += 1
+            if self.attack_frame_counter == 1: #frame that the snowball leaves hand
+                self.game.object_handler.spawn_projectile(self.pos, 'enemy', random.randint(1, 6))
+            if self.attack_frame_counter == self.attack_frame_num:
+                self.attack_frame_counter = 0
 
     def movement(self):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.player.map_pos)

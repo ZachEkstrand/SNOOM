@@ -36,8 +36,7 @@ class ObjectHandler:
         self.sprite_list.append(sprite)
 
     def spawn_projectile(self, pos, entity, angle):
-        if entity == 'player':
-            self.add_sprite(Projectile(self.game, pos=pos, angle=angle))
+        self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle))
         
     def spawn_npc(self):
         for i in range(self.npc_num):
@@ -59,6 +58,8 @@ class ObjectHandler:
                 del_indexes.append(i)
             else:
                 sprite.update()
+        if del_indexes:
+            del_indexes.sort(reverse=True)
         for i in del_indexes:
             del self.sprite_list[i]
 
