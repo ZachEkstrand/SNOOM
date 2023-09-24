@@ -160,7 +160,7 @@ class NPC(AnimatedSprite): #elf cadet
             self.image = self.attack_images[0]
             self.attack_frame_counter += 1
             if self.attack_frame_counter == 1: #frame that the snowball leaves hand
-                self.game.object_handler.spawn_projectile(self.pos, 'enemy', random.randint(1, 6))
+                self.game.object_handler.spawn_projectile(self.pos, 'enemy', self.theta + math.pi +random.uniform(-0.3, 0.3))
             if self.attack_frame_counter == self.attack_frame_num:
                 self.attack_frame_counter = 0
 

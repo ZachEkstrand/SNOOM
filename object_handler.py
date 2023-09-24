@@ -36,7 +36,10 @@ class ObjectHandler:
         self.sprite_list.append(sprite)
 
     def spawn_projectile(self, pos, entity, angle):
-        self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle))
+        if entity == 'player':
+            self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle))
+        if entity == 'enemy':
+            self.add_sprite(Projectile(self.game, pos=pos, shift=1, entity=entity, angle=angle))
         
     def spawn_npc(self):
         for i in range(self.npc_num):
@@ -81,4 +84,5 @@ class ObjectHandler:
             random_pos = random.choice(self.game.map.space_indexes)
             while random_pos in self.decoration_pos:
                 random_pos = random.choice(self.game.map.space_indexes)
-            self.add_sprite(Snowpile(self.game, pos=random_pos))
+            pos = (random_pos[0] +0.5, random_pos[1] +0.5)
+            self.add_sprite(Snowpile(self.game, pos=pos))
