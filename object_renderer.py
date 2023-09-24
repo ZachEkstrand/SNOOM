@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+import leaderboard
 
 path = 'resources/textures/'
 
@@ -77,6 +78,26 @@ class ObjectRenderer:
     @staticmethod
     def center_on_y(y):
         return (HEIGHT / 2) -(y / 2)
+    
+    def draw_leaderboard(self):
+        blit = self.screen.blit
+        blit(self.background_image, (0, 0))
+        blit(self.background_shade, (0, 0))
+        blit(self.highscores_image, (self.center_on_x(152 * self.header_font_size), 0))
+        names = leaderboard.names
+        scores = leaderboard.scores
+        dashes = self.convert_string_to_font([' ', '-', ' ', '-', ' ', '-', ' ', '-', ' '])
+
+        for j, name in enumerate(names):
+            c_name = self.convert_string_to_font(name)
+            for i, num in enumerate(c_name):
+                blit(self.char_sprites_18x19[num], (40 +i * 18 * self.general_font_size, 80 +j * 27 *self.general_font_size))
+            for i, num in enumerate(dashes):
+                blit(self.char_sprites_18x19[num], (40 +(6 +i) * (18 * self.general_font_size), 80 +j * 27 * self.general_font_size))
+            c_score = self.convert_string_to_font(scores[j])
+            for i, num in enumerate(c_score):
+                blit(self.char_sprites_18x19[num], (40 +(15 +i) * (18 * self.general_font_size), 80 +j * 27 * self.general_font_size))
+        
     
     def draw_arena(self):
         self.draw_background()
