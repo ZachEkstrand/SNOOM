@@ -122,6 +122,13 @@ class Player:
     
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.map_diction
+    
+    def take_damage(self, damage):
+        self.health -= damage
+        self.check_game_over()
+
+    def check_game_over(self):
+        pass
 
     @property
     def pos(self):

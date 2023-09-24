@@ -13,6 +13,7 @@ class ObjectHandler:
         self.npc_positions = {}
         self.restricted_area = [(i, j) for i in range(int(self.game.player.x), int(self.game.player.x) +2) for j in range(int(self.game.player.y) -1, int(self.game.player.y) +2)]
         self.player_projectile_pos = {}
+        self.enemy_projectile_pos = {}
 
         self.npc_num = 10
         self.npc_types = [NPC]
@@ -35,11 +36,11 @@ class ObjectHandler:
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
 
-    def spawn_projectile(self, pos, entity, angle):
+    def spawn_projectile(self, pos, entity, angle, damage):
         if entity == 'player':
-            self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle))
+            self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle, damage=damage))
         if entity == 'enemy':
-            self.add_sprite(Projectile(self.game, pos=pos, shift=1, entity=entity, angle=angle))
+            self.add_sprite(Projectile(self.game, pos=pos, shift=1, entity=entity, angle=angle, damage=damage))
         
     def spawn_npc(self):
         for i in range(self.npc_num):
@@ -49,7 +50,7 @@ class ObjectHandler:
                 pos = random.choice(self.game.map.space_indexes)
             x, y = pos
             self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))
-        self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
+        self.npc_positions = {npc:npc.pos for npc in self.npc_list if npc.alive}
 
     def add_npc(self, npc):
         self.npc_list.append(npc)
@@ -68,8 +69,7 @@ class ObjectHandler:
 
         self.check_ammo()
 
-        self.player_projectile_pos = {snowball:snowball.pos for snowball in self.sprite_list if isinstance(snowball, Projectile) and snowball.alive and snowball.entity == 'player'}
-        self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
+        self.npc_positions = {npc:npc.pos for npc in self.npc_list if npc.alive}
         self.decoration_pos = [sprite.pos for sprite in self.sprite_list if isinstance(sprite, Decoration)]
         [npc.update() for npc in self.npc_list]
         self.weapon.update()

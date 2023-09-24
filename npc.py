@@ -18,6 +18,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.attack_delay = 180
         self.speed = 0.025
         self.size = 15
+        self.hitbox = self.size / 70
         self.health = 100
         self.attack_damage = 10
         self.attack_frame_counter = 0
@@ -40,7 +41,6 @@ class NPC(AnimatedSprite): #elf cadet
     def run_logic(self):
         if self.alive:
             self.ray_cast_value = self.ray_cast_player_npc()
-            self.check_hit_in_npc()
             if self.pain:
                 self.animate_pain()
             elif self.ray_cast_value:
@@ -130,23 +130,16 @@ class NPC(AnimatedSprite): #elf cadet
     @property
     def map_pos(self):
         return int(self.x), int(self.y)
-    
-    def check_hit_in_npc(self):
-        hitbox = self.size / 70
-        for snowball in self.game.object_handler.player_projectile_pos:
-            snowball_x, snowball_y = self.game.object_handler.player_projectile_pos[snowball]
-            dx = self.x -snowball_x
-            dy = self.y -snowball_y
-            dist_from_snowball = math.hypot(dx, dy)
-            if dist_from_snowball <= hitbox:
-                snowball.die()
-                self.pain = True
-                self.health -= PLAYER_DAMAGE
-                self.check_health()
+
+    def take_damage(self, damage):
+        self.pain = True
+        self.health -= damage
+        self.check_health()
 
     def check_health(self):
         if self.health < 1:
             self.alive = False
+            self.game.player.ammo += 2
             self.game.player.score += self.point_give
 
     def animate_pain(self):
@@ -160,7 +153,7 @@ class NPC(AnimatedSprite): #elf cadet
             self.image = self.attack_images[0]
             self.attack_frame_counter += 1
             if self.attack_frame_counter == 1: #frame that the snowball leaves hand
-                self.game.object_handler.spawn_projectile(self.pos, 'enemy', self.theta + math.pi +random.uniform(-0.3, 0.3))
+                self.game.object_handler.spawn_projectile(self.pos, 'enemy', self.theta + math.pi +random.uniform(-0.3, 0.3), 10)
             if self.attack_frame_counter == self.attack_frame_num:
                 self.attack_frame_counter = 0
 
@@ -184,7 +177,7 @@ class NPC(AnimatedSprite): #elf cadet
         return (x, y) not in self.game.map.map_diction
     
     def animate_death(self):
-        if (not self.alive) and (self.frame_counter < len(self.death_images) -1):
+        if self.frame_counter < len(self.death_images) -1:
             self.death_images.rotate(-1)
             self.image = self.death_images[0]
             self.frame_counter += 1

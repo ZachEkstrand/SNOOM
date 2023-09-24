@@ -19,7 +19,7 @@ class Weapon(AnimatedSprite):
                 self.image = self.images[0]
                 self.frame_counter += 1
                 if self.frame_counter == 4:
-                    self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) +(self.game.player.joy_str_0 * 2) +(self.game.player.joy_str_2 * 6))
+                    self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) +(self.game.player.joy_str_0 * 2) +(self.game.player.joy_str_2 * 6), 50)
                 if self.frame_counter == self.num_images:
                     self.game.player.shooting = False
                     self.frame_counter = 0
