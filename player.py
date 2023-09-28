@@ -82,6 +82,18 @@ class Player:
             if self.XBC.inputs[4][1] != -1:
                 self.game.signal_manager.Permissions['down_pad'] = True
 
+            if self.game.signal_manager.Permissions['right_pad'] and self.XBC.inputs[4][0] == 1:
+                self.game.scene_manager.column += 1
+                self.game.signal_manager.Permissions['right_pad'] = False
+            if self.XBC.inputs[4][0] != 1:
+                self.game.signal_manager.Permissions['right_pad'] = True
+
+            if self.game.signal_manager.Permissions['left_pad'] and self.XBC.inputs[4][0] == -1:
+                self.game.scene_manager.column -= 1
+                self.game.signal_manager.Permissions['left_pad'] = False
+            if self.XBC.inputs[4][0] != -1:
+                self.game.signal_manager.Permissions['left_pad'] = True
+
         # buttons
         if self.game.signal_manager.Permissions['main_buttons']:
             if self.game.signal_manager.Permissions['A_button'] and self.XBC.inputs[5] == 1:
@@ -90,6 +102,13 @@ class Player:
             if self.XBC.inputs[5] != 1:
                 self.game.scene_manager.A_down = False
                 self.game.signal_manager.Permissions['A_button'] = True
+
+            if self.game.signal_manager.Permissions['B_button'] and self.XBC.inputs[6] == 1:
+                self.game.scene_manager.B_down = True
+                self.game.signal_manager.Permissions['B_button'] = False
+            if self.XBC.inputs[6] != 1:
+                self.game.scene_manager.B_button = False
+                self.game.signal_manager.Permissions['B_button'] = True
         
             if self.game.signal_manager.Permissions['menu_button'] and self.XBC.inputs[7] == 1:
                 self.game.scene_manager.menu_button_down = True
@@ -128,7 +147,15 @@ class Player:
         self.check_game_over()
 
     def check_game_over(self):
-        pass
+        if self.health < 1:
+            self.new_highscore, self.leaderboard_index = self.check_new_highscore()
+            self.game.scene_manager.change_scene('game_over')
+
+    def check_new_highscore(self):
+        for i, score in enumerate(self.game.leaderboard.scores):
+            if int(score) < self.score:
+                return True, i
+        return False, None
 
     @property
     def pos(self):

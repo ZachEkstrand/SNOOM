@@ -45,7 +45,7 @@ class Projectile(SpriteObject):
                     self.die()
         if self.target == 'player':
             if self.dist <= 0.7:
-                self.game.player.take_damage(self.damage)
+                self.game.signal_manager.emit_signal(self.game.player.take_damage, args=self.damage)
                 self.die()
 
     def movement(self):

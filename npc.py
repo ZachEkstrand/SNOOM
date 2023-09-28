@@ -3,8 +3,8 @@ from sprite_object import *
 
 path = 'resources/sprites/npc/'
 class NPC(AnimatedSprite): #elf cadet
-    def __init__(self, game, path=path +'soldier/0.png',pos=(1, 1),
-                 scale=0.6, shift=0.38, animation_time=180):
+    def __init__(self, game, path=path +'elf/0.png',pos=(1, 1),
+                 scale=0.6, shift=0.38, animation_time=100):
         super().__init__(game, path, pos, scale, shift, animation_time)
         path = self.path
         self.attack_images = self.get_images(path +'/attack')
@@ -13,7 +13,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.walk_images = self.get_images(path +'/walk')
         self.idle_images = self.get_images(path +'/idle')
 
-        self.point_give = 7
+        self.point_give = 11
         self.attack_dist = random.randint(3, 6)
         self.attack_delay = 180
         self.speed = 0.025

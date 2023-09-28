@@ -174,3 +174,4 @@ class Map:
                 else:
                     print(self.map_grid[i][j], end=' ')
             print()
+        print()

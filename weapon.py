@@ -1,7 +1,7 @@
 from sprite_object import *
 
 class Weapon(AnimatedSprite):
-    def __init__(self, game, path='resources/sprites/player/00.png', scale=HEIGHT, animation_time=70):
+    def __init__(self, game, path='resources/sprites/player/00.png', scale=HEIGHT, animation_time=60):
         super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
         self.num_images = len(self.images)
         self.frame_counter = 0

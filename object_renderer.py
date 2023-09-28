@@ -1,6 +1,5 @@
 import pygame as pg
 from settings import *
-import leaderboard
 
 path = 'resources/textures/'
 
@@ -30,8 +29,7 @@ class ObjectRenderer:
         self.tree_horizon = self.get_texture(path +'tree_horizon.png', (WIDTH, HALF_HEIGHT))
         self.crosshair_image = self.get_texture(path +'crosshair.png', (31, 31))
         self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
-        self.blood_screen = self.get_texture(path +'blood_screen.png', RES)
-        self.game_over_image = self.get_texture(path +'game_over.png', RES)
+        self.game_over_image = self.get_texture(path +'game_over.png', (260 * self.title_image_scale, 73 * self.title_image_scale))
         self.win_image = self.get_texture(path +'win.png', RES)
         # pause_menu
         self.background_shade = self.get_texture(path +'background_shade.png', RES)
@@ -45,10 +43,6 @@ class ObjectRenderer:
         self.highscores_image = self.get_texture(path +'highscores.png', (152 * self.header_font_size, 19 * self.header_font_size))
         self.char_sprites_18x19 = [self.get_texture(f'{path}chars/doom-nightmare-{i}.png', (18 * self.general_font_size, 19 * self.general_font_size)) for i in range(41)]
         # username input
-        self.letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        self.username = []
-        self.column = 0
-        self.row = 0
         self.done_button_image = self.get_texture(path +'done.png', (60 * 1.5, 19 * 1.5))
         self.selected_letter_highlight = self.get_texture(path +'select.png', (40 * self.general_font_size, 46 * self.general_font_size))
     
@@ -84,8 +78,8 @@ class ObjectRenderer:
         blit(self.background_image, (0, 0))
         blit(self.background_shade, (0, 0))
         blit(self.highscores_image, (self.center_on_x(152 * self.header_font_size), 0))
-        names = leaderboard.names
-        scores = leaderboard.scores
+        names = self.game.leaderboard.names #write to leaderboard.names NOT names
+        scores = self.game.leaderboard.scores
         dashes = self.convert_string_to_font([' ', '-', ' ', '-', ' ', '-', ' ', '-', ' '])
 
         for j, name in enumerate(names):
@@ -130,13 +124,13 @@ class ObjectRenderer:
         self.draw_ammo()
 
     def draw_health(self):
-        health = str(self.game.player.health)
+        health = str(self.player.health)
         cmsg = self.convert_string_to_font(health +'%')
         for i, num in enumerate(cmsg):
             self.screen.blit(self.char_sprites_36x38[num], (36 * i * self.general_font_size, 10))
 
     def draw_score(self):
-        score = str(self.game.player.score)
+        score = str(self.player.score)
         cmsg = self.convert_string_to_font(score)
         i = len(cmsg)
         for num in cmsg:
@@ -145,7 +139,7 @@ class ObjectRenderer:
 
     def draw_ammo(self):
         blit = self.screen.blit
-        ammo = str(self.game.player.ammo)
+        ammo = str(self.player.ammo)
         cmsg = self.convert_string_to_font(ammo)
         i = len(cmsg)
         for num in cmsg:
@@ -172,6 +166,36 @@ class ObjectRenderer:
             blit(self.quit_shadow, (self.center_on_x(57 * self.button_font_size), 337))
         blit(self.resume_image, (self.center_on_x(96 * self.button_font_size), 240))
         blit(self.quit_image, (self.center_on_x(55 * self.button_font_size), 340))
+
+    def draw_game_over(self):
+        blit = self.screen.blit
+        self.draw_background()
+        self.render_game_objects()
+        blit(self.background_shade, (0, 0))
+        blit(self.game_over_image, (self.center_on_x(260 * self.title_image_scale), self.center_on_y(73 * self.title_image_scale)))
+
+    def draw_keyboard(self):
+        blit = self.screen.blit
+        blit(self.background_image, (0, 0))
+        blit(self.background_shade, (0, 0))
+        blit(self.selected_letter_highlight, (25 +self.game.scene_manager.column * 44 * self.general_font_size, 185 +self.game.scene_manager.selected_button * 52 * self.general_font_size))
+        c_letters = self.convert_string_to_font(self.scene_manager.letters)
+        for i, num in enumerate(c_letters):
+            if i < 9:
+                blit(self.char_sprites_36x38[num], (30 +i * 44 * self.general_font_size, 200))
+            if i > 8 and i < 18:
+                blit(self.char_sprites_36x38[num], (30 +(i -9) * (44 * self.general_font_size), 330))
+            if i > 17:
+                blit(self.char_sprites_36x38[num], (30 +(i -18) * (44 * self.general_font_size), 460))
+        blit(self.done_button_image, (30 +(8 * 44 * self.general_font_size), 487))
+        c_username = self.convert_string_to_font(self.scene_manager.username)
+        for i, num in enumerate(c_username):
+            blit(self.char_sprites_36x38[num], (30 +i * 44 * self.general_font_size, 30))
+        c_score = self.convert_string_to_font(str(self.player.score))
+        i = len(c_score)
+        for num in c_score:
+            blit(self.char_sprites_18x19[num], (WIDTH -(18 * i * self.general_font_size), 10))
+            i -= 1
 
     @staticmethod
     def convert_string_to_font(msg):
