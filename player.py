@@ -12,6 +12,7 @@ class Player:
         self.health = PLAYER_MAX_HEALTH
         self.score = 0
         self.ammo = PLAYER_STARTING_AMMO
+        self.key = False
         self.rot_speed = 0
         self.shooting = False
 

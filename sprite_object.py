@@ -102,6 +102,29 @@ class Snowpile(SpriteObject):
             self.game.player.ammo += 3
             self.game.object_handler.del_queue.append(self)
 
+class Key(SpriteObject):
+    def __init__(self, game, path=path +'static_sprites/key.png',
+                 pos=(1, 1), scale=0.3, shift=0):
+        super().__init__(game, path, pos, scale, shift)
+        self.time_of_spawn = pg.time.get_ticks()
+    
+    def update(self):
+        self.check_collision_on_player()
+        self.move()
+        super().update()
+
+    def check_collision_on_player(self):
+        if self.dist < 0.5:
+            self.game.player.key = True
+            self.game.object_handler.del_queue.append(self)
+
+    def move(self):
+        freq = 2
+        amp = 0.3
+        time_since_spawn = pg.time.get_ticks() -self.time_of_spawn
+        x = time_since_spawn / 1000
+        self.SPRITE_HEIGHT_SHIFT = math.cos(x * freq) * amp
+
 class AnimatedSprite(SpriteObject):
     def __init__(self, game, path=path +'animated_sprites/red_light/0.png',
                  pos=(10.5, 3.5), scale=0.7, shift=0.27, animation_time=120):

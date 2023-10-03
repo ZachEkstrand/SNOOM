@@ -28,6 +28,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.ray_cast_value = False
         self.frame_counter = 0
         self.player_search_trigger = False
+        self.key = False
 
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass 
@@ -141,6 +142,8 @@ class NPC(AnimatedSprite): #elf cadet
             self.alive = False
             self.game.player.ammo += 2
             self.game.player.score += self.point_give
+            if self.key:
+                self.game.object_handler.spawn_key(self.pos)
 
     def animate_pain(self):
         self.animate(self.pain_images)

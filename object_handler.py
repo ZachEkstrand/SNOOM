@@ -41,6 +41,9 @@ class ObjectHandler:
             self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle, damage=damage))
         if entity == 'enemy':
             self.add_sprite(Projectile(self.game, pos=pos, shift=1, entity=entity, angle=angle, damage=damage))
+    
+    def spawn_key(self, pos):
+        self.add_sprite(Key(self.game, pos=pos))
         
     def spawn_npc(self):
         for i in range(self.npc_num):
@@ -70,6 +73,9 @@ class ObjectHandler:
         self.check_ammo()
 
         self.npc_positions = {npc:npc.pos for npc in self.npc_list if npc.alive}
+        if len(self.npc_positions) == 1:
+            for npc in self.npc_positions:
+                npc.key = True
         self.decoration_pos = [sprite.pos for sprite in self.sprite_list if isinstance(sprite, Decoration)]
         [npc.update() for npc in self.npc_list]
         self.weapon.update()
