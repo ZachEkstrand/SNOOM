@@ -1,12 +1,16 @@
 class SceneManager:
     def __init__(self, game):
         self.game = game
+        self.sound_handler = game.sound_handler
         self.current_scene = 'title_screen'
         self.quit = False
         self.selected_button = 0
+        self.column = 0
         self.A_down = False
         self.menu_button_down = False
         self.letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+        self.sound_handler.play(1, loops=-1, fade_ms=1000)
     
     def change_scene(self, scene_name, reset_game=False):
         self.current_scene = scene_name
@@ -19,15 +23,21 @@ class SceneManager:
         self.menu_button_down = False
 
         if scene_name == 'title_screen':
+            if self.sound_handler.wind == False:
+                self.sound_handler.play(1, loops=-1, fade_ms=1000)
+            self.sound_handler.set_volume(1, 1)
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
             self.game.signal_manager.Permissions['D-pad'] = True
             self.game.signal_manager.Permissions['up_pad'] = True
             self.game.signal_manager.Permissions['down_pad'] = True
+            self.game.signal_manager.Permissions['right_pad'] = False
+            self.game.signal_manager.Permissions['left_pad'] = False
             self.game.signal_manager.Permissions['main_buttons'] = True
             if reset_game:
                 self.game.reset_game()
         if scene_name == 'leaderboard':
+            self.sound_handler.set_volume(1, 0.5)
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
             self.game.signal_manager.Permissions['D-pad'] = True
@@ -39,6 +49,7 @@ class SceneManager:
             if reset_game:
                 self.game.reset_game()
         if scene_name == 'arena':
+            self.sound_handler.fade(1)
             self.game.signal_manager.Permissions['Player.attack'] = True
             self.game.signal_manager.Permissions['Player.take_damage'] = True
             self.game.signal_manager.Permissions['joysticks'] = True
@@ -92,14 +103,17 @@ class SceneManager:
             self.selected_button = 2
         elif self.A_down:
             if self.selected_button == 0:
+                self.sound_handler.play(0)
                 self.change_scene('arena')
             if self.selected_button == 1:
+                self.sound_handler.play(3)
                 self.change_scene('leaderboard')
             if self.selected_button == 2:
                 self.quit = True
 
     def leaderboard_update(self):
         if self.A_down:
+            self.sound_handler.play(2)
             self.change_scene('title_screen')
 
     def arena_update(self):
@@ -107,6 +121,7 @@ class SceneManager:
         game.ray_casting.update()
         game.object_handler.update()
         if self.menu_button_down:
+            self.sound_handler.play(0)
             self.change_scene('pause_menu')
 
     def pause_menu_update(self):
@@ -118,11 +133,13 @@ class SceneManager:
         if self.selected_button < 0:
             self.selected_button = 1
         elif self.A_down:
+            self.sound_handler.play(3)
             if self.selected_button == 0:
                 self.change_scene('arena')
             if self.selected_button == 1:
                 self.change_scene('title_screen', reset_game=True)
         elif self.menu_button_down:
+            self.sound_handler.play(3)
             self.change_scene('arena')
 
     def game_over_update(self):
@@ -145,6 +162,7 @@ class SceneManager:
         if self.column < 0:
             self.column = 8
         if self.A_down:
+            self.sound_handler.play(3)
             self.A_down = False
             if self.column != 8 or self.selected_button != 2:
                 if len(self.username) < 6:
@@ -153,6 +171,7 @@ class SceneManager:
                 self.game.leaderboard.add_entry(self.username)
                 self.change_scene('leaderboard', reset_game=True)
         elif self.B_down:
+            self.sound_handler.play(3)
             self.B_down = False
             if len(self.username) > 0:
                 self.username.pop()

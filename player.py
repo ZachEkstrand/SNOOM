@@ -4,6 +4,8 @@ class Player:
     def __init__(self, game):
         self.game = game
         self.emit_signal = game.signal_manager.emit_signal
+        self.sound_handler = game.sound_handler
+        self.sfx = game.sound_handler.sfx
         self.XBC = game.XBC
         self.x, self.y = game.map.player_pos
         self.angle = game.map.player_angle
@@ -83,24 +85,28 @@ class Player:
             if self.game.signal_manager.Permissions['up_pad'] and self.XBC.inputs[4][1] == 1:
                 self.game.scene_manager.selected_button -= 1
                 self.game.signal_manager.Permissions['up_pad'] = False
+                self.sound_handler.play(2)
             if self.XBC.inputs[4][1] != 1:
                 self.game.signal_manager.Permissions['up_pad'] = True
 
             if self.game.signal_manager.Permissions['down_pad'] and self.XBC.inputs[4][1] == -1:
                 self.game.scene_manager.selected_button += 1
                 self.game.signal_manager.Permissions['down_pad'] = False
+                self.sound_handler.play(2)
             if self.XBC.inputs[4][1] != -1:
                 self.game.signal_manager.Permissions['down_pad'] = True
 
             if self.game.signal_manager.Permissions['right_pad'] and self.XBC.inputs[4][0] == 1:
                 self.game.scene_manager.column += 1
                 self.game.signal_manager.Permissions['right_pad'] = False
+                self.sound_handler.play(2)
             if self.XBC.inputs[4][0] != 1:
                 self.game.signal_manager.Permissions['right_pad'] = True
 
             if self.game.signal_manager.Permissions['left_pad'] and self.XBC.inputs[4][0] == -1:
                 self.game.scene_manager.column -= 1
                 self.game.signal_manager.Permissions['left_pad'] = False
+                self.sound_handler.play(2)
             if self.XBC.inputs[4][0] != -1:
                 self.game.signal_manager.Permissions['left_pad'] = True
 

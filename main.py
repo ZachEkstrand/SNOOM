@@ -11,6 +11,7 @@ from ray_casting import *
 from object_handler import *
 from pathfinding import *
 from leaderboard import *
+from sound_handler import *
 
 class Game:
     def __init__(self):
@@ -25,6 +26,7 @@ class Game:
     def new_game(self):
         self.map = Map(self)
         self.XBC = XBController(self)
+        self.sound_handler = SoundHandler(self)
         self.signal_manager = SignalManager(self)
         self.scene_manager = SceneManager(self)
         self.player = Player(self)
@@ -36,6 +38,7 @@ class Game:
 
     def reset_game(self):
         del self.map
+        del self.sound_handler
         del self.signal_manager
         del self.scene_manager
         del self.player
@@ -44,6 +47,7 @@ class Game:
         del self.object_handler
         del self.pathfinding
         self.map = Map(self)
+        self.sound_handler = SoundHandler(self)
         self.signal_manager = SignalManager(self)
         self.scene_manager = SceneManager(self)
         self.player = Player(self)
