@@ -4,9 +4,7 @@ class Player:
     def __init__(self, game):
         self.game = game
         self.emit_signal = game.signal_manager.emit_signal
-        self.read_controller_inputs = game.XBC.read_controller_inputs
         self.XBC = game.XBC
-
         self.x, self.y = game.map.player_pos
         self.angle = game.map.player_angle
         self.health = PLAYER_MAX_HEALTH
@@ -16,9 +14,20 @@ class Player:
         self.rot_speed = 0
         self.shooting = False
 
+        self.exit_x, self.exit_y = self.game.map.exit_pos
+
+    def new_round(self):
+        self.x, self.y = self.game.map.player_pos
+        self.angle = self.game.map.player_angle
+        self.health = PLAYER_MAX_HEALTH
+        self.key = False
+        self.exit_x, self.exit_y = self.game.map.exit_pos
+
     def update(self):
-        self.emit_signal(self.read_controller_inputs) #False if in victory state
-        self.emit_signal(self.xbc_inputs) #False if in victory state
+        self.game.XBC.read_controller_inputs()
+        self.xbc_inputs()
+        if self.x > float(self.exit_x):
+            self.game.new_round()
         
     def xbc_inputs(self):
         sin_a = math.sin(self.angle)
@@ -131,7 +140,6 @@ class Player:
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.ammo -= 1
             self.shooting = True
-            #spawn snowball
 
     def check_wall_collision(self, dx, dy):
         scale = PLAYER_SIZE_SCALE / self.game.delta_time
@@ -141,7 +149,7 @@ class Player:
             self.y += dy
     
     def check_wall(self, x, y):
-        return (x, y) not in self.game.map.map_diction
+        return (x, y) not in self.game.map.map_diction or ((x, y) == self.game.map.exit_pos and self.key)
     
     def take_damage(self, damage):
         self.health -= damage

@@ -15,6 +15,7 @@ class Map:
         self.create_blank_map()
         self.cut_out_shapes()
         self.create_player_spawnpoint()
+        self.create_exit_door()
         self.print_map()
 
     def create_blank_map(self):
@@ -156,6 +157,12 @@ class Map:
         else:
             self.map_grid[self.player_spawn_y -1][self.player_spawn_x] = 9
             self.player_angle = 1.5
+
+    def create_exit_door(self):
+        last_space_index = self.space_indexes[len(self.space_indexes) -1]
+        x, y = last_space_index
+        self.map_grid[y][x +1] = 9
+        self.exit_pos = (x +1, y)
 
     def get_map(self):
         for j, row in enumerate(self.map_grid):

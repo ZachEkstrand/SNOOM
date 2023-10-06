@@ -4,8 +4,6 @@ class SignalManager:
     def __init__(self, game):
         self.game = game
         self.Permissions = {
-            'XBController.read_controller_inputs':True,
-            'Player.xbc_inputs':True,
             'Player.attack':False,
             'Player.take_damage':True,
             'joysticks':False,

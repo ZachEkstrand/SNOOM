@@ -136,7 +136,6 @@ class SceneManager:
                 self.change_scene('title_screen', reset_game=True)
     
     def keyboard_update(self):
-        game = self.game
         if self.selected_button > 2:
             self.selected_button = 0
         if self.selected_button < 0 :
@@ -157,9 +156,6 @@ class SceneManager:
             self.B_down = False
             if len(self.username) > 0:
                 self.username.pop()
-
-
-        
 
     def draw_scene(self):
         game = self.game

@@ -52,6 +52,20 @@ class Game:
         self.object_handler = ObjectHandler(self)
         self.pathfinding = Pathfinding(self)
 
+    def new_round(self):
+        del self.map
+        del self.signal_manager
+        del self.ray_casting
+        del self.object_handler
+        del self.pathfinding
+        self.map = Map(self)
+        self.signal_manager = SignalManager(self)
+        self.ray_casting = RayCasting(self)
+        self.object_handler = ObjectHandler(self)
+        self.pathfinding = Pathfinding(self)
+        self.scene_manager.change_scene('arena')
+        self.player.new_round()
+
     def run(self):
         pg.display.flip()
         self.check_events()
@@ -65,7 +79,6 @@ class Game:
                 sys.exit()
 
     def update(self):
-        self.del_queue = []
         self.player.update()
         self.scene_manager.update_scene()
         self.delta_time = self.clock.tick(FPS)
