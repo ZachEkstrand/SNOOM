@@ -53,7 +53,6 @@ class SoundHandler:
     def set_volume(self, index, volume, sfx=True):
         volume = volume * self.master_volume
         if sfx:
-            print(volume)
             audio.set_volume(self.sfx[index], volume)
         else:
             audio.set_volume(self.tracks[index], volume)

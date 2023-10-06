@@ -1,3 +1,5 @@
+import random
+
 class SceneManager:
     def __init__(self, game):
         self.game = game
@@ -50,6 +52,7 @@ class SceneManager:
                 self.game.reset_game()
         if scene_name == 'arena':
             self.sound_handler.fade(1)
+            self.sound_handler.play(random.randint(0, 6), sfx=False, fade_ms=500)
             self.game.signal_manager.Permissions['Player.attack'] = True
             self.game.signal_manager.Permissions['Player.take_damage'] = True
             self.game.signal_manager.Permissions['joysticks'] = True

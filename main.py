@@ -38,21 +38,17 @@ class Game:
 
     def reset_game(self):
         del self.map
-        del self.sound_handler
         del self.signal_manager
         del self.scene_manager
         del self.player
         del self.object_renderer
-        del self.ray_casting
         del self.object_handler
         del self.pathfinding
         self.map = Map(self)
-        self.sound_handler = SoundHandler(self)
         self.signal_manager = SignalManager(self)
         self.scene_manager = SceneManager(self)
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
-        self.ray_casting = RayCasting(self)
         self.object_handler = ObjectHandler(self)
         self.pathfinding = Pathfinding(self)
 
