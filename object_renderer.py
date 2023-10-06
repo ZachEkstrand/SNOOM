@@ -31,7 +31,6 @@ class ObjectRenderer:
         self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
         self.key_image = self.get_texture('resources/sprites/static_sprites/key.png', (59, 60))
         self.game_over_image = self.get_texture(path +'game_over.png', (260 * self.title_image_scale, 73 * self.title_image_scale))
-        self.win_image = self.get_texture(path +'win.png', RES)
         # pause_menu
         self.background_shade = self.get_texture(path +'background_shade.png', RES)
         self.quit_image = self.get_texture(path +'quit.png', (55 * self.button_font_size, 19 * self.button_font_size))
