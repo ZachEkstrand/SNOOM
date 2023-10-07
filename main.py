@@ -1,5 +1,6 @@
 import sys
 import pygame as pg
+from pygame.locals import *
 from settings import *
 from map import *
 from controller_setup import *
@@ -16,7 +17,8 @@ from sound_handler import *
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = pg.display.set_mode(RES, #pg.FULLSCREEN
+        flags = FULLSCREEN | SCALED | DOUBLEBUF
+        self.screen = pg.display.set_mode(RES, flags, 8
         )
         pg.mouse.set_visible(False)
         self.clock = pg.time.Clock()

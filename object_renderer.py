@@ -99,15 +99,7 @@ class ObjectRenderer:
         self.draw_HUD()
 
     def draw_background(self):
-        blit = self.screen.blit
-        self.sky_offset = (self.sky_offset +1.4 * self.game.player.rot_speed) % WIDTH
-        self.tree_offset = (self.tree_offset +1.6 * self.game.player.rot_speed) % WIDTH
-        blit(self.sky_image, (-self.sky_offset, 0))
-        blit(self.sky_image, (-self.sky_offset +WIDTH, 0))
-        blit(self.tree_horizon, (-self.tree_offset, 0))
-        blit(self.tree_horizon, (-self.tree_offset +WIDTH, 0))
-
-        pg.draw.rect(self.screen, FLOOR_COLOR, (0, HALF_HEIGHT, WIDTH, HEIGHT))
+        pg.draw.rect(self.screen, FLOOR_COLOR, (0, 0, WIDTH, HEIGHT))
     
     def render_game_objects(self):
         blit = self.screen.blit
@@ -116,7 +108,7 @@ class ObjectRenderer:
             blit(image, pos)
 
         blit(self.crosshair_image, (self.center_on_x(31), self.center_on_y(31)))
-        blit(self.game.object_handler.weapon.image, (0, 0))
+        #blit(self.game.object_handler.weapon.image, (0, 0))
 
     def draw_HUD(self):
         self.draw_health()
