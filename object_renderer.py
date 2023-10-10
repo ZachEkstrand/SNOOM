@@ -53,7 +53,9 @@ class ObjectRenderer:
 
     def draw_title_screen(self):
         blit = self.screen.blit
+        print(pg.time.get_ticks(), 'start')
         blit(self.background_image, (0, 0))
+        print(pg.time.get_ticks(), 'background image')
         blit(self.title, (self.center_on_x(149 * self.title_image_scale), 40))
         if self.scene_manager.selected_button == 0:
             blit(self.start_button_shadow, (self.center_on_x(132 * self.button_font_size), 297))
@@ -107,7 +109,9 @@ class ObjectRenderer:
         for depth, image, pos in list_objects:
             blit(image, pos)
         blit(self.crosshair_image, (self.center_on_x(31), self.center_on_y(31)))
+        print(pg.time.get_ticks(), 'start')
         blit(self.game.object_handler.weapon.image, (0, 0))
+        print(pg.time.get_ticks(), 'hand')
 
     def draw_HUD(self):
         self.draw_health()
