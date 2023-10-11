@@ -135,15 +135,13 @@ class AnimatedSprite(SpriteObject):
         self.animation_time_prev = pg.time.get_ticks()
         self.animation_trigger = False
     
-    def get_images(self, path, res=None):
+    def get_images(self, path):
         images = deque()
         files = os.listdir(path)
         files.sort()
         for file_name in files:
             if os.path.isfile(os.path.join(path, file_name)):
                 img = pg.image.load(path +'/' +file_name).convert_alpha()
-                if res != None:
-                    img = pg.transform.scale(img, res)
                 images.append(img)
         return images
     
