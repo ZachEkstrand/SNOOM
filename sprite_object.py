@@ -99,6 +99,7 @@ class Snowpile(SpriteObject):
 
     def check_collision_on_player(self):
         if self.dist < 0.5:
+            self.game.sound_manager.play(12)
             self.game.player.ammo += 3
             self.game.object_handler.del_queue.append(self)
 
@@ -107,6 +108,7 @@ class Key(SpriteObject):
                  pos=(1, 1), scale=0.3, shift=0):
         super().__init__(game, path, pos, scale, shift)
         self.time_of_spawn = pg.time.get_ticks()
+        self.game.sound_manager.play(14)
     
     def update(self):
         self.check_collision_on_player()
@@ -115,6 +117,7 @@ class Key(SpriteObject):
 
     def check_collision_on_player(self):
         if self.dist < 0.5:
+            self.game.sound_manager.play(15)
             self.game.player.key = True
             self.game.object_handler.del_queue.append(self)
 

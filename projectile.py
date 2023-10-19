@@ -30,6 +30,8 @@ class Projectile(SpriteObject):
             self.die()
 
     def die(self):
+        if self.dist < 10:
+            self.game.sound_manager.play(13)
         self.alive = False
         self.game.object_handler.del_queue.append(self)
 

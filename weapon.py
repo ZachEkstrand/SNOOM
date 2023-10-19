@@ -16,6 +16,8 @@ class Weapon(AnimatedSprite):
     def animate(self):
         if self.game.player.shooting:
             if self.animation_trigger:
+                if self.frame_counter == 0:
+                    self.game.sound_manager.play(4, player=True)
                 self.images.rotate(-1)
                 self.image = self.images[0]
                 self.frame_counter += 1

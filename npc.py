@@ -139,11 +139,14 @@ class NPC(AnimatedSprite): #elf cadet
 
     def check_health(self):
         if self.health < 1:
+            self.game.sound_manager.play(11)
             self.alive = False
             self.game.player.ammo += 2
             self.game.player.score += self.point_give
             if self.key:
                 self.game.object_handler.spawn_key(self.pos)
+        else:
+            self.game.sound_manager.play(random.randint(8, 10))
 
     def animate_pain(self):
         self.animate(self.pain_images)
@@ -152,6 +155,8 @@ class NPC(AnimatedSprite): #elf cadet
 
     def animate_attack(self):
         if self.animation_trigger:
+            if self.attack_frame_counter == 0:
+                self.game.sound_manager.play(4)
             self.attack_images.rotate(-1)
             self.image = self.attack_images[0]
             self.attack_frame_counter += 1

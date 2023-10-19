@@ -12,7 +12,7 @@ from ray_casting import *
 from object_handler import *
 from pathfinding import *
 from leaderboard import *
-from sound_handler import *
+from sound_manager import *
 
 class Game:
     def __init__(self):
@@ -28,7 +28,7 @@ class Game:
     def new_game(self):
         self.map = Map(self)
         self.XBC = XBController(self)
-        self.sound_handler = SoundHandler(self)
+        self.sound_manager = SoundManager(self)
         self.signal_manager = SignalManager(self)
         self.scene_manager = SceneManager(self)
         self.player = Player(self)
