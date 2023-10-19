@@ -8,7 +8,7 @@ class SoundManager:
         self.game = game
         pg.mixer.init()
         pg.mixer.set_num_channels(16)
-        self.master_volume = 0.5
+        self.master_volume = 1
 
         self.tracks = [
             audio(path +'8-bits_of_christmas.mp3'),             # 0
