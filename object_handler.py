@@ -49,14 +49,20 @@ class ObjectHandler:
         for i in range(self.npc_num):
             npc = random.choices(self.npc_types, self.weights)[0]
             pos = random.choice(self.game.map.space_indexes)
-            while pos in self.restricted_area:
-                pos = random.choice(self.game.map.space_indexes)
             x, y = pos
-            self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))
-        self.npc_positions = {npc:npc.pos for npc in self.npc_list if npc.alive}
+            npc_address = self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))
+            npc_address.get_sprite()
+            while npc_address.ray_cast_player_npc():
+                pos = random.choice(self.game.map.space_indexes)
+                x, y = pos
+                npc_address.x = x +0.6
+                npc_address.y = y +0.6
+                npc_address.get_sprite()
+        self.npc_positions = {npc:npc.pos for npc in self.npc_list}
 
     def add_npc(self, npc):
         self.npc_list.append(npc)
+        return npc
 
     def update(self):
         del_indexes = []
