@@ -6,7 +6,7 @@ class Projectile(SpriteObject):
                  pos=(1, 1), scale=0.15, shift= -0.04, entity='player', angle=1, damage=50):
         super().__init__(game, path, pos, scale, shift)
         self.alive = True
-        self.speed = 0.3
+        self.speed = 0.01
         self.entity = entity
         self.angle = angle
         self.damage = damage
@@ -51,8 +51,8 @@ class Projectile(SpriteObject):
                 self.die()
 
     def movement(self):
-        dx = math.cos(self.angle) * self.speed
-        dy = math.sin(self.angle) * self.speed
+        dx = math.cos(self.angle) * self.speed * self.game.delta_time
+        dy = math.sin(self.angle) * self.speed * self.game.delta_time
         self.x += dx
         self.y += dy
 

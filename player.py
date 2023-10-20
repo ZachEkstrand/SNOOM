@@ -42,7 +42,7 @@ class Player:
 
         rv1 = 0.11
         rv2 = 0.99
-        wv1 = 0.0005
+        wv1 = 0.00025
         wv2 = 0.05
 
         self.joy_str_0 = 0
@@ -68,15 +68,16 @@ class Player:
                 dx += -speed_sin * self.joy_str_0
                 dy += speed_cos * self.joy_str_0
 
+            dx *= self.game.delta_time
+            dy *= self.game.delta_time
+
             if self.XBC.inputs[2] > rv1:
                 self.joy_str_2 = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[2] -rv1) +wv1
-                self.angle += self.joy_str_2 * LOOK_SENSITIVITY
-                self.rot_speed = self.joy_str_2 * PLAYER_ROT_SPEED
+                self.angle += self.joy_str_2 * LOOK_SENSITIVITY * self.game.delta_time
 
             if self.XBC.inputs[2] < -rv1:
                 self.joy_str_2 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[2] +rv1) -wv1
-                self.angle += self.joy_str_2 * LOOK_SENSITIVITY
-                self.rot_speed = self.joy_str_2 * PLAYER_ROT_SPEED
+                self.angle += self.joy_str_2 * LOOK_SENSITIVITY * self.game.delta_time
 
         self.angle %= math.tau
 

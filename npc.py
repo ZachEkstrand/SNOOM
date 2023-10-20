@@ -16,7 +16,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.point_give = 11
         self.attack_dist = random.randint(3, 6)
         self.attack_delay = 180
-        self.speed = 0.025
+        self.speed = 0.001
         self.size = 15
         self.hitbox = self.size / 70
         self.health = 100
@@ -171,8 +171,8 @@ class NPC(AnimatedSprite): #elf cadet
 
         if next_pos not in self.game.object_handler.npc_positions:
             angle = math.atan2(next_y +0.5 -self.y, next_x +0.5 -self.x)
-            dx = math.cos(angle) * self.speed
-            dy = math.sin(angle) * self.speed
+            dx = math.cos(angle) * self.speed * self.game.delta_time
+            dy = math.sin(angle) * self.speed * self.game.delta_time
             self.check_wall_collision(dx, dy)
 
     def check_wall_collision(self, dx, dy):
