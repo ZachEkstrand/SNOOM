@@ -17,7 +17,7 @@ from sound_manager import *
 class Game:
     def __init__(self):
         pg.init()
-        flags = FULLSCREEN | SCALED | DOUBLEBUF
+        flags = DOUBLEBUF #| FULLSCREEN | SCALED
         self.screen = pg.display.set_mode(RES, flags, 8
         )
         pg.mouse.set_visible(False)
@@ -71,8 +71,9 @@ class Game:
     def run(self):
         pg.display.flip()
         self.check_events()
+        self.draw_flat()
         self.update()
-        self.draw()
+        s#elf.draw()
 
     def check_events(self):
         for event in pg.event.get():
@@ -87,6 +88,12 @@ class Game:
 
     def draw(self):
         self.scene_manager.draw_scene()
+        
+    def draw_flat(self):
+        scale = 30
+        self.screen.fill('black')
+        [pg.draw.rect(self.screen, 'darkgray', (pos[0] * scale, pos[1] * scale, scale, scale), 1) for pos in self.map.map_diction]
+        pg.draw.circle(self.screen, 'green', (self.player.x * scale, self.player.y * scale), 7)
 
 if __name__ == '__main__':
     game = Game()
