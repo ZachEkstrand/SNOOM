@@ -58,26 +58,26 @@ class Decoration(SpriteObject):
                  pos=(1, 1), scale=0.6, shift=0.5):
         super().__init__(game, path, pos, scale, shift)
 
-    def get_sprite_projection(self):
-        proj = SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
-        proj_width, proj_height = proj * self.IMAGE_RATIO, proj
+    #def get_sprite_projection(self):
+        #proj = SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
+        #proj_width, proj_height = proj * self.IMAGE_RATIO, proj
         
-        image = pg.transform.scale(self.image, (proj_width, proj_height))
+        #image = pg.transform.scale(self.image, (proj_width, proj_height))
         
-        rv1 = 0.6
-        rv2 = 1.8
-        wv1 = 0
-        wv2 = 255
+        #rv1 = 0.6
+        #rv2 = 1.8
+        #wv1 = 0
+        #wv2 = 255
 
-        self.transparency = ((wv1 -wv2) / (rv1 -rv2)) * (self.dist -rv1) +wv1
+        #self.transparency = ((wv1 -wv2) / (rv1 -rv2)) * (self.dist -rv1) +wv1
         
-        image.set_alpha(int(self.transparency))
+        #image.set_alpha(int(self.transparency))
 
-        self.sprite_half_width = proj_width // 2
-        height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
-        pos = self.screen_x -self.sprite_half_width, HALF_HEIGHT -proj_height // 2 +height_shift
+        #self.sprite_half_width = proj_width // 2
+        #height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
+        #pos = self.screen_x -self.sprite_half_width, HALF_HEIGHT -proj_height // 2 +height_shift
 
-        self.game.ray_casting.objects_to_render.append((self.norm_dist, image, pos))
+        #self.game.ray_casting.objects_to_render.append((self.norm_dist, image, pos))
 
     @property
     def pos(self):

@@ -80,7 +80,7 @@ class RayCasting:
             self.ray_casting_result.append((depth, proj_height, texture, offset))
 
             #draw ray casting lines
-            pg.draw.line(self.game.screen, 'yellow', (30 * ox, 30 * oy), (30* ox + 30 * depth * cos_a, 30 * oy + 30 * depth * sin_a), 1)
+            #pg.draw.line(self.game.screen, 'yellow', (30 * ox, 30 * oy), (30* ox + 30 * depth * cos_a, 30 * oy + 30 * depth * sin_a), 1)
 
             ray_angle += DELTA_ANGLE
 

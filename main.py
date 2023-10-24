@@ -13,6 +13,7 @@ from object_handler import *
 from pathfinding import *
 from leaderboard import *
 from sound_manager import *
+from projectile import *
 
 class Game:
     def __init__(self):
@@ -71,9 +72,9 @@ class Game:
     def run(self):
         pg.display.flip()
         self.check_events()
-        self.draw_flat()
+        #self.draw_flat()
         self.update()
-        s#elf.draw()
+        self.draw()
 
     def check_events(self):
         for event in pg.event.get():
@@ -85,6 +86,7 @@ class Game:
         self.player.update()
         self.scene_manager.update_scene()
         self.delta_time = self.clock.tick(FPS)
+        pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
 
     def draw(self):
         self.scene_manager.draw_scene()
@@ -94,6 +96,7 @@ class Game:
         self.screen.fill('black')
         [pg.draw.rect(self.screen, 'darkgray', (pos[0] * scale, pos[1] * scale, scale, scale), 1) for pos in self.map.map_diction]
         pg.draw.circle(self.screen, 'green', (self.player.x * scale, self.player.y * scale), 7)
+        [pg.draw.circle(self.screen, 'blue', (ob.x * scale, ob.y * scale), 3) for ob in self.object_handler.sprite_list if isinstance(ob, Projectile)]
 
 if __name__ == '__main__':
     game = Game()
