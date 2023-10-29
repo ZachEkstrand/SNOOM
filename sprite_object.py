@@ -103,8 +103,11 @@ class Key(SpriteObject):
         self.game.sound_manager.play(14)
     
     def update(self):
-        self.check_collision_on_player()
-        self.move()
+        if self.game.scene_manager.current_scene == 'pause_menu':
+            pass 
+        else:
+            self.check_collision_on_player()
+            self.move()
         super().update()
 
     def check_collision_on_player(self):
