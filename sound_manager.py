@@ -37,8 +37,7 @@ class SoundManager:
             audio(spath +'snowball_death.mp3'), # 13
             audio(spath +'key.wav'),            # 14
             audio(spath +'key_pickup.mp3'),     # 15
-            audio(spath +'door_open.mp3'),      # 16
-            audio(spath +'door_close.wav')      # 17
+            audio(spath +'door.mp3'),           # 16
         ]
     
         self.set_master()
@@ -70,16 +69,13 @@ class SoundManager:
             return self.check_channel([6, 7, 8, 9, 10])
         if index in [5, 6, 7]:
             return 5
-        if index in [8, 9, 10, 12]:
+        if index in [8, 9, 10, 12, 14]:
             return self.check_channel([11, 12])
-        if index == 11:
+        if index in [11, 15, 16]:
             return 15
         if index == 13:
             return self.check_channel([13, 14])
-        if index == 14:
-            return self.check_channel([11, 12])
-        if index == 15:
-            return 15
+        
         
     def check_channel(self, nums):
         for i in nums:
@@ -108,3 +104,15 @@ class SoundManager:
         
     def queue(self, index):
         pg.mixer.Channel(1).queue(self.tracks[index])
+
+    def pause(self):
+        self.set_music_volume(0.3)
+        for i in range(4, 16):
+            pg.mixer.Channel(i).pause()
+
+    def unpause(self):
+        for i in range(4, 16):
+            pg.mixer.Channel(i).unpause()
+    
+    def get_busy(self, index):
+        return pg.mixer.Channel(index).get_busy()

@@ -15,7 +15,7 @@ class SceneManager:
         self.sound_manager.set_volume(0, 0.3)
         self.sound_manager.play(0, loops=-1, fade_ms=1000)
     
-    def change_scene(self, scene_name, reset_game=False):
+    def change_scene(self, scene_name, reset_game=False, unpause=False):
         self.current_scene = scene_name
         self.selected_button = 0 # acting as self.row
         self.column = 0
@@ -49,7 +49,10 @@ class SceneManager:
                 self.game.reset_game()
         if scene_name == 'arena':
             self.sound_manager.set_music_volume(0.8)
-            self.sound_manager.play(random.randint(0, 4), sfx=False, fade_ms=500)
+            if unpause:
+                self.sound_manager.unpause()
+            if not self.sound_manager.get_busy(1):
+                self.sound_manager.play(random.randint(0, 4), sfx=False, fade_ms=500)
             self.game.signal_manager.Permissions['Player.attack'] = True
             self.game.signal_manager.Permissions['Player.take_damage'] = True
             self.game.signal_manager.Permissions['joysticks'] = True
@@ -58,6 +61,7 @@ class SceneManager:
             self.game.signal_manager.Permissions['down_pad'] = False
             self.game.signal_manager.Permissions['main_buttons'] = True
         if scene_name == 'pause_menu':
+            self.sound_manager.pause()
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
             self.game.signal_manager.Permissions['D-pad'] = True
@@ -137,12 +141,12 @@ class SceneManager:
         elif self.A_down:
             self.sound_manager.play(3)
             if self.selected_button == 0:
-                self.change_scene('arena')
+                self.change_scene('arena', unpause=True)
             if self.selected_button == 1:
                 self.change_scene('title_screen', reset_game=True)
         elif self.menu_button_down:
             self.sound_manager.play(3)
-            self.change_scene('arena')
+            self.change_scene('arena', unpause=True)
 
     def game_over_update(self):
         game = self.game

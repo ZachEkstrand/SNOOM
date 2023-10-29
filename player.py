@@ -29,6 +29,7 @@ class Player:
         self.game.XBC.read_controller_inputs()
         self.xbc_inputs()
         if self.x > float(self.exit_x):
+            self.game.sound_manager.play(16)
             self.game.new_round()
         
     def xbc_inputs(self):
