@@ -13,7 +13,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.walk_images = self.get_images(path +'/walk')
         self.idle_images = self.get_images(path +'/idle')
 
-        self.point_give = 11
+        self.point_give = 300
         self.attack_dist = random.randint(3, 6)
         self.attack_delay = 180
         self.speed = 0.001

@@ -83,17 +83,17 @@ class SoundManager:
                 return i
         return nums[0]
 
-    def fade(self, index, sfx=True, time=500):
-        if sfx:
-            if index == 1:
-                self.wind = False
-            audio.fadeout(self.sfx[index], time)
-        else:
-            audio.fadeout(self.tracks[index, time])
+    def fade_music(self, time=500):
+        pg.mixer.Channel(1).fadeout(time)
 
     def set_volume(self, index, volume):
         volume = volume * self.master_volume
         audio.set_volume(self.sfx[index], volume)
+
+    def set_sfx_volume(self, volume):
+        volume = volume * self.master_volume
+        for i in range(4, 16):
+            pg.mixer.Channel(i).set_volume(volume)
 
     def set_music_volume(self, volume):
         volume = volume * self.master_volume
@@ -116,3 +116,6 @@ class SoundManager:
     
     def get_busy(self, index):
         return pg.mixer.Channel(index).get_busy()
+    
+    def get_track(self):
+        return pg.mixer.Channel(1).get_sound()
