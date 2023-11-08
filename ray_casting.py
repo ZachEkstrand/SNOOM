@@ -15,6 +15,13 @@ class RayCasting:
 
     def ray_cast(self):
         self.ray_casting_result = []
+        self.draw_lines = {
+            'ox':[],
+            'oy':[],
+            'depth':[],
+            'cos_a':[],
+            'sin_a':[]
+        }
         texture_vert, texture_hor = 1, 1
         ox, oy = self.game.player.pos
         x_map, y_map = self.game.player.map_pos
@@ -80,7 +87,12 @@ class RayCasting:
             self.ray_casting_result.append((depth, proj_height, texture, offset))
 
             #draw ray casting lines
-            #pg.draw.line(self.game.screen, 'yellow', (30 * ox, 30 * oy), (30* ox + 30 * depth * cos_a, 30 * oy + 30 * depth * sin_a), 1)
+            pg.draw.line(self.game.screen, 'yellow', (30 * ox, 30 * oy), (30* ox + 30 * depth * cos_a, 30 * oy + 30 * depth * sin_a), 1)
+            self.draw_lines['ox'].append(ox)
+            self.draw_lines['oy'].append(oy)
+            self.draw_lines['depth'].append(depth)
+            self.draw_lines['cos_a'].append(cos_a)
+            self.draw_lines['sin_a'].append(sin_a)
 
             ray_angle += DELTA_ANGLE
 

@@ -18,7 +18,7 @@ from projectile import *
 class Game:
     def __init__(self):
         pg.init()
-        flags = DOUBLEBUF #| FULLSCREEN | SCALED
+        flags = DOUBLEBUF | FULLSCREEN | SCALED
         self.screen = pg.display.set_mode(RES, flags, 8
         )
         pg.mouse.set_visible(False)
@@ -72,9 +72,9 @@ class Game:
     def run(self):
         pg.display.flip()
         self.check_events()
-        #self.draw_flat()
+        self.draw_flat()
         self.update()
-        self.draw()
+        #self.draw()
 
     def check_events(self):
         for event in pg.event.get():
@@ -96,6 +96,7 @@ class Game:
         self.screen.fill('black')
         [pg.draw.rect(self.screen, 'darkgray', (pos[0] * scale, pos[1] * scale, scale, scale), 1) for pos in self.map.map_diction]
         pg.draw.circle(self.screen, 'green', (self.player.x * scale, self.player.y * scale), 7)
+        
         [pg.draw.circle(self.screen, 'blue', (ob.x * scale, ob.y * scale), 3) for ob in self.object_handler.sprite_list if isinstance(ob, Projectile)]
 
 if __name__ == '__main__':
