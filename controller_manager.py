@@ -1,6 +1,6 @@
 import pygame as pg
 
-class XBController:
+class ControllerManager:
     def __init__(self, game):
         self.joysticks = [pg.joystick.Joystick(i) for i in range(pg.joystick.get_count())]
         self.controller = self.joysticks[0]

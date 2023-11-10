@@ -6,7 +6,7 @@ class Player:
         self.game = game
         self.emit_signal = game.signal_manager.emit_signal
         self.sound_manager = game.sound_manager
-        self.XBC = game.XBC
+        self.controller_manager = game.controller_manager
         self.x, self.y = game.map.player_pos
         self.angle = game.map.player_angle
         self.health = PLAYER_MAX_HEALTH
@@ -26,13 +26,13 @@ class Player:
         self.exit_x, self.exit_y = self.game.map.exit_pos
 
     def update(self):
-        self.game.XBC.read_controller_inputs()
-        self.xbc_inputs()
+        self.game.controller_manager.read_controller_inputs()
+        self.controller_inputs()
         if self.x > float(self.exit_x):
             self.game.sound_manager.play(16)
             self.game.new_round()
         
-    def xbc_inputs(self):
+    def controller_inputs(self):
         sin_a = math.sin(self.angle)
         cos_a = math.cos(self.angle)
         dx, dy = 0, 0
@@ -52,90 +52,90 @@ class Player:
 
         # joysticks
         if self.game.signal_manager.Permissions['joysticks']:
-            if self.XBC.inputs[1] < -rv1:
-                self.joy_str_1 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[1] +rv1) -wv1
+            if self.controller_manager.inputs[1] < -rv1:
+                self.joy_str_1 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.controller_manager.inputs[1] +rv1) -wv1
                 dx += speed_cos * -self.joy_str_1
                 dy += speed_sin * -self.joy_str_1
-            if self.XBC.inputs[1] > rv1:
-                self.joy_str_1 = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[1] -rv1) +wv1
+            if self.controller_manager.inputs[1] > rv1:
+                self.joy_str_1 = ((wv2 -wv1) / (rv2 -rv1)) * (self.controller_manager.inputs[1] -rv1) +wv1
                 dx += -speed_cos * self.joy_str_1
                 dy += -speed_sin * self.joy_str_1
-            if self.XBC.inputs[0] < -rv1:
-                self.joy_str_0 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[0] +rv1) -wv1
+            if self.controller_manager.inputs[0] < -rv1:
+                self.joy_str_0 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.controller_manager.inputs[0] +rv1) -wv1
                 dx += speed_sin * -self.joy_str_0
                 dy += -speed_cos * -self.joy_str_0
-            if self.XBC.inputs[0] > rv1:
-                self.joy_str_0 = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[0] -rv1) +wv1
+            if self.controller_manager.inputs[0] > rv1:
+                self.joy_str_0 = ((wv2 -wv1) / (rv2 -rv1)) * (self.controller_manager.inputs[0] -rv1) +wv1
                 dx += -speed_sin * self.joy_str_0
                 dy += speed_cos * self.joy_str_0
 
-            if self.XBC.inputs[2] > rv1:
-                self.joy_str_2 = ((wv2 -wv1) / (rv2 -rv1)) * (self.XBC.inputs[2] -rv1) +wv1
+            if self.controller_manager.inputs[2] > rv1:
+                self.joy_str_2 = ((wv2 -wv1) / (rv2 -rv1)) * (self.controller_manager.inputs[2] -rv1) +wv1
                 self.angle += self.joy_str_2 * LOOK_SENSITIVITY * self.game.delta_time
 
-            if self.XBC.inputs[2] < -rv1:
-                self.joy_str_2 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.XBC.inputs[2] +rv1) -wv1
+            if self.controller_manager.inputs[2] < -rv1:
+                self.joy_str_2 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.controller_manager.inputs[2] +rv1) -wv1
                 self.angle += self.joy_str_2 * LOOK_SENSITIVITY * self.game.delta_time
 
         self.angle %= math.tau
 
         # D-pad
         if self.game.signal_manager.Permissions['D-pad']:
-            if self.game.signal_manager.Permissions['up_pad'] and self.XBC.inputs[4][1] == 1:
+            if self.game.signal_manager.Permissions['up_pad'] and self.controller_manager.inputs[4][1] == 1:
                 self.game.scene_manager.selected_button -= 1
                 self.game.signal_manager.Permissions['up_pad'] = False
                 self.sound_manager.play(2)
-            if self.XBC.inputs[4][1] != 1:
+            if self.controller_manager.inputs[4][1] != 1:
                 self.game.signal_manager.Permissions['up_pad'] = True
 
-            if self.game.signal_manager.Permissions['down_pad'] and self.XBC.inputs[4][1] == -1:
+            if self.game.signal_manager.Permissions['down_pad'] and self.controller_manager.inputs[4][1] == -1:
                 self.game.scene_manager.selected_button += 1
                 self.game.signal_manager.Permissions['down_pad'] = False
                 self.sound_manager.play(2)
-            if self.XBC.inputs[4][1] != -1:
+            if self.controller_manager.inputs[4][1] != -1:
                 self.game.signal_manager.Permissions['down_pad'] = True
 
-            if self.game.signal_manager.Permissions['right_pad'] and self.XBC.inputs[4][0] == 1:
+            if self.game.signal_manager.Permissions['right_pad'] and self.controller_manager.inputs[4][0] == 1:
                 self.game.scene_manager.column += 1
                 self.game.signal_manager.Permissions['right_pad'] = False
                 self.sound_manager.play(2)
-            if self.XBC.inputs[4][0] != 1:
+            if self.controller_manager.inputs[4][0] != 1:
                 self.game.signal_manager.Permissions['right_pad'] = True
 
-            if self.game.signal_manager.Permissions['left_pad'] and self.XBC.inputs[4][0] == -1:
+            if self.game.signal_manager.Permissions['left_pad'] and self.controller_manager.inputs[4][0] == -1:
                 self.game.scene_manager.column -= 1
                 self.game.signal_manager.Permissions['left_pad'] = False
                 self.sound_manager.play(2)
-            if self.XBC.inputs[4][0] != -1:
+            if self.controller_manager.inputs[4][0] != -1:
                 self.game.signal_manager.Permissions['left_pad'] = True
 
         # buttons
         if self.game.signal_manager.Permissions['main_buttons']:
-            if self.game.signal_manager.Permissions['A_button'] and self.XBC.inputs[5] == 1:
+            if self.game.signal_manager.Permissions['A_button'] and self.controller_manager.inputs[5] == 1:
                 self.game.scene_manager.A_down = True
                 self.game.signal_manager.Permissions['A_button'] = False
-            if self.XBC.inputs[5] != 1:
+            if self.controller_manager.inputs[5] != 1:
                 self.game.scene_manager.A_down = False
                 self.game.signal_manager.Permissions['A_button'] = True
 
-            if self.game.signal_manager.Permissions['B_button'] and self.XBC.inputs[6] == 1:
+            if self.game.signal_manager.Permissions['B_button'] and self.controller_manager.inputs[6] == 1:
                 self.game.scene_manager.B_down = True
                 self.game.signal_manager.Permissions['B_button'] = False
-            if self.XBC.inputs[6] != 1:
+            if self.controller_manager.inputs[6] != 1:
                 self.game.scene_manager.B_button = False
                 self.game.signal_manager.Permissions['B_button'] = True
         
-            if self.game.signal_manager.Permissions['menu_button'] and self.XBC.inputs[7] == 1:
+            if self.game.signal_manager.Permissions['menu_button'] and self.controller_manager.inputs[7] == 1:
                 self.game.scene_manager.menu_button_down = True
                 self.game.signal_manager.Permissions['menu_button'] = False
-            if self.XBC.inputs[7] != 1:
+            if self.controller_manager.inputs[7] != 1:
                 self.game.scene_manager.menu_button_down = False
                 self.game.signal_manager.Permissions['menu_button'] = True
         
         # trigger
-        if round(self.XBC.inputs[3]) == 1:
+        if round(self.controller_manager.inputs[3]) == 1:
             self.emit_signal(self.attack)
-        if (round(self.XBC.inputs[3]) == -1) and (self.shooting == False) and (self.game.scene_manager.current_scene == 'arena'):
+        if (round(self.controller_manager.inputs[3]) == -1) and (self.shooting == False) and (self.game.scene_manager.current_scene == 'arena'):
             self.game.signal_manager.Permissions['Player.attack'] = True
 
         self.check_wall_collision(dx, dy)

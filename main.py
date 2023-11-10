@@ -3,7 +3,7 @@ import pygame as pg
 from pygame.locals import *
 from settings import *
 from map import *
-from controller_setup import *
+from controller_manager import *
 from signal_manager import *
 from scene_manager import *
 from player import *
@@ -36,7 +36,7 @@ class Game:
 
     def new_game(self):
         self.map = Map(self)
-        self.XBC = XBController(self)
+        self.controller_manager = ControllerManager(self)
         self.sound_manager = SoundManager(self)
         self.signal_manager = SignalManager(self)
         self.scene_manager = SceneManager(self)
@@ -83,8 +83,8 @@ class Game:
         pg.display.flip()
         self.check_events()
         self.update()
-        #self.draw()
-        self.draw_flat()
+        self.draw()
+        #self.draw_flat()
 
     def check_events(self):
         for event in pg.event.get():
