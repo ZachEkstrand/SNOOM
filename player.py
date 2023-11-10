@@ -12,6 +12,7 @@ class Player:
         self.health = PLAYER_MAX_HEALTH
         self.score = 0
         self.ammo = PLAYER_STARTING_AMMO
+        self.candy_canes = 0
         self.key = False
         self.rot_speed = 0
         self.shooting = False
@@ -124,6 +125,13 @@ class Player:
             if self.controller_manager.inputs[6] != 1:
                 self.game.scene_manager.B_button = False
                 self.game.signal_manager.Permissions['B_button'] = True
+
+            if self.game.signal_manager.Permissions['X_button'] and self.controller_manager.inputs[8] == 1:
+                self.game.scene_manager.X_down = True
+                self.game.signal_manager.Permissions['X_button'] = False
+            if self.controller_manager.inputs[8] != 1:
+                self.game.scene_manager.X_down = False
+                self.game.signal_manager.Permissions['X_button'] = True
         
             if self.game.signal_manager.Permissions['menu_button'] and self.controller_manager.inputs[7] == 1:
                 self.game.scene_manager.menu_button_down = True
@@ -171,6 +179,12 @@ class Player:
             if int(score) < self.score:
                 return True, i
         return False, None
+    
+    def eat(self):
+        if self.candy_canes > 0:
+            #play eat sound
+            self.candy_canes -= 1
+            self.health += 25
 
     @property
     def pos(self):

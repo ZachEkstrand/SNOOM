@@ -4,7 +4,7 @@ class ControllerManager:
     def __init__(self, game):
         self.joysticks = [pg.joystick.Joystick(i) for i in range(pg.joystick.get_count())]
         self.controller = self.joysticks[0]
-        self.inputs = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.inputs = [0 for i in range(9)]
 
     def read_controller_inputs(self):
         self.inputs[0] = self.controller.get_axis(0)
@@ -25,3 +25,6 @@ class ControllerManager:
         
         # menu-button
         self.inputs[7] = self.controller.get_button(7)
+
+        # X-button
+        self.inputs[8] = self.controller.get_button(2)

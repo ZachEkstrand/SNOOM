@@ -15,6 +15,7 @@ class SignalManager:
             'main_buttons':True,
             'A_button':True,
             'B_button':False,
+            'X_button':False,
             'menu_button':False
         }
         

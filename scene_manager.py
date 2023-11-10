@@ -23,6 +23,7 @@ class SceneManager:
 
         self.A_down = False
         self.B_down = False
+        self.X_down = False
         self.menu_button_down = False
 
         if scene_name == 'title_screen':
@@ -132,6 +133,8 @@ class SceneManager:
         game.object_handler.update()
         if self.sound_manager.get_queue() == None:
             self.sound_manager.queue(random.randint(0, 4))
+        if self.X_down:
+            self.game.player.eat()
         if self.menu_button_down:
             self.sound_manager.play(1)
             self.change_scene('pause_menu')

@@ -30,7 +30,7 @@ class ObjectHandler:
             pos = (pos[0] +0.5, pos[1] +0.5)
             create_object = random.choices([True, False], [3, 97])[0]
             if create_object:
-                random_sprite = random.choices([Decoration, Tree, Snowpile])[0]
+                random_sprite = random.choices([CandyCane, Tree, Snowpile])[0]
                 self.add_sprite(random_sprite(self.game, pos=pos))
 
     def add_sprite(self, sprite):

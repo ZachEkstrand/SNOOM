@@ -27,7 +27,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.pain = False
         self.ray_cast_value = False
         self.frame_counter = 0
-        self.key = True
+        self.key = False
         self.destination = None
 
     def update(self):

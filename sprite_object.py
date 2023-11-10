@@ -95,6 +95,21 @@ class Snowpile(SpriteObject):
             self.game.player.ammo += 3
             self.game.object_handler.del_queue.append(self)
 
+class CandyCane(SpriteObject):
+    def __init__(self, game, path=path +'static_sprites/candy_cane.png',
+                 pos=(1, 1), scale=0.6, shift=0.5):
+        super().__init__(game, path, pos, scale, shift)
+
+    def update(self):
+        super().update()
+        self.check_collision_on_player()
+
+    def check_collision_on_player(self):
+        if self.dist < 0.5:
+            #pick up candy cane sound
+            self.game.player.candy_canes += 1
+            self.game.object_handler.del_queue.append(self)
+
 class Key(SpriteObject):
     def __init__(self, game, path=path +'static_sprites/key.png',
                  pos=(1, 1), scale=0.3, shift=0):

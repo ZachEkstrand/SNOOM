@@ -29,6 +29,7 @@ class ObjectRenderer:
         self.tree_horizon = self.get_texture(path +'tree_horizon.png', (WIDTH, HALF_HEIGHT))
         self.crosshair_image = self.get_texture(path +'crosshair.png', (31, 31))
         self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
+        self.candy_cane_image = self.get_texture('resources/sprites/static_sprites/candy_cane_item.png', (64 // 2, 143 // 2))
         self.key_image = self.get_texture('resources/sprites/static_sprites/key.png', (59, 60))
         self.game_over_image = self.get_texture(path +'game_over.png', (260 * self.title_image_scale, 73 * self.title_image_scale))
         # pause_menu
@@ -113,6 +114,7 @@ class ObjectRenderer:
         self.draw_health()
         self.draw_score()
         self.draw_ammo()
+        self.draw_candy_canes()
         self.draw_key()
 
     def draw_health(self):
@@ -145,6 +147,23 @@ class ObjectRenderer:
         if i == 1:
             blit(self.char_sprites_18x19[cmsg[0]], (820 +(30 * self.general_font_size) -10, 525))
             blit(self.snowball_image,(745 +(30 * self.general_font_size) -10, 515))
+
+    def draw_candy_canes(self):
+        blit = self.screen.blit
+        candy_canes = str(self.player.candy_canes)
+        cmsg = self.convert_string_to_font(candy_canes)
+        i = len(cmsg)
+        for num in cmsg:
+            blit(self.char_sprites_36x38[num], (WIDTH -(30 * i * self.general_font_size) -10, 400))
+            i -= 1
+        i = len(cmsg)
+        cmsg = self.convert_string_to_font('X')
+        if i == 2:
+            blit(self.char_sprites_18x19[cmsg[0]], (820, 425))
+            blit(self.candy_cane_image, (770, 400))
+        if i == 1:
+            blit(self.char_sprites_18x19[cmsg[0]], (820 +(30 * self.general_font_size) -10, 425))
+            blit(self.candy_cane_image, (770 +(30 * self.general_font_size) -10, 400))
 
     def draw_key(self):
         if self.game.player.key:
