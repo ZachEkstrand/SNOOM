@@ -15,7 +15,7 @@ class ObjectHandler:
         self.player_projectile_pos = {}
         self.enemy_projectile_pos = {}
 
-        self.npc_num = 5
+        self.npc_num = 10
         self.npc_types = [NPC]
         self.weights = [100]
 
@@ -53,6 +53,7 @@ class ObjectHandler:
             npc_address = self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))
             npc_address.get_sprite()
             while npc_address.ray_cast_player_npc():
+                npc_address.destination = None
                 pos = random.choice(self.game.map.space_indexes)
                 x, y = pos
                 npc_address.x = x +0.6

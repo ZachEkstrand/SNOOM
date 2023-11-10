@@ -27,8 +27,8 @@ class NPC(AnimatedSprite): #elf cadet
         self.pain = False
         self.ray_cast_value = False
         self.frame_counter = 0
-        self.player_search_trigger = False
-        self.key = False
+        self.key = True
+        self.destination = None
 
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass 
@@ -45,13 +45,12 @@ class NPC(AnimatedSprite): #elf cadet
             if self.pain:
                 self.animate_pain()
             elif self.ray_cast_value:
-                self.player_search_trigger = True
                 if self.dist < self.attack_dist:
                     self.animate_attack()
                 else:
                     self.animate(self.walk_images)
                     self.movement()
-            elif self.player_search_trigger:
+            elif self.destination:
                 self.animate(self.walk_images)
                 self.movement()
             else:
@@ -120,7 +119,7 @@ class NPC(AnimatedSprite): #elf cadet
         wall_dist = max(wall_dist_v, wall_dist_h)
 
         if 0 < player_dist < wall_dist or not wall_dist:
-            self.last_seen_player_pos = self.player.map_pos
+            self.destination = self.player.map_pos
             return True
         return False
     
@@ -166,14 +165,22 @@ class NPC(AnimatedSprite): #elf cadet
                 self.attack_frame_counter = 0
 
     def movement(self):
-        next_pos = self.game.pathfinding.get_path(self.map_pos, self.player.map_pos)
+        next_pos = self.game.pathfinding.get_path(self.map_pos, self.destination)
         next_x, next_y = next_pos
+        self.game.e_lines['start_x'].append(self.x)
+        self.game.e_lines['start_y'].append(self.y)
+        self.game.e_lines['end_x'].append(self.destination[0] +0.5)
+        self.game.e_lines['end_y'].append(self.destination[1] +0.5)
+        self.game.e_lines['next_x'].append(next_x)
+        self.game.e_lines['next_y'].append(next_y)
 
         if next_pos not in self.game.object_handler.npc_positions:
             angle = math.atan2(next_y +0.5 -self.y, next_x +0.5 -self.x)
             dx = math.cos(angle) * self.speed * self.game.delta_time
             dy = math.sin(angle) * self.speed * self.game.delta_time
             self.check_wall_collision(dx, dy)
+        if self.map_pos == self.destination:
+            self.destination = None
 
     def check_wall_collision(self, dx, dy):
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):

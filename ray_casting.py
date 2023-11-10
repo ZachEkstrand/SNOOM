@@ -6,6 +6,13 @@ class RayCasting:
     def __init__(self, game):
         self.game = game
         self.ray_casting_result = []
+        self.draw_lines = {
+            'ox':[],
+            'oy':[],
+            'depth':[],
+            'cos_a':[],
+            'sin_a':[]
+        }
         self.objects_to_render = []
         self.textures = game.object_renderer.wall_textures
 
@@ -87,7 +94,7 @@ class RayCasting:
             self.ray_casting_result.append((depth, proj_height, texture, offset))
 
             #draw ray casting lines
-            pg.draw.line(self.game.screen, 'yellow', (30 * ox, 30 * oy), (30* ox + 30 * depth * cos_a, 30 * oy + 30 * depth * sin_a), 1)
+            #pg.draw.line(self.game.screen, 'yellow', (30 * ox, 30 * oy), (30 * ox + 30 * depth * cos_a, 30 * oy + 30 * depth * sin_a), 1)
             self.draw_lines['ox'].append(ox)
             self.draw_lines['oy'].append(oy)
             self.draw_lines['depth'].append(depth)

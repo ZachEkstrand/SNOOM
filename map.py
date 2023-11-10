@@ -1,4 +1,5 @@
 import random
+import math
 
 class Map:
     def __init__(self, game):
@@ -156,7 +157,7 @@ class Map:
             self.player_angle = 0
         else:
             self.map_grid[self.player_spawn_y -1][self.player_spawn_x] = 9
-            self.player_angle = 1.5
+            self.player_angle = math.pi / 2
 
     def create_exit_door(self):
         last_space_index = self.space_indexes[len(self.space_indexes) -1]
