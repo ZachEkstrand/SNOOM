@@ -22,12 +22,12 @@ class NPC(AnimatedSprite): #elf cadet
         self.health = 100
         self.attack_damage = 10
         self.attack_frame_counter = 0
+        self.pain_frame_counter = 0
         self.attack_frame_num = len(self.attack_images)
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
         self.frame_counter = 0
-        self.key = False
         self.destination = None
 
     def update(self):
@@ -142,17 +142,23 @@ class NPC(AnimatedSprite): #elf cadet
             self.alive = False
             self.game.player.ammo += 2
             self.game.player.score += self.point_give
-            if self.key:
+            if len([npc for npc in self.game.object_handler.npc_list if npc.alive]) == 0:
                 self.game.object_handler.spawn_key(self.pos)
         else:
             self.game.sound_manager.play(random.randint(8, 10))
 
     def animate_pain(self):
-        self.animate(self.pain_images)
+        self.animation_time = 120
         if self.animation_trigger:
-            self.pain = False
+            self.pain_images.rotate(-1)
+            self.image = self.pain_images[0]
+            self.pain_frame_counter += 1
+            if self.pain_frame_counter == len(self.pain_images):
+                self.pain_frame_counter = 0
+                self.pain = False
 
     def animate_attack(self):
+        self.animation_time = 300
         if self.animation_trigger:
             if self.attack_frame_counter == 0:
                 self.game.sound_manager.play(4)

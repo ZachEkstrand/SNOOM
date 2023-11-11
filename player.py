@@ -27,10 +27,9 @@ class Player:
         self.health = PLAYER_HEALTH
         self.key = False
         self.exit_x, self.exit_y = self.game.map.exit_pos
+        self.powerup = None
 
     def update(self):
-        if self.health > self.max_health:
-            self.health = self.max_health
         self.game.controller_manager.read_controller_inputs()
         self.controller_inputs()
         if self.x > float(self.exit_x):
@@ -185,10 +184,12 @@ class Player:
         return False, None
     
     def eat(self):
-        if self.candy_canes > 0:
+        if self.candy_canes > 0 and self.health != self.max_health:
             self.sound_manager.play(17)
             self.candy_canes -= 1
             self.health += 25
+            if self.health > self.max_health:
+                self.health = self.max_health
 
     @property
     def pos(self):

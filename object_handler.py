@@ -88,9 +88,6 @@ class ObjectHandler:
         self.check_ammo()
 
         self.npc_positions = {npc:npc.pos for npc in self.npc_list if npc.alive}
-        if len(self.npc_positions) == 1:
-            for npc in self.npc_positions:
-                npc.key = True
         self.sprite_pos = [sprite.pos for sprite in self.sprite_list]
         [npc.update() for npc in self.npc_list]
         self.weapon.update()
