@@ -172,11 +172,15 @@ class ObjectRenderer:
 
     def draw_mini_map(self):
         scale = 5
+        door = self.game.map.exit_pos
         mini_map = pg.Surface((32 * scale, 32 * scale))
         mini_map.set_alpha(200)
         
-        [pg.draw.rect(mini_map, (75, 75, 75), ((pos[0] * scale), (pos[1] * scale), scale, scale), 0) for pos in self.game.map.map_diction]
+        [pg.draw.rect(mini_map, (75, 75, 75), ((pos[0] * scale), (pos[1] * scale), scale, scale), 0) for pos in self.game.map.map_diction if pos != door]
+        pg.draw.rect(mini_map, 'yellow', (door[0] * scale, door[1] * scale, scale, scale), 0)
         pg.draw.circle(mini_map, 'green', (self.player.x * scale, self.player.y * scale), 2)
+        if self.player.powerup == 'sight':
+            [pg.draw.circle(mini_map, 'red', (enemy.x * scale, enemy.y * scale), 2) for enemy in self.game.object_handler.npc_list if enemy.alive]
         self.screen.blit(mini_map, (10, 300))
     
     def draw_pause_menu(self):

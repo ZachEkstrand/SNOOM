@@ -8,6 +8,7 @@ class ObjectHandler:
     def __init__(self, game):
         self.game = game
         self.sprite_list = []
+        self.sprite_pos = []
         self.npc_list = []
         self.del_queue = []
         self.npc_positions = {}
@@ -27,11 +28,18 @@ class ObjectHandler:
         for pos in self.game.map.space_indexes:
             if pos in self.restricted_area:
                 continue
-            pos = (pos[0] +0.5, pos[1] +0.5)
             create_object = random.choices([True, False], [3, 97])[0]
             if create_object:
                 random_sprite = random.choices([CandyCane, Tree, Snowpile])[0]
+                pos = (pos[0] +0.5, pos[1] +0.5)
                 self.add_sprite(random_sprite(self.game, pos=pos))
+                self.sprite_pos.append(pos)
+        pos = random.choice(self.game.map.space_indexes)
+        while pos in self.sprite_pos:
+            pos = random.choice(self.game.map.space_indexes)
+        pos = (pos[0] +0.5, pos[1] +0.5)
+        self.add_sprite(PowerCane(self.game, pos=pos))
+        self.sprite_pos.append(pos)
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
@@ -83,7 +91,7 @@ class ObjectHandler:
         if len(self.npc_positions) == 1:
             for npc in self.npc_positions:
                 npc.key = True
-        self.decoration_pos = [sprite.pos for sprite in self.sprite_list if isinstance(sprite, Decoration)]
+        self.sprite_pos = [sprite.pos for sprite in self.sprite_list]
         [npc.update() for npc in self.npc_list]
         self.weapon.update()
     
@@ -95,7 +103,7 @@ class ObjectHandler:
     def respawn_snowpiles(self):
         for i in range(3):
             random_pos = random.choice(self.game.map.space_indexes)
-            while random_pos in self.decoration_pos:
+            while random_pos in self.sprite_list:
                 random_pos = random.choice(self.game.map.space_indexes)
             pos = (random_pos[0] +0.5, random_pos[1] +0.5)
             self.add_sprite(Snowpile(self.game, pos=pos))

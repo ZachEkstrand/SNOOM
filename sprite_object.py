@@ -2,6 +2,7 @@ import pygame as pg
 import os
 from collections import deque
 from settings import *
+import random
 
 path = 'resources/sprites/'
 
@@ -53,16 +54,11 @@ class SpriteObject:
     def update(self):
         self.get_sprite()
 
-class Decoration(SpriteObject):
-    def __init__(self, game, path=path +'static_sprites/candy_cane.png',
-                 pos=(1, 1), scale=0.6, shift=0.5):
-        super().__init__(game, path, pos, scale, shift)
-
     @property
     def pos(self):
         return (self.x, self.y)
 
-class Tree(Decoration):
+class Tree(SpriteObject):
     def __init__(self, game, path=path +'static_sprites/tree.png',
                  pos=(1, 1), scale=2, shift=-0.2):
         super().__init__(game, path, pos, scale, shift)
@@ -139,7 +135,7 @@ class Key(SpriteObject):
         self.SPRITE_HEIGHT_SHIFT = math.cos(x * freq) * amp
 
 class AnimatedSprite(SpriteObject):
-    def __init__(self, game, path=path +'animated_sprites/red_light/0.png',
+    def __init__(self, game, path=path +'animated_sprites/power_cane/0.png',
                  pos=(10.5, 3.5), scale=0.7, shift=0.27, animation_time=120):
         super().__init__(game, path, pos, scale, shift)
         self.animation_time = animation_time
@@ -174,3 +170,21 @@ class AnimatedSprite(SpriteObject):
         if self.animation_trigger:
             images.rotate(-1)
             self.image = images[0]
+
+class PowerCane(AnimatedSprite):
+    def __init__(self, game, path=path +'animated_sprites/power_cane/0.png',
+                 pos=(0, 0), scale=0.6, shift=0.5, animation_time=120):
+        super().__init__(game, path, pos, scale, shift)
+        
+    def update(self):
+        super().update()
+        self.check_collision_on_player()
+
+    def check_collision_on_player(self):
+        if self.dist < 0.5:
+            self.game.sound_manager.play(18) # find new sound
+            self.player.powerup = random.choice(['triple', 'sight', 'BEEG', 'armor'])
+            if self.player.powerup == 'armor':
+                self.player.health = 200
+                self.player.max_health = 200
+            self.game.object_handler.del_queue.append(self)

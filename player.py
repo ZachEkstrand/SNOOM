@@ -9,7 +9,8 @@ class Player:
         self.controller_manager = game.controller_manager
         self.x, self.y = game.map.player_pos
         self.angle = game.map.player_angle
-        self.health = PLAYER_MAX_HEALTH
+        self.health = PLAYER_HEALTH
+        self.max_health = PLAYER_HEALTH
         self.score = 0
         self.ammo = PLAYER_STARTING_AMMO
         self.candy_canes = 0
@@ -23,11 +24,13 @@ class Player:
     def new_round(self):
         self.x, self.y = self.game.map.player_pos
         self.angle = self.game.map.player_angle
-        self.health = PLAYER_MAX_HEALTH
+        self.health = PLAYER_HEALTH
         self.key = False
         self.exit_x, self.exit_y = self.game.map.exit_pos
 
     def update(self):
+        if self.health > self.max_health:
+            self.health = self.max_health
         self.game.controller_manager.read_controller_inputs()
         self.controller_inputs()
         if self.x > float(self.exit_x):
