@@ -116,6 +116,7 @@ class ObjectRenderer:
         self.draw_ammo()
         self.draw_candy_canes()
         self.draw_key()
+        self.draw_mini_map()
 
     def draw_health(self):
         health = str(self.player.health)
@@ -168,6 +169,15 @@ class ObjectRenderer:
     def draw_key(self):
         if self.game.player.key:
             self.screen.blit(self.key_image, (WIDTH -70, 70))
+
+    def draw_mini_map(self):
+        scale = 5
+        mini_map = pg.Surface((32 * scale, 32 * scale))
+        mini_map.set_alpha(200)
+        
+        [pg.draw.rect(mini_map, (75, 75, 75), ((pos[0] * scale), (pos[1] * scale), scale, scale), 0) for pos in self.game.map.map_diction]
+        pg.draw.circle(mini_map, 'green', (self.player.x * scale, self.player.y * scale), 2)
+        self.screen.blit(mini_map, (10, 300))
     
     def draw_pause_menu(self):
         blit = self.screen.blit

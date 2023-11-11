@@ -17,7 +17,6 @@ class Player:
         self.rot_speed = 0
         self.shooting = False
         self.powerup = None
-        self.streak = None
 
         self.exit_x, self.exit_y = self.game.map.exit_pos
 
