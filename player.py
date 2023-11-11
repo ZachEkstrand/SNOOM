@@ -16,6 +16,8 @@ class Player:
         self.key = False
         self.rot_speed = 0
         self.shooting = False
+        self.powerup = None
+        self.streak = None
 
         self.exit_x, self.exit_y = self.game.map.exit_pos
 
@@ -182,7 +184,7 @@ class Player:
     
     def eat(self):
         if self.candy_canes > 0:
-            #play eat sound
+            self.sound_manager.play(17)
             self.candy_canes -= 1
             self.health += 25
 

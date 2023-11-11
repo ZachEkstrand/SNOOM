@@ -21,9 +21,19 @@ class Projectile(SpriteObject):
 
     def run_logic(self):
         if self.alive:
+            self.check_powerup()
             self.check_wall_collision()
             self.check_target_collision()
             self.movement()
+
+    def check_powerup(self):
+        if self.player.powerup == 'BEEG' and self.entity == 'player':
+            self.SPRITE_SCALE = 0.5
+            self.bonus = 5 / 70
+        else:
+            self.SPRITE_SCALE = 0.15
+            self.bonus = 0
+
 
     def check_wall_collision(self):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
@@ -42,9 +52,10 @@ class Projectile(SpriteObject):
                 dx = self.x -enemy_x
                 dy = self.y -enemy_y
                 dist_from_enemy = math.hypot(dx, dy)
-                if dist_from_enemy <= enemy.hitbox:
+                if dist_from_enemy <= enemy.hitbox +self.bonus:
                     enemy.take_damage(self.damage)
-                    self.die()
+                    if self.player.powerup != 'BEEG':
+                        self.die()
         if self.target == 'player':
             if self.dist <= 0.7:
                 self.game.signal_manager.emit_signal(self.game.player.take_damage, args=self.damage)

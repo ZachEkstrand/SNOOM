@@ -38,6 +38,8 @@ class SoundManager:
             audio(spath +'key.wav'),            # 14
             audio(spath +'key_pickup.mp3'),     # 15
             audio(spath +'door.mp3'),           # 16
+            audio(spath +'bite.mp3'),           # 17
+            audio(spath +'candy_cane_pickup.wav') # 18
         ]
     
         self.set_master()
@@ -69,9 +71,9 @@ class SoundManager:
             return self.check_channel([6, 7, 8, 9, 10])
         if index in [5, 6, 7]:
             return 5
-        if index in [8, 9, 10, 12, 14]:
+        if index in [8, 9, 10, 12, 14, 18]:
             return self.check_channel([11, 12])
-        if index in [11, 15, 16]:
+        if index in [11, 15, 16, 17]:
             return 15
         if index == 13:
             return self.check_channel([13, 14])

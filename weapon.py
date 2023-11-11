@@ -1,4 +1,5 @@
 from sprite_object import *
+import math
 
 class Weapon(AnimatedSprite):
     def __init__(self, game, path='resources/sprites/player/00.png', scale=HEIGHT, animation_time=60):
@@ -27,7 +28,10 @@ class Weapon(AnimatedSprite):
                 if self.frame_counter == 2:
                     self.pos = (0, 0)
                 if self.frame_counter == 4:
-                    self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) +(self.game.player.joy_str_0 * 2) +(self.game.player.joy_str_2 * 6), 50)
+                    self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102), 50)
+                    if self.player.powerup == 'triple snowballs':
+                        self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) -math.pi / 16, 50)
+                        self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) +math.pi / 16, 50)
                 if self.frame_counter == self.num_images:
                     self.game.player.shooting = False
                     self.frame_counter = 0

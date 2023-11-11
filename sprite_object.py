@@ -106,7 +106,7 @@ class CandyCane(SpriteObject):
 
     def check_collision_on_player(self):
         if self.dist < 0.5:
-            #pick up candy cane sound
+            self.game.sound_manager.play(18)
             self.game.player.candy_canes += 1
             self.game.object_handler.del_queue.append(self)
 
