@@ -183,8 +183,10 @@ class PowerCane(AnimatedSprite):
     def check_collision_on_player(self):
         if self.dist < 0.5:
             self.game.sound_manager.play(18) # find new sound
-            self.player.powerup = random.choice(['triple', 'sight', 'BEEG', 'armor'])
+            self.player.powerup = random.choice(['triple', 'sight', 'BEEG', 'armor', 'ice'])
             if self.player.powerup == 'armor':
                 self.player.health = 200
                 self.player.max_health = 200
+            if self.player.powerup == 'ice':
+                self.player.damage = 100
             self.game.object_handler.del_queue.append(self)

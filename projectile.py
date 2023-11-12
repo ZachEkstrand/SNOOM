@@ -37,6 +37,8 @@ class Projectile(SpriteObject):
 
     def check_wall_collision(self):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
+            if self.entity == 'player':
+                self.player.hit_streak = 0
             self.die()
 
     def die(self):

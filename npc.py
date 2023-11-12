@@ -13,8 +13,8 @@ class NPC(AnimatedSprite): #elf cadet
         self.walk_images = self.get_images(path +'/walk')
         self.idle_images = self.get_images(path +'/idle')
 
-        self.point_give = 10
         self.attack_dist = random.randint(3, 6)
+        self.point_give = round(self.attack_dist * 3, -1)
         self.attack_delay = 180
         self.speed = 0.001
         self.size = 15
@@ -134,6 +134,7 @@ class NPC(AnimatedSprite): #elf cadet
     def take_damage(self, damage):
         self.pain = True
         self.health -= damage
+        self.player.hit_streak += 1
         self.check_health()
 
     def check_health(self):
@@ -141,7 +142,8 @@ class NPC(AnimatedSprite): #elf cadet
             self.game.sound_manager.play(11)
             self.alive = False
             self.game.player.ammo += 2
-            self.game.player.score += self.point_give
+            self.player.kill_streak += 1
+            self.game.player.score += self.point_give +self.player.kill_streak +self.player.hit_streak
             if len([npc for npc in self.game.object_handler.npc_list if npc.alive]) == 0:
                 self.game.object_handler.spawn_key(self.pos)
         else:

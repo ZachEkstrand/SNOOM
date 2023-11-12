@@ -135,6 +135,7 @@ class SceneManager:
             self.sound_manager.queue(random.randint(0, 4))
         if self.X_down:
             self.game.player.eat()
+            self.X_down = False
         if self.menu_button_down:
             self.sound_manager.play(1)
             self.change_scene('pause_menu')

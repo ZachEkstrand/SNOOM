@@ -28,7 +28,7 @@ class Weapon(AnimatedSprite):
                 if self.frame_counter == 2:
                     self.x, self.y = (0, 0)
                 if self.frame_counter == 4:
-                    self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102), 50)
+                    self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102), self.player.damage)
                     if self.player.powerup == 'triple':
                         self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) -math.pi / 16, 50)
                         self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) +math.pi / 16, 50)

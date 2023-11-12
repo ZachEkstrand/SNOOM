@@ -12,12 +12,15 @@ class Player:
         self.health = PLAYER_HEALTH
         self.max_health = PLAYER_HEALTH
         self.score = 0
-        self.ammo = PLAYER_STARTING_AMMO
+        self.ammo = 3
+        self.damage = 50
         self.candy_canes = 0
         self.key = False
         self.rot_speed = 0
         self.shooting = False
         self.powerup = None
+        self.hit_streak = 0
+        self.kill_streak = 0
 
         self.exit_x, self.exit_y = self.game.map.exit_pos
 
@@ -25,6 +28,8 @@ class Player:
         self.x, self.y = self.game.map.player_pos
         self.angle = self.game.map.player_angle
         self.health = PLAYER_HEALTH
+        self.max_health = PLAYER_HEALTH
+        self.damage = 50
         self.key = False
         self.exit_x, self.exit_y = self.game.map.exit_pos
         self.powerup = None
@@ -152,6 +157,7 @@ class Player:
         self.check_wall_collision(dx, dy)
 
     def attack(self):
+        print('snowball')
         if self.ammo > 0:
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.ammo -= 1
