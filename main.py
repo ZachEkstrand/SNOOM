@@ -114,12 +114,12 @@ class Game:
         [pg.draw.rect(self.screen, 'red', (scale * e_lines['next_x'][i], scale * e_lines['next_y'][i], scale, scale), 1) for i in range(len(e_lines['next_x']))]
         [pg.draw.line(self.screen, 'yellow', (scale * rays['ox'][i], scale * rays['oy'][i]), (scale * rays['ox'][i] + scale * rays['depth'][i] * rays['cos_a'][i], scale * rays['oy'][i] + scale * rays['depth'][i] * rays['sin_a'][i]), 1) for i in range(len(rays['ox']))]
         [pg.draw.circle(self.screen, 'white', (scale * ob.x, scale * ob.y), 5) for ob in self.object_handler.sprite_list if isinstance(ob, Snowpile)]
-        [pg.draw.circle(self.screen, 'red', (scale * ob.x, scale * ob.y), 7) for ob in self.object_handler.npc_list]
+        [pg.draw.circle(self.screen, 'red', (scale * ob.x, scale * ob.y), 7) for ob in self.object_handler.npc_list if ob.alive]
         pg.draw.circle(self.screen, 'green', (scale * self.player.x, scale * self.player.y), 7)
         [pg.draw.circle(self.screen, 'yellow', (scale * key.x, scale * key.y), 5) for key in self.object_handler.sprite_list if isinstance(key, Key)]
         [pg.draw.circle(self.screen, 'blue', (ob.x * scale, ob.y * scale), 3) for ob in self.object_handler.sprite_list if isinstance(ob, Projectile)]
         [pg.draw.line(self.screen, 'orange', (scale * e_lines['start_x'][i], scale * e_lines['start_y'][i]), (scale * e_lines['end_x'][i], scale * e_lines['end_y'][i]), 1) for i in range(len(e_lines['end_x']))]
-        [pg.draw.circle(self.screen, 'white', (scale * marker[0], scale * marker[1]), 2) for marker in self.markers]
+        #[pg.draw.circle(self.screen, 'white', (scale * marker[0], scale * marker[1]), 1) for marker in self.markers]
         self.e_lines = {
             'start_x':[],
             'start_y':[],

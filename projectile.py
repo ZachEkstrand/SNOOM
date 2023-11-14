@@ -13,12 +13,12 @@ class Projectile(SpriteObject):
         self.target = 'enemy'
         if self.entity == 'enemy':
             self.target = 'player'
+        self.bounces = 0
 
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass
         else: 
             self.run_logic()
-            self.game.markers.append([self.x, self.y])
         super().update()
 
     def run_logic(self):
@@ -43,8 +43,35 @@ class Projectile(SpriteObject):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
             if self.entity == 'player':
                 self.player.hit_streak = 0
+                if self.player.powerup == 'bounce' and self.bounces < 2:
+                    if self.check_wall_angle() == 'horizontal':
+                        self.angle = 2 * math.pi -self.angle
+                    elif self.check_wall_angle() == 'vertical':
+                        self.angle = math.pi -self.angle
+                    elif self.check_wall_angle() == 'corner':
+                        self.angle = math.pi +self.angle
+                    self.bounces += 1
+                    return False
             return True
         return False
+    
+    def check_wall_angle(self):
+        if self.dist_from_center(self.x) < self.dist_from_center(self.y):
+            angle = 'horizontal'
+        elif self.dist_from_center(self.x) > self.dist_from_center(self.y):
+            angle = 'vertical'
+        if self.dist_from_center(self.x) == self.dist_from_center(self.y):
+            angle = 'corner'
+
+        return angle
+
+    def dist_from_center(self, n):
+        nint = n -int(n)
+        if nint <= 0.5:
+            dist = 0.5 -nint
+        if nint > 0.5:
+            dist = nint -0.5
+        return dist
 
     def die(self):
         if self.dist < 10:
