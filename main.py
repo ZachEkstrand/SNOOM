@@ -19,9 +19,8 @@ from powerup_handler import *
 class Game:
     def __init__(self):
         pg.init()
-        flags = DOUBLEBUF #| FULLSCREEN | SCALED
-        self.screen = pg.display.set_mode(RES, flags, 8
-        )
+        flags = DOUBLEBUF | FULLSCREEN | SCALED
+        self.screen = pg.display.set_mode(RES, flags, 8)
         pg.mouse.set_visible(False)
         self.clock = pg.time.Clock()
         self.delta_time = 1
@@ -86,8 +85,8 @@ class Game:
         pg.display.flip()
         self.check_events()
         self.update()
-        #self.draw()
-        self.draw_flat()
+        self.draw()
+        #self.draw_flat()
 
     def check_events(self):
         for event in pg.event.get():

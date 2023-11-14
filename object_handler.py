@@ -16,7 +16,7 @@ class ObjectHandler:
         self.player_projectile_pos = {}
         self.enemy_projectile_pos = {}
 
-        self.npc_num = 2
+        self.npc_num = 8
         self.npc_types = [NPC]
         self.weights = [100]
 

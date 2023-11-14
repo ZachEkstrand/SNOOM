@@ -54,7 +54,7 @@ class Player:
 
         rv1 = 0.11
         rv2 = 0.99
-        wv1 = 0.00025
+        wv1 = 0.00000025
         wv2 = 0.05
 
         self.joy_str_0 = 0
