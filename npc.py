@@ -160,7 +160,7 @@ class NPC(AnimatedSprite): #elf cadet
                 self.pain = False
 
     def animate_attack(self):
-        self.animation_time = 300
+        self.animation_time = 400
         if self.animation_trigger:
             if self.attack_frame_counter == 0:
                 self.game.sound_manager.play(4)

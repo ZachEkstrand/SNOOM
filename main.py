@@ -14,6 +14,7 @@ from pathfinding import *
 from leaderboard import *
 from sound_manager import *
 from projectile import *
+from powerup_handler import *
 
 class Game:
     def __init__(self):
@@ -32,6 +33,7 @@ class Game:
             'next_x':[],
             'next_y':[]
         }
+        self.markers = []
         self.new_game()
 
     def new_game(self):
@@ -43,6 +45,7 @@ class Game:
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
         self.ray_casting = RayCasting(self)
+        self.powerup_handler = Powerup_handler(self)
         self.object_handler = ObjectHandler(self)
         self.pathfinding = Pathfinding(self)
         self.leaderboard = Leaderboard(self)
@@ -83,8 +86,8 @@ class Game:
         pg.display.flip()
         self.check_events()
         self.update()
-        self.draw()
-        #self.draw_flat()
+        #self.draw()
+        self.draw_flat()
 
     def check_events(self):
         for event in pg.event.get():
@@ -93,6 +96,7 @@ class Game:
                 sys.exit()
 
     def update(self):
+        self.powerup_handler.update()
         self.player.update()
         self.scene_manager.update_scene()
         self.delta_time = self.clock.tick(FPS)
@@ -115,6 +119,7 @@ class Game:
         [pg.draw.circle(self.screen, 'yellow', (scale * key.x, scale * key.y), 5) for key in self.object_handler.sprite_list if isinstance(key, Key)]
         [pg.draw.circle(self.screen, 'blue', (ob.x * scale, ob.y * scale), 3) for ob in self.object_handler.sprite_list if isinstance(ob, Projectile)]
         [pg.draw.line(self.screen, 'orange', (scale * e_lines['start_x'][i], scale * e_lines['start_y'][i]), (scale * e_lines['end_x'][i], scale * e_lines['end_y'][i]), 1) for i in range(len(e_lines['end_x']))]
+        [pg.draw.circle(self.screen, 'white', (scale * marker[0], scale * marker[1]), 2) for marker in self.markers]
         self.e_lines = {
             'start_x':[],
             'start_y':[],

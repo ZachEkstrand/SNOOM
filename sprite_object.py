@@ -2,7 +2,6 @@ import pygame as pg
 import os
 from collections import deque
 from settings import *
-import random
 
 path = 'resources/sprites/'
 
@@ -155,9 +154,9 @@ class AnimatedSprite(SpriteObject):
         return images
     
     def update(self):
-        super().update()
         self.check_animation_time()
         self.animate(self.images)
+        super().update()
 
     def check_animation_time(self):
         self.animation_trigger = False
@@ -174,7 +173,7 @@ class AnimatedSprite(SpriteObject):
 class PowerCane(AnimatedSprite):
     def __init__(self, game, path=path +'animated_sprites/power_cane/0.png',
                  pos=(0, 0), scale=0.6, shift=0.5, animation_time=120):
-        super().__init__(game, path, pos, scale, shift)
+        super().__init__(game, path, pos, scale, shift, animation_time)
         
     def update(self):
         super().update()
@@ -182,11 +181,6 @@ class PowerCane(AnimatedSprite):
 
     def check_collision_on_player(self):
         if self.dist < 0.5:
-            self.game.sound_manager.play(18) # find new sound
-            self.player.powerup = random.choice(['triple', 'sight', 'BEEG', 'armor', 'ice'])
-            if self.player.powerup == 'armor':
-                self.player.health = 200
-                self.player.max_health = 200
-            if self.player.powerup == 'ice':
-                self.player.damage = 100
+            self.game.sound_manager.play(18)
+            self.game.powerup_handler.pick_powerup()
             self.game.object_handler.del_queue.append(self)

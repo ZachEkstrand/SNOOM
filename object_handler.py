@@ -16,9 +16,11 @@ class ObjectHandler:
         self.player_projectile_pos = {}
         self.enemy_projectile_pos = {}
 
-        self.npc_num = 10
+        self.npc_num = 2
         self.npc_types = [NPC]
         self.weights = [100]
+
+        self.key_pos = None
 
         self.place_objects()
         self.spawn_npc()
@@ -52,6 +54,7 @@ class ObjectHandler:
     
     def spawn_key(self, pos):
         self.add_sprite(Key(self.game, pos=pos))
+        self.key_pos = pos
         
     def spawn_npc(self):
         for i in range(self.npc_num):
@@ -74,23 +77,22 @@ class ObjectHandler:
         return npc
 
     def update(self):
-        del_indexes = []
-        for i, sprite in enumerate(self.sprite_list):
-            if sprite in self.del_queue:
-                del_indexes.append(i)
-            else:
-                sprite.update()
-        if del_indexes:
-            del_indexes.sort(reverse=True)
-        for i in del_indexes:
-            del self.sprite_list[i]
-
         self.check_ammo()
 
         self.npc_positions = {npc:npc.pos for npc in self.npc_list if npc.alive}
         self.sprite_pos = [sprite.pos for sprite in self.sprite_list]
         [npc.update() for npc in self.npc_list]
         self.weapon.update()
+        [sprite.update() for sprite in self.sprite_list]
+
+        del_indexes = []
+        for i, sprite in enumerate(self.sprite_list):
+            if sprite in self.del_queue:
+                del_indexes.append(i)
+        if del_indexes:
+            del_indexes.sort(reverse=True)
+        for i in del_indexes:
+            del self.sprite_list[i]
     
     def check_ammo(self):
         snowpile_count = len([sprite for sprite in self.sprite_list if isinstance(sprite, Snowpile)])

@@ -181,6 +181,8 @@ class ObjectRenderer:
         pg.draw.circle(mini_map, 'green', (self.player.x * scale, self.player.y * scale), 2)
         if self.player.powerup == 'sight':
             [pg.draw.circle(mini_map, 'red', (enemy.x * scale, enemy.y * scale), 2) for enemy in self.game.object_handler.npc_list if enemy.alive]
+        if self.game.object_handler.key_pos and self.player.key == False:
+            pg.draw.circle(mini_map, 'yellow', (self.game.object_handler.key_pos[0] * scale, self.game.object_handler.key_pos[1] * scale), 1)
         self.screen.blit(mini_map, (10, 300))
     
     def draw_pause_menu(self):

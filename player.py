@@ -1,5 +1,6 @@
 from settings import *
 import random
+import math
 
 class Player:
     def __init__(self, game):
@@ -12,7 +13,7 @@ class Player:
         self.health = PLAYER_HEALTH
         self.max_health = PLAYER_HEALTH
         self.score = 0
-        self.ammo = 3
+        self.ammo = PLAYER_STARTING_AMMO
         self.damage = 50
         self.candy_canes = 0
         self.key = False
@@ -28,17 +29,18 @@ class Player:
         self.x, self.y = self.game.map.player_pos
         self.angle = self.game.map.player_angle
         self.health = PLAYER_HEALTH
-        self.max_health = PLAYER_HEALTH
-        self.damage = 50
         self.key = False
         self.exit_x, self.exit_y = self.game.map.exit_pos
         self.powerup = None
 
     def update(self):
+        if self.health > self.max_health:
+            self.health = self.max_health
         self.game.controller_manager.read_controller_inputs()
         self.controller_inputs()
         if self.x > float(self.exit_x):
             self.game.sound_manager.play(16)
+            self.score += 250
             self.game.new_round()
         
     def controller_inputs(self):
@@ -157,7 +159,6 @@ class Player:
         self.check_wall_collision(dx, dy)
 
     def attack(self):
-        print('snowball')
         if self.ammo > 0:
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.ammo -= 1
@@ -194,8 +195,6 @@ class Player:
             self.sound_manager.play(17)
             self.candy_canes -= 1
             self.health += 25
-            if self.health > self.max_health:
-                self.health = self.max_health
 
     @property
     def pos(self):

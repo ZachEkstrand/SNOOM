@@ -15,16 +15,20 @@ class Projectile(SpriteObject):
             self.target = 'player'
 
     def update(self):
-        super().update()
         if self.game.scene_manager.current_scene == 'pause_menu': pass
-        else: self.run_logic()
+        else: 
+            self.run_logic()
+            self.game.markers.append([self.x, self.y])
+        super().update()
 
     def run_logic(self):
         if self.alive:
             self.check_powerup()
-            self.check_wall_collision()
-            self.check_target_collision()
-            self.movement()
+            for i in range(10):
+                self.movement()
+                if self.check_wall_collision() or self.check_target_collision():
+                    self.die()
+                    break
 
     def check_powerup(self):
         if self.player.powerup == 'BEEG' and self.entity == 'player':
@@ -39,7 +43,8 @@ class Projectile(SpriteObject):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
             if self.entity == 'player':
                 self.player.hit_streak = 0
-            self.die()
+            return True
+        return False
 
     def die(self):
         if self.dist < 10:
@@ -56,12 +61,14 @@ class Projectile(SpriteObject):
                 dist_from_enemy = math.hypot(dx, dy)
                 if dist_from_enemy <= enemy.hitbox +self.bonus:
                     enemy.take_damage(self.damage)
-                    if self.player.powerup != 'BEEG':
-                        self.die()
+                    if self.player.powerup == 'BEEG':
+                        return False
+                    return True
         if self.target == 'player':
             if self.dist <= 0.7:
                 self.game.signal_manager.emit_signal(self.game.player.take_damage, args=self.damage)
-                self.die()
+                return True
+        return False
 
     def movement(self):
         sin_a = math.sin(self.angle)
@@ -71,8 +78,8 @@ class Projectile(SpriteObject):
         speed_sin = speed * sin_a
         dx = speed_cos
         dy = speed_sin
-        self.x += dx
-        self.y += dy
+        self.x += dx / 10
+        self.y += dy / 10
 
     @property
     def pos(self):
