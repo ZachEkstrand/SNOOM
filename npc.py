@@ -1,17 +1,14 @@
 import random
 from sprite_object import *
 
-path = 'resources/sprites/npc/'
 class NPC(AnimatedSprite): #elf cadet
-    def __init__(self, game, path=path +'elf/0.png',pos=(1, 1),
+    def __init__(self, game, path='resources/sprites/npc/elf/walk/7.png', pos=(1, 1),
                  scale=0.6, shift=0.38, animation_time=100):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        path = self.path
-        self.attack_images = self.get_images(path +'/attack')
-        self.death_images = self.get_images(path +'/death')
-        self.pain_images = self.get_images(path +'/pain')
-        self.walk_images = self.get_images(path +'/walk')
-        self.idle_images = self.get_images(path +'/idle')
+        self.idle_image = pg.image.load('resources/sprites/npc/elf/walk/7.png').convert_alpha()
+        self.death_images = self.get_images('resources/sprites/npc/elf/death')
+        self.pain_images = self.get_images('resources/sprites/npc/elf/pain')
+        self.walk_images = self.get_images('resources/sprites/npc/elf/walk')
 
         self.attack_dist = random.randint(3, 6)
         self.point_give = round(self.attack_dist * 3, -1)
@@ -21,9 +18,9 @@ class NPC(AnimatedSprite): #elf cadet
         self.hitbox = self.size / 70
         self.health = 100
         self.attack_damage = 10
-        self.attack_frame_counter = 0
+        self.last_attack_time = 0
+        self.attack_delay = 1000
         self.pain_frame_counter = 0
-        self.attack_frame_num = len(self.attack_images)
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
@@ -46,7 +43,7 @@ class NPC(AnimatedSprite): #elf cadet
                 self.animate_pain()
             elif self.ray_cast_value:
                 if self.dist < self.attack_dist:
-                    self.animate_attack()
+                    self.attack()
                 else:
                     self.animate(self.walk_images)
                     self.movement()
@@ -54,7 +51,7 @@ class NPC(AnimatedSprite): #elf cadet
                 self.animate(self.walk_images)
                 self.movement()
             else:
-                self.animate(self.idle_images)
+                self.image = self.idle_image
         else:
             self.animate_death()
 
@@ -159,18 +156,12 @@ class NPC(AnimatedSprite): #elf cadet
                 self.pain_frame_counter = 0
                 self.pain = False
 
-    def animate_attack(self):
-        self.animation_time = 400
-        if self.animation_trigger:
-            if self.attack_frame_counter == 0:
-                self.game.sound_manager.play(4)
-            self.attack_images.rotate(-1)
-            self.image = self.attack_images[0]
-            self.attack_frame_counter += 1
-            if self.attack_frame_counter == 1: #frame that the snowball leaves hand
-                self.game.object_handler.spawn_projectile(self.pos, 'enemy', self.theta + math.pi +random.uniform(-0.3, 0.3), 10)
-            if self.attack_frame_counter == self.attack_frame_num:
-                self.attack_frame_counter = 0
+    def attack(self):
+        time_now = pg.time.get_ticks()
+        if time_now -self.last_attack_time > self.attack_delay:
+            self.game.sound_manager.play(4)
+            self.game.object_handler.spawn_projectile(self.pos, 'enemy', self.theta +math.pi +random.uniform(-0.3, 0.3), self.attack_damage)
+            self.last_attack_time = time_now
 
     def movement(self):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.destination)

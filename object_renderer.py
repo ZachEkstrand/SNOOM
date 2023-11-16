@@ -21,12 +21,8 @@ class ObjectRenderer:
         self.leaderboard_button_shadow = self.get_texture(path +'leaderboard_shadow.png', (157 * self.button_font_size, 20 * self.button_font_size))
         # arena
         self.digit_size = 90
-        self.sky_offset = 0
-        self.tree_offset = 0
         self.wall_textures = {i:self.get_texture(path +f'{i}.png') for i in range(1, 10)}
         self.char_sprites_36x38 = [self.get_texture(f'{path}chars/doom-nightmare-{i}.png', (36 * 2.5, 38 * 2.5)) for i in range(41)]
-        self.sky_image = self.get_texture(path +'sky.png', (WIDTH, HALF_HEIGHT))
-        self.tree_horizon = self.get_texture(path +'tree_horizon.png', (WIDTH, HALF_HEIGHT))
         self.crosshair_image = self.get_texture(path +'crosshair.png', (31, 31))
         self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
         self.candy_cane_image = self.get_texture('resources/sprites/static_sprites/candy_cane_item.png', (64 // 2, 143 // 2))
