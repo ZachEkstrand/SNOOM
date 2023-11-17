@@ -55,7 +55,7 @@ class SceneManager:
                 self.sound_manager.unpause()
             if self.sound_manager.get_busy(1) == False or self.sound_manager.get_track() == self.sound_manager.tracks[6]:
                 self.sound_manager.play(random.randint(0, 4), sfx=False, fade_ms=500)
-            self.game.signal_manager.Permissions['Player.attack'] = True
+            self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['Player.take_damage'] = True
             self.game.signal_manager.Permissions['joysticks'] = True
             self.game.signal_manager.Permissions['D-pad'] = False

@@ -69,13 +69,11 @@ class Game:
 
     def new_round(self):
         del self.map
-        del self.signal_manager
         del self.ray_casting
         del self.object_handler
         del self.pathfinding
         self.map = Map(self)
         self.player.new_round()
-        self.signal_manager = SignalManager(self)
         self.ray_casting = RayCasting(self)
         self.object_handler = ObjectHandler(self)
         self.pathfinding = Pathfinding(self)
