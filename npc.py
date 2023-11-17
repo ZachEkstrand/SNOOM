@@ -17,14 +17,18 @@ class NPC(AnimatedSprite): #elf cadet
         self.size = 15
         self.hitbox = self.size / 70
         self.health = 100
-        self.attack_damage = 10
+        self.attack_damage = 5
         self.last_attack_time = 0
         self.attack_delay = 1000
-        self.pain_frame_counter = 0
+        self.pain_frame_time = 80
+        self.last_pain_frame = pg.time.get_ticks()
+        self.death_frame_time = 40
+        self.last_death_frame = pg.time.get_ticks()
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
-        self.frame_counter = 0
+        self.pain_frame_counter = -1
+        self.death_frame_counter = -1
         self.destination = None
 
     def update(self):
@@ -147,14 +151,21 @@ class NPC(AnimatedSprite): #elf cadet
             self.game.sound_manager.play(random.randint(8, 10))
 
     def animate_pain(self):
-        self.animation_time = 120
-        if self.animation_trigger:
-            self.pain_images.rotate(-1)
-            self.image = self.pain_images[0]
+        time_now = pg.time.get_ticks()
+        if self.pain_frame_counter == -1:
             self.pain_frame_counter += 1
-            if self.pain_frame_counter == len(self.pain_images):
-                self.pain_frame_counter = 0
+            self.last_pain_frame = time_now
+        if time_now -self.last_pain_frame > self.pain_frame_time:
+            if self.pain_frame_counter == 1:
+                self.pain_frame_counter = -1
                 self.pain = False
+            else:
+                self.pain_images.rotate(-1)
+                self.pain_frame_counter += 1
+                self.last_pain_frame = time_now
+        self.image = self.pain_images[0]
+        if self.pain == False:
+            self.image = random.choice(self.walk_images)
 
     def attack(self):
         time_now = pg.time.get_ticks()
@@ -191,7 +202,13 @@ class NPC(AnimatedSprite): #elf cadet
         return (x, y) not in self.game.map.map_diction
     
     def animate_death(self):
-        if self.frame_counter < len(self.death_images) -1:
-            self.death_images.rotate(-1)
-            self.image = self.death_images[0]
-            self.frame_counter += 1
+        time_now = pg.time.get_ticks()
+        if self.death_frame_counter == -1:
+            self.death_frame_counter += 1
+            self.last_death_frame = time_now
+        if time_now -self.last_death_frame > self.death_frame_time:
+            if self.death_frame_counter < 8: 
+                self.death_images.rotate(-1)
+                self.death_frame_counter += 1
+                self.last_death_frame = time_now
+        self.image = self.death_images[0]

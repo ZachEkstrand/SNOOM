@@ -57,6 +57,9 @@ class Player:
         wv1 = 0.00000025
         wv2 = 0.05
 
+        wv3 = 0.0000000025
+        wv4 = 0.03
+
         self.joy_str_0 = 0
         self.joy_str_1 = 0
         self.joy_str_2 = 0
@@ -81,11 +84,11 @@ class Player:
                 dy += speed_cos * self.joy_str_0
 
             if self.controller_manager.inputs[2] > rv1:
-                self.joy_str_2 = ((wv2 -wv1) / (rv2 -rv1)) * (self.controller_manager.inputs[2] -rv1) +wv1
+                self.joy_str_2 = ((wv4 -wv3) / (rv2 -rv1)) * (self.controller_manager.inputs[2] -rv1) +wv3
                 self.angle += self.joy_str_2 * LOOK_SENSITIVITY * self.game.delta_time
 
             if self.controller_manager.inputs[2] < -rv1:
-                self.joy_str_2 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.controller_manager.inputs[2] +rv1) -wv1
+                self.joy_str_2 = (-(wv4 -wv3) / -(rv2 -rv1)) * (self.controller_manager.inputs[2] +rv1) -wv3
                 self.angle += self.joy_str_2 * LOOK_SENSITIVITY * self.game.delta_time
 
         self.angle %= math.tau
