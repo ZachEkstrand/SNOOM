@@ -33,12 +33,11 @@ class NPC(AnimatedSprite): #elf cadet
 
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass 
-        else: self.check_animation_time()
+        else: 
+            self.check_animation_time()
+            self.run_logic()
 
         self.get_sprite()
-        
-        if self.game.scene_manager.current_scene == 'pause_menu': pass
-        else: self.run_logic()
 
     def run_logic(self):
         if self.alive:
@@ -156,7 +155,7 @@ class NPC(AnimatedSprite): #elf cadet
             self.pain_frame_counter += 1
             self.last_pain_frame = time_now
         if time_now -self.last_pain_frame > self.pain_frame_time:
-            if self.pain_frame_counter == 1:
+            if self.pain_frame_counter == len(self.pain_images) -1:
                 self.pain_frame_counter = -1
                 self.pain = False
             else:
