@@ -345,7 +345,7 @@ class Header:
         self.surface = pg.Surface((int(len(text) * 36 * 2.5), int(38 * 2.5)))
         self.width = self.surface.get_width()
         self.height = self.surface.get_height()
-        self.x = WIDTH
+        self.y = -self.height
 
         self.surface.fill(BLACK)
         self.surface.set_colorkey(BLACK)
@@ -368,7 +368,7 @@ class Header:
             stop_time = 1000
             if self.animation_phase == 1:
                 self.surface.set_alpha(self.alpha)
-                self.alpha += 10
+                self.alpha += 20
                 blit(self.surface, (x, y))
                 if self.alpha >= 256:
                     self.alpha = 255
@@ -380,27 +380,26 @@ class Header:
                     self.animation_phase = 3
             elif self.animation_phase == 3:
                 self.surface.set_alpha(self.alpha)
-                self.alpha -= 11
+                self.alpha -= 25
                 blit(self.surface, (x, y))
                 if self.alpha <= 0:
                     object_renderer.del_queue.append(self)
         if self.animation_type == 'slide':
-            y = 100
-            center_x = object_renderer.center_on_x(self.width)
             stop_time = 1000
+            center_x = object_renderer.center_on_x(self.width)
             if self.animation_phase == 1:
-                self.x -= 30
-                if self.x <= center_x:
-                    self.x = center_x
+                self.y += 20
+                if self.y >= 100:
+                    self.y = 100
                     self.animation_phase = 2
                     self.timer_start = time_now
-                blit(self.surface, (self.x, y))
+                blit(self.surface, (center_x, self.y))
             elif self.animation_phase == 2:
-                blit(self.surface, (self.x, y))
+                blit(self.surface, (center_x, self.y))
                 if time_now -self.timer_start > stop_time:
                     self.animation_phase = 3
             elif self.animation_phase == 3:
-                self.x -= 35
-                blit(self.surface, (self.x, y))
-                if self.x <= -self.width:
+                self.y -= 30
+                blit(self.surface, (center_x, self.y))
+                if self.y <= -self.height:
                     object_renderer.del_queue.append(self)
