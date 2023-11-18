@@ -22,6 +22,7 @@ class Player:
         self.powerup = None
         self.hit_streak = 0
         self.kill_streak = 0
+        self.room_num = 1
 
         self.exit_x, self.exit_y = self.game.map.exit_pos
 
@@ -32,6 +33,7 @@ class Player:
         self.key = False
         self.exit_x, self.exit_y = self.game.map.exit_pos
         self.powerup = None
+        self.room_num += 1
 
     def update(self):
         if self.health > self.max_health:
@@ -198,6 +200,8 @@ class Player:
             self.sound_manager.play(17)
             self.candy_canes -= 1
             self.health += 25
+            if self.health > self.max_health:
+                self.health = self.max_health
 
     @property
     def pos(self):

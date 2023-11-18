@@ -186,5 +186,6 @@ class PowerCane(AnimatedSprite):
     def check_collision_on_player(self):
         if self.dist < 0.5:
             self.game.sound_manager.play(18)
+            self.player.score += 50
             self.game.powerup_handler.pick_powerup()
             self.game.object_handler.del_queue.append(self)

@@ -78,6 +78,7 @@ class Game:
         self.object_handler = ObjectHandler(self)
         self.pathfinding = Pathfinding(self)
         self.scene_manager.change_scene('arena')
+        self.object_renderer.new_round()
 
     def run(self):
         pg.display.flip()

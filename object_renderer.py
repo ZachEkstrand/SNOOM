@@ -42,11 +42,31 @@ class ObjectRenderer:
         # username input
         self.done_button_image = self.get_texture(path +'done.png', (60 * 1.5, 19 * 1.5))
         self.selected_letter_highlight = self.get_texture(path +'select.png', (40 * self.general_font_size, 46 * self.general_font_size))
+
+        self.new_round()
     
     @staticmethod
     def get_texture(path, res=(TEXTURE_SIZE, TEXTURE_SIZE)):
         texture = pg.image.load(path).convert_alpha()
         return pg.transform.scale(texture, res)
+    
+    def init_room_num(self):
+        BLACK = (0, 0, 0)
+        header = 'ROOM ' +str(self.player.room_num)
+        header_surface = pg.Surface((int(len(header) * 36 * 2.5), int(38 * 2.5)))
+        header_surface.fill(BLACK)
+        header_surface.set_colorkey(BLACK)
+        header_surface.set_alpha(0)
+
+        font_string = self.convert_string_to_font(header)
+        for i, num in enumerate(font_string):
+            header_surface.blit(self.char_sprites_36x38[num], (36 * i * self.general_font_size, 0))
+        return header_surface
+    
+    def new_round(self):
+        self.header_surface = self.init_room_num()
+        self.header_alpha = self.header_surface.get_alpha()
+        self.header_phase = 1
 
     def draw_title_screen(self):
         blit = self.screen.blit
@@ -113,53 +133,54 @@ class ObjectRenderer:
         self.draw_candy_canes()
         self.draw_key()
         self.draw_mini_map()
+        self.animate_header()
 
     def draw_health(self):
         health = str(self.player.health)
-        cmsg = self.convert_string_to_font(health +'%')
-        for i, num in enumerate(cmsg):
+        font_string = self.convert_string_to_font(health +'%')
+        for i, num in enumerate(font_string):
             self.screen.blit(self.char_sprites_36x38[num], (36 * i * self.general_font_size, 10))
 
     def draw_score(self):
         score = str(self.player.score)
-        cmsg = self.convert_string_to_font(score)
-        i = len(cmsg)
-        for num in cmsg:
+        font_string = self.convert_string_to_font(score)
+        i = len(font_string)
+        for num in font_string:
             self.screen.blit(self.char_sprites_18x19[num], (WIDTH -(18 * i * self.general_font_size), 10))
             i -= 1
 
     def draw_ammo(self):
         blit = self.screen.blit
         ammo = str(self.player.ammo)
-        cmsg = self.convert_string_to_font(ammo)
-        i = len(cmsg)
-        for num in cmsg:
+        font_string = self.convert_string_to_font(ammo)
+        i = len(font_string)
+        for num in font_string:
             blit(self.char_sprites_36x38[num], (WIDTH -(30 * i * self.general_font_size) -10, 500))
             i -= 1
-        i = len(cmsg)
-        cmsg = self.convert_string_to_font('X')
+        i = len(font_string)
+        font_string = self.convert_string_to_font('X')
         if i == 2:
-            blit(self.char_sprites_18x19[cmsg[0]], (820, 525))
+            blit(self.char_sprites_18x19[font_string[0]], (820, 525))
             blit(self.snowball_image, (745, 515))
         if i == 1:
-            blit(self.char_sprites_18x19[cmsg[0]], (820 +(30 * self.general_font_size) -10, 525))
+            blit(self.char_sprites_18x19[font_string[0]], (820 +(30 * self.general_font_size) -10, 525))
             blit(self.snowball_image,(745 +(30 * self.general_font_size) -10, 515))
 
     def draw_candy_canes(self):
         blit = self.screen.blit
         candy_canes = str(self.player.candy_canes)
-        cmsg = self.convert_string_to_font(candy_canes)
-        i = len(cmsg)
-        for num in cmsg:
+        font_string = self.convert_string_to_font(candy_canes)
+        i = len(font_string)
+        for num in font_string:
             blit(self.char_sprites_36x38[num], (WIDTH -(30 * i * self.general_font_size) -10, 400))
             i -= 1
-        i = len(cmsg)
-        cmsg = self.convert_string_to_font('X')
+        i = len(font_string)
+        font_string = self.convert_string_to_font('X')
         if i == 2:
-            blit(self.char_sprites_18x19[cmsg[0]], (820, 425))
+            blit(self.char_sprites_18x19[font_string[0]], (820, 425))
             blit(self.candy_cane_image, (770, 400))
         if i == 1:
-            blit(self.char_sprites_18x19[cmsg[0]], (820 +(30 * self.general_font_size) -10, 425))
+            blit(self.char_sprites_18x19[font_string[0]], (820 +(30 * self.general_font_size) -10, 425))
             blit(self.candy_cane_image, (770 +(30 * self.general_font_size) -10, 400))
 
     def draw_key(self):
@@ -180,6 +201,27 @@ class ObjectRenderer:
         if self.game.object_handler.key_pos and self.player.key == False:
             pg.draw.circle(mini_map, 'yellow', (self.game.object_handler.key_pos[0] * scale, self.game.object_handler.key_pos[1] * scale), 1)
         self.screen.blit(mini_map, (10, 300))
+
+    def animate_header(self):
+        time_now = pg.time.get_ticks()
+        if self.header_phase == 1:
+            self.header_surface.set_alpha(self.header_alpha)
+            self.header_alpha += 10
+            self.screen.blit(self.header_surface, (self.center_on_x(self.header_surface.get_width()), 200))
+            if self.header_alpha >= 256:
+                self.header_phase = 2
+                self.header_timer_start = time_now
+        elif self.header_phase == 2:
+            self.screen.blit(self.header_surface, (self.center_on_x(self.header_surface.get_width()), 200))
+            if time_now -self.header_timer_start > 1000:
+                self.header_phase = 3
+        elif self.header_phase == 3:
+            self.header_surface.set_alpha(self.header_alpha)
+            self.header_alpha -= 11
+            self.screen.blit(self.header_surface, (self.center_on_x(self.header_surface.get_width()), 200))
+            if self.header_alpha <= 0:
+                self.header_phase = 0
+
     
     def draw_pause_menu(self):
         blit = self.screen.blit
@@ -225,89 +267,89 @@ class ObjectRenderer:
             i -= 1
 
     @staticmethod
-    def convert_string_to_font(msg):
-        cmsg = []
-        for char in msg:
+    def convert_string_to_font(string):
+        font_string = []
+        for char in string:
             if char == '0':
-                cmsg.append(0)
+                font_string.append(0)
             if char == '1':
-                cmsg.append(1)
+                font_string.append(1)
             if char == '2':
-                cmsg.append(2)
+                font_string.append(2)
             if char == '3':
-                cmsg.append(3)
+                font_string.append(3)
             if char == '4':
-                cmsg.append(4)
+                font_string.append(4)
             if char == '5':
-                cmsg.append(5)
+                font_string.append(5)
             if char == '6':
-                cmsg.append(6)
+                font_string.append(6)
             if char == '7':
-                cmsg.append(7)
+                font_string.append(7)
             if char == '8':
-                cmsg.append(8)
+                font_string.append(8)
             if char == '9':
-                cmsg.append(9)
+                font_string.append(9)
             if char == 'A':
-                cmsg.append(10)
+                font_string.append(10)
             if char == 'B':
-                cmsg.append(11)
+                font_string.append(11)
             if char == 'C':
-                cmsg.append(12)
+                font_string.append(12)
             if char == 'D':
-                cmsg.append(13)
+                font_string.append(13)
             if char == 'E':
-                cmsg.append(14)
+                font_string.append(14)
             if char == 'F':
-                cmsg.append(15)
+                font_string.append(15)
             if char == 'G':
-                cmsg.append(16)
+                font_string.append(16)
             if char == 'H':
-                cmsg.append(17)
+                font_string.append(17)
             if char == 'I':
-                cmsg.append(18)
+                font_string.append(18)
             if char == 'J':
-                cmsg.append(19)
+                font_string.append(19)
             if char == 'K':
-                cmsg.append(20)
+                font_string.append(20)
             if char == 'L':
-                cmsg.append(21)
+                font_string.append(21)
             if char == 'M':
-                cmsg.append(22)
+                font_string.append(22)
             if char == 'N':
-                cmsg.append(23)
+                font_string.append(23)
             if char == 'O':
-                cmsg.append(24)
+                font_string.append(24)
             if char == 'P':
-                cmsg.append(25)
+                font_string.append(25)
             if char == 'Q':
-                cmsg.append(26)
+                font_string.append(26)
             if char == 'R':
-                cmsg.append(27)
+                font_string.append(27)
             if char == 'S':
-                cmsg.append(28)
+                font_string.append(28)
             if char == 'T':
-                cmsg.append(29)
+                font_string.append(29)
             if char == 'U':
-                cmsg.append(30)
+                font_string.append(30)
             if char == 'V':
-                cmsg.append(31)
+                font_string.append(31)
             if char == 'W':
-                cmsg.append(32)
+                font_string.append(32)
             if char == 'X':
-                cmsg.append(33)
+                font_string.append(33)
             if char == 'Y':
-                cmsg.append(34)
+                font_string.append(34)
             if char == 'Z':
-                cmsg.append(35)
+                font_string.append(35)
             if char == '%':
-                cmsg.append(36)
+                font_string.append(36)
             if char == '-':
-                cmsg.append(37)
+                font_string.append(37)
             if char == '(':
-                cmsg.append(38)
+                font_string.append(38)
             if char == ')':
-                cmsg.append(39)
+                font_string.append(39)
             if char == ' ':
-                cmsg.append(40)
-        return cmsg
+                font_string.append(40)
+        return font_string
