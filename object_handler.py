@@ -33,14 +33,14 @@ class ObjectHandler:
             create_object = random.choices([True, False], [3, 97])[0]
             if create_object:
                 random_sprite = random.choices([CandyCane, Tree, Snowpile])[0]
-                pos = (pos[0] +0.5, pos[1] +0.5)
-                self.add_sprite(random_sprite(self.game, pos=pos))
+                center_pos = (pos[0] +0.5, pos[1] +0.5)
+                self.add_sprite(random_sprite(self.game, pos=center_pos))
                 self.sprite_pos.append(pos)
         pos = random.choice(self.game.map.space_indexes)
         while pos in self.sprite_pos:
             pos = random.choice(self.game.map.space_indexes)
-        pos = (pos[0] +0.5, pos[1] +0.5)
-        self.add_sprite(PowerCane(self.game, pos=pos))
+        center_pos = (pos[0] +0.5, pos[1] +0.5)
+        self.add_sprite(PowerCane(self.game, pos=center_pos))
         self.sprite_pos.append(pos)
 
     def add_sprite(self, sprite):

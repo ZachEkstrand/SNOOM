@@ -16,7 +16,7 @@ class Player:
         self.ammo = PLAYER_STARTING_AMMO
         self.damage = 50
         self.candy_canes = 0
-        self.key = False
+        self.key = True
         self.rot_speed = 0
         self.shooting = False
         self.powerup = None

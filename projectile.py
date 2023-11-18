@@ -14,6 +14,7 @@ class Projectile(SpriteObject):
         if self.entity == 'enemy':
             self.target = 'player'
         self.bounces = 0
+        self.ignore = []
 
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass
@@ -31,7 +32,7 @@ class Projectile(SpriteObject):
                     break
 
     def check_powerup(self):
-        if self.player.powerup == 'BEEG' and self.entity == 'player':
+        if self.player.powerup == 'giant' and self.entity == 'player':
             self.SPRITE_SCALE = 0.5
             self.bonus = 5 / 70
         else:
@@ -87,8 +88,10 @@ class Projectile(SpriteObject):
                 dy = self.y -enemy_y
                 dist_from_enemy = math.hypot(dx, dy)
                 if dist_from_enemy <= enemy.hitbox +self.bonus:
-                    enemy.take_damage(self.damage)
-                    if self.player.powerup == 'BEEG':
+                    if enemy not in self.ignore:
+                        enemy.take_damage(self.damage)
+                    if self.player.powerup == 'giant':
+                        self.ignore.append(enemy)
                         return False
                     return True
         if self.target == 'player':

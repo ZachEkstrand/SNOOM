@@ -141,9 +141,8 @@ class NPC(AnimatedSprite): #elf cadet
         if self.health < 1:
             self.game.sound_manager.play(11)
             self.alive = False
-            self.game.player.ammo += 2
             self.player.kill_streak += 1
-            self.game.player.score += self.point_give +self.player.kill_streak ** 2 +self.player.hit_streak ** 2
+            self.game.player.score += self.point_give +self.player.kill_streak * self.player.room_num +self.player.hit_streak * self.player.room_num
             if len([npc for npc in self.game.object_handler.npc_list if npc.alive]) == 0:
                 self.game.object_handler.spawn_key(self.pos)
         else:

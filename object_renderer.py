@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+from sprite_object import *
 
 path = 'resources/textures/'
 
@@ -43,6 +44,7 @@ class ObjectRenderer:
         self.done_button_image = self.get_texture(path +'done.png', (60 * 1.5, 19 * 1.5))
         self.selected_letter_highlight = self.get_texture(path +'select.png', (40 * self.general_font_size, 46 * self.general_font_size))
 
+        self.del_queue = []
         self.new_round()
     
     @staticmethod
@@ -50,23 +52,12 @@ class ObjectRenderer:
         texture = pg.image.load(path).convert_alpha()
         return pg.transform.scale(texture, res)
     
-    def init_room_num(self):
-        BLACK = (0, 0, 0)
-        header = 'ROOM ' +str(self.player.room_num)
-        header_surface = pg.Surface((int(len(header) * 36 * 2.5), int(38 * 2.5)))
-        header_surface.fill(BLACK)
-        header_surface.set_colorkey(BLACK)
-        header_surface.set_alpha(0)
-
-        font_string = self.convert_string_to_font(header)
-        for i, num in enumerate(font_string):
-            header_surface.blit(self.char_sprites_36x38[num], (36 * i * self.general_font_size, 0))
-        return header_surface
-    
     def new_round(self):
-        self.header_surface = self.init_room_num()
-        self.header_alpha = self.header_surface.get_alpha()
-        self.header_phase = 1
+        self.header_list = []
+        self.create_header('ROOM ' +str(self.player.room_num), 0)
+
+    def create_header(self, text, alpha, animation_type='fade'):
+        self.header_list.append(Header(self, text, alpha, animation_type))
 
     def draw_title_screen(self):
         blit = self.screen.blit
@@ -115,6 +106,15 @@ class ObjectRenderer:
         self.render_game_objects()
         self.draw_HUD()
 
+        del_indexes = []
+        for i, header in enumerate(self.header_list):
+            if header in self.del_queue:
+                del_indexes.append(i)
+        if del_indexes:
+            del_indexes.sort(reverse=True)
+        for i in del_indexes:
+            del self.header_list[i]
+
     def draw_background(self):
         pg.draw.rect(self.screen, FLOOR_COLOR, (0, 0, WIDTH, HEIGHT))
     
@@ -133,7 +133,7 @@ class ObjectRenderer:
         self.draw_candy_canes()
         self.draw_key()
         self.draw_mini_map()
-        self.animate_header()
+        [header.update() for header in self.header_list]
 
     def draw_health(self):
         health = str(self.player.health)
@@ -198,31 +198,11 @@ class ObjectRenderer:
         pg.draw.circle(mini_map, 'green', (self.player.x * scale, self.player.y * scale), 2)
         if self.player.powerup == 'sight':
             [pg.draw.circle(mini_map, 'red', (enemy.x * scale, enemy.y * scale), 2) for enemy in self.game.object_handler.npc_list if enemy.alive]
+            [pg.draw.circle(mini_map, 'white', (sprite.x * scale, sprite.y * scale), 2) for sprite in self.game.object_handler.sprite_list if isinstance(sprite, Snowpile)]
         if self.game.object_handler.key_pos and self.player.key == False:
             pg.draw.circle(mini_map, 'yellow', (self.game.object_handler.key_pos[0] * scale, self.game.object_handler.key_pos[1] * scale), 1)
         self.screen.blit(mini_map, (10, 300))
 
-    def animate_header(self):
-        time_now = pg.time.get_ticks()
-        if self.header_phase == 1:
-            self.header_surface.set_alpha(self.header_alpha)
-            self.header_alpha += 10
-            self.screen.blit(self.header_surface, (self.center_on_x(self.header_surface.get_width()), 200))
-            if self.header_alpha >= 256:
-                self.header_phase = 2
-                self.header_timer_start = time_now
-        elif self.header_phase == 2:
-            self.screen.blit(self.header_surface, (self.center_on_x(self.header_surface.get_width()), 200))
-            if time_now -self.header_timer_start > 1000:
-                self.header_phase = 3
-        elif self.header_phase == 3:
-            self.header_surface.set_alpha(self.header_alpha)
-            self.header_alpha -= 11
-            self.screen.blit(self.header_surface, (self.center_on_x(self.header_surface.get_width()), 200))
-            if self.header_alpha <= 0:
-                self.header_phase = 0
-
-    
     def draw_pause_menu(self):
         blit = self.screen.blit
 
@@ -268,6 +248,7 @@ class ObjectRenderer:
 
     @staticmethod
     def convert_string_to_font(string):
+        string = string.upper()
         font_string = []
         for char in string:
             if char == '0':
@@ -353,3 +334,73 @@ class ObjectRenderer:
             if char == ' ':
                 font_string.append(40)
         return font_string
+    
+class Header:
+    def __init__(self, object_renderer, text, alpha, animation_type):
+        BLACK = (0, 0, 0)
+        self.alpha = alpha
+        self.text = text
+        self.object_renderer = object_renderer
+        self.animation_type = animation_type
+        self.surface = pg.Surface((int(len(text) * 36 * 2.5), int(38 * 2.5)))
+        self.width = self.surface.get_width()
+        self.height = self.surface.get_height()
+        self.x = WIDTH
+
+        self.surface.fill(BLACK)
+        self.surface.set_colorkey(BLACK)
+        self.font_string = object_renderer.convert_string_to_font(text)
+
+        for i, num in enumerate(self.font_string):
+            self.surface.blit(self.object_renderer.char_sprites_36x38[num], (36 * i * 2.5, 0))
+        self.animation_phase = 1
+
+    def update(self):
+        self.animate()
+
+    def animate(self):
+        object_renderer = self.object_renderer
+        blit = object_renderer.game.screen.blit
+        time_now = pg.time.get_ticks()
+        if self.animation_type == 'fade':
+            x = object_renderer.center_on_x(self.width)
+            y = 200
+            stop_time = 1000
+            if self.animation_phase == 1:
+                self.surface.set_alpha(self.alpha)
+                self.alpha += 10
+                blit(self.surface, (x, y))
+                if self.alpha >= 256:
+                    self.alpha = 255
+                    self.animation_phase = 2
+                    self.timer_start = time_now
+            elif self.animation_phase == 2:
+                blit(self.surface, (x, y))
+                if time_now -self.timer_start > stop_time:
+                    self.animation_phase = 3
+            elif self.animation_phase == 3:
+                self.surface.set_alpha(self.alpha)
+                self.alpha -= 11
+                blit(self.surface, (x, y))
+                if self.alpha <= 0:
+                    object_renderer.del_queue.append(self)
+        if self.animation_type == 'slide':
+            y = 100
+            center_x = object_renderer.center_on_x(self.width)
+            stop_time = 1000
+            if self.animation_phase == 1:
+                self.x -= 30
+                if self.x <= center_x:
+                    self.x = center_x
+                    self.animation_phase = 2
+                    self.timer_start = time_now
+                blit(self.surface, (self.x, y))
+            elif self.animation_phase == 2:
+                blit(self.surface, (self.x, y))
+                if time_now -self.timer_start > stop_time:
+                    self.animation_phase = 3
+            elif self.animation_phase == 3:
+                self.x -= 35
+                blit(self.surface, (self.x, y))
+                if self.x <= -self.width:
+                    object_renderer.del_queue.append(self)
