@@ -6,12 +6,12 @@ class Powerup_handler:
         self.game = game
         self.player = game.player
         self.powerups = [
-            'triple',
-            'giant',
-            'sight',
-            'armor',
-            '2x damage',
-            'bounce'
+            'TRIPLE',
+            'GIANT',
+            'SIGHT',
+            'ARMOR',
+            '2X DAMAGE',
+            'BOUNCE'
         ]
         self.player_powerup = None
 
@@ -19,13 +19,13 @@ class Powerup_handler:
         self.check_powerup(self.player_powerup)
 
     def check_powerup(self, powerup, just_aquired=False):
-        if powerup == 'armor':
+        if powerup == 'ARMOR':
             self.player.max_health = PLAYER_HEALTH * 2
             if just_aquired:
                 self.player.health = PLAYER_HEALTH * 2
         else:
             self.max_health = PLAYER_HEALTH
-        if powerup == '2x damage':
+        if powerup == '2X DAMAGE':
             self.player.damage = PLAYER_DAMAGE * 2
         else:
             self.player.damage = PLAYER_DAMAGE

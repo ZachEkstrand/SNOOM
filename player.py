@@ -29,7 +29,10 @@ class Player:
     def new_round(self):
         self.x, self.y = self.game.map.player_pos
         self.angle = self.game.map.player_angle
-        self.health = PLAYER_HEALTH
+        self.max_health = PLAYER_HEALTH
+        self.health += 20
+        if self.health > self.max_health:
+            self.health = self.max_health
         self.key = False
         self.exit_x, self.exit_y = self.game.map.exit_pos
         self.powerup = None

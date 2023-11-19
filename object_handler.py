@@ -35,6 +35,7 @@ class ObjectHandler:
         self.enemy_projectile_pos = {}
         self.npc_num += 0.5
         self.sprite_weights[0] *= 0.6
+        self.sprite_weights[2] *= 0.9
         if self.spawn_rate < 50:
             self.spawn_rate += 0.5
         self.key_pos = None

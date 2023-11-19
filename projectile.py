@@ -32,7 +32,7 @@ class Projectile(SpriteObject):
                     break
 
     def check_powerup(self):
-        if self.player.powerup == 'giant' and self.entity == 'player':
+        if self.player.powerup == 'GIANT' and self.entity == 'player':
             self.SPRITE_SCALE = 0.5
             self.bonus = 5 / 70
         else:
@@ -44,7 +44,7 @@ class Projectile(SpriteObject):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
             if self.entity == 'player':
                 self.player.hit_streak = 0
-                if self.player.powerup == 'bounce' and self.bounces < 3:
+                if self.player.powerup == 'BOUNCE' and self.bounces < 3:
                     if self.check_wall_angle() == 'horizontal':
                         self.angle = 2 * math.pi -self.angle
                     elif self.check_wall_angle() == 'vertical':
@@ -90,7 +90,7 @@ class Projectile(SpriteObject):
                 if dist_from_enemy <= enemy.hitbox +self.bonus:
                     if enemy not in self.ignore:
                         enemy.take_damage(self.damage)
-                    if self.player.powerup == 'giant':
+                    if self.player.powerup == 'GIANT':
                         self.ignore.append(enemy)
                         return False
                     return True

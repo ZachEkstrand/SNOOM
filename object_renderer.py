@@ -197,7 +197,7 @@ class ObjectRenderer:
         [pg.draw.rect(mini_map, (75, 75, 75), ((pos[0] * scale), (pos[1] * scale), scale, scale), 0) for pos in self.game.map.map_diction if pos != door]
         pg.draw.rect(mini_map, 'yellow', (door[0] * scale, door[1] * scale, scale, scale), 0)
         pg.draw.circle(mini_map, 'green', (self.player.x * scale, self.player.y * scale), 2)
-        if self.player.powerup == 'sight':
+        if self.player.powerup == 'SIGHT':
             [pg.draw.circle(mini_map, 'red', (enemy.x * scale, enemy.y * scale), 2) for enemy in self.game.object_handler.npc_list if enemy.alive]
             [pg.draw.circle(mini_map, 'white', (sprite.x * scale, sprite.y * scale), 2) for sprite in self.game.object_handler.sprite_list if isinstance(sprite, Snowpile)]
         if self.game.object_handler.key_pos and self.player.key == False:
@@ -251,7 +251,6 @@ class ObjectRenderer:
     def convert_string_to_font(string):
         font_string = []
         for char in string:
-            char.upper()
             if char == '0':
                 font_string.append(0)
             if char == '1':
