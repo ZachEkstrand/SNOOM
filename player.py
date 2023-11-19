@@ -16,7 +16,7 @@ class Player:
         self.ammo = PLAYER_STARTING_AMMO
         self.damage = 50
         self.candy_canes = 0
-        self.key = True
+        self.key = False
         self.rot_speed = 0
         self.shooting = False
         self.powerup = None
@@ -43,6 +43,7 @@ class Player:
         if self.x > float(self.exit_x):
             self.game.sound_manager.play(16)
             self.score += 250
+            self.game.signal_manager.Permissions['joysticks'] = False
             self.game.new_round()
         
     def controller_inputs(self):

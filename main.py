@@ -71,15 +71,13 @@ class Game:
         del self.map
         del self.ray_casting
         del self.powerup_handler
-        del self.object_handler
         del self.pathfinding
         self.map = Map(self)
         self.player.new_round()
         self.ray_casting = RayCasting(self)
         self.powerup_handler = Powerup_handler(self)
-        self.object_handler = ObjectHandler(self)
+        self.object_handler.new_round()
         self.pathfinding = Pathfinding(self)
-        self.scene_manager.change_scene('arena')
         self.object_renderer.new_round()
 
     def run(self):

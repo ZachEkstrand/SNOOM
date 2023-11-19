@@ -10,6 +10,7 @@ class ObjectRenderer:
         self.screen = game.screen
         self.player = game.player
         self.scene_manager = game.scene_manager
+        self.signal_manager = game.signal_manager
         # title_screen
         self.selected_button = 0
         self.title_image_scale = 3
@@ -248,9 +249,9 @@ class ObjectRenderer:
 
     @staticmethod
     def convert_string_to_font(string):
-        string = string.upper()
         font_string = []
         for char in string:
+            char.upper()
             if char == '0':
                 font_string.append(0)
             if char == '1':
@@ -375,6 +376,7 @@ class Header:
                     self.animation_phase = 2
                     self.timer_start = time_now
             elif self.animation_phase == 2:
+                object_renderer.signal_manager.Permissions['joysticks'] = True
                 blit(self.surface, (x, y))
                 if time_now -self.timer_start > stop_time:
                     self.animation_phase = 3
@@ -395,6 +397,7 @@ class Header:
                     self.timer_start = time_now
                 blit(self.surface, (center_x, self.y))
             elif self.animation_phase == 2:
+                object_renderer.signal_manager.Permissions['joysticks'] = True
                 blit(self.surface, (center_x, self.y))
                 if time_now -self.timer_start > stop_time:
                     self.animation_phase = 3

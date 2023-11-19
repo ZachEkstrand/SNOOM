@@ -17,11 +17,28 @@ class ObjectHandler:
         self.enemy_projectile_pos = {}
 
         self.npc_num = 8
-        self.npc_types = [NPC]
-        self.weights = [100]
+        self.sprite_weights = [1.0, 1.0, 1.0]
+        self.spawn_rate = 3.0
 
         self.key_pos = None
 
+        self.place_objects()
+        self.spawn_npc()
+
+    def new_round(self):
+        self.sprite_list = []
+        self.sprite_pos = []
+        self.npc_list = []
+        self.del_queue = []
+        self.npc_positions = {}
+        self.player_projectile_pos = {}
+        self.enemy_projectile_pos = {}
+        self.npc_num += 0.5
+        self.sprite_weights[0] *= 0.6
+        if self.spawn_rate < 50:
+            self.spawn_rate += 0.5
+        self.key_pos = None
+        del self.weapon
         self.place_objects()
         self.spawn_npc()
 
@@ -30,9 +47,9 @@ class ObjectHandler:
         for pos in self.game.map.space_indexes:
             if pos in self.restricted_area:
                 continue
-            create_object = random.choices([True, False], [3, 97])[0]
+            create_object = random.choices([True, False], [self.spawn_rate, 100 -self.spawn_rate])[0]
             if create_object:
-                random_sprite = random.choices([CandyCane, Tree, Snowpile])[0]
+                random_sprite = random.choices([CandyCane, Tree, Snowpile], self.sprite_weights)[0]
                 center_pos = (pos[0] +0.5, pos[1] +0.5)
                 self.add_sprite(random_sprite(self.game, pos=center_pos))
                 self.sprite_pos.append(pos)
@@ -57,8 +74,8 @@ class ObjectHandler:
         self.key_pos = pos
         
     def spawn_npc(self):
-        for i in range(self.npc_num):
-            npc = random.choices(self.npc_types, self.weights)[0]
+        for i in range(int(self.npc_num)):
+            npc = NPC
             pos = random.choice(self.game.map.space_indexes)
             x, y = pos
             npc_address = self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))

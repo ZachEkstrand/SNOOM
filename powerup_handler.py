@@ -25,7 +25,6 @@ class Powerup_handler:
                 self.player.health = PLAYER_HEALTH * 2
         else:
             self.max_health = PLAYER_HEALTH
-        print(powerup)
         if powerup == '2x damage':
             self.player.damage = PLAYER_DAMAGE * 2
         else:
