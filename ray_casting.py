@@ -100,6 +100,8 @@ class RayCasting:
             self.draw_lines['depth'].append(depth)
             self.draw_lines['cos_a'].append(cos_a)
             self.draw_lines['sin_a'].append(sin_a)
+            if ray == NUM_RAYS // 2:
+                self.game.object_renderer.mini_map_player_angle = [ox, oy, depth, cos_a, sin_a]
 
             ray_angle += DELTA_ANGLE
 

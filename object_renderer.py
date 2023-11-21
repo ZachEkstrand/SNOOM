@@ -30,6 +30,7 @@ class ObjectRenderer:
         self.candy_cane_image = self.get_texture('resources/sprites/static_sprites/candy_cane_item.png', (64 // 2, 143 // 2))
         self.key_image = self.get_texture('resources/sprites/static_sprites/key.png', (59, 60))
         self.game_over_image = self.get_texture(path +'game_over.png', (260 * self.title_image_scale, 73 * self.title_image_scale))
+        self.mini_map_player_angle = [0, 0, 0, 0, 0]
         # pause_menu
         self.background_shade = self.get_texture(path +'background_shade.png', RES)
         self.quit_image = self.get_texture(path +'quit.png', (55 * self.button_font_size, 19 * self.button_font_size))
@@ -189,6 +190,7 @@ class ObjectRenderer:
             self.screen.blit(self.key_image, (WIDTH -70, 70))
 
     def draw_mini_map(self):
+        player_line = self.mini_map_player_angle
         scale = 5
         door = self.game.map.exit_pos
         mini_map = pg.Surface((32 * scale, 32 * scale))
@@ -202,6 +204,7 @@ class ObjectRenderer:
             [pg.draw.circle(mini_map, 'white', (sprite.x * scale, sprite.y * scale), 2) for sprite in self.game.object_handler.sprite_list if isinstance(sprite, Snowpile)]
         if self.game.object_handler.key_pos and self.player.key == False:
             pg.draw.circle(mini_map, 'yellow', (self.game.object_handler.key_pos[0] * scale, self.game.object_handler.key_pos[1] * scale), 1)
+        pg.draw.line(mini_map, 'orange', (scale * player_line[0], scale * player_line[1]), (scale * player_line[0] + scale * player_line[2] * player_line[3], scale * player_line[1] + scale * player_line[2] * player_line[4]), 1)
         self.screen.blit(mini_map, (10, 300))
 
     def draw_pause_menu(self):
