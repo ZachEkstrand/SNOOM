@@ -32,7 +32,6 @@ class Game:
             'next_x':[],
             'next_y':[]
         }
-        self.markers = []
         self.new_game()
 
     def new_game(self):
@@ -68,6 +67,7 @@ class Game:
         self.pathfinding = Pathfinding(self)
 
     def new_round(self):
+        self.scene_manager.round_stopwatch = None
         del self.map
         del self.ray_casting
         del self.powerup_handler

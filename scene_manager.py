@@ -1,4 +1,5 @@
 import random
+from timer_handler import *
 
 class SceneManager:
     def __init__(self, game):
@@ -10,6 +11,7 @@ class SceneManager:
         self.column = 0
         self.A_down = False
         self.menu_button_down = False
+        self.round_stopwatch = None
         self.letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
         
         self.sound_manager.set_volume(0, 0.3)
@@ -131,6 +133,8 @@ class SceneManager:
         game = self.game
         game.ray_casting.update()
         game.object_handler.update()
+        if self.round_stopwatch:
+            self.round_stopwatch.update(game.delta_time)
         if self.sound_manager.get_queue() == None:
             self.sound_manager.queue(random.randint(0, 4))
         if self.X_down:
@@ -210,3 +214,7 @@ class SceneManager:
             game.object_renderer.draw_game_over()
         elif self.current_scene == 'keyboard':
             game.object_renderer.draw_keyboard()
+
+    def start_round_stopwatch(self):
+        if self.round_stopwatch == None:
+            self.round_stopwatch = Stopwatch(pg.time.get_ticks())

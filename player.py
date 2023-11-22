@@ -43,9 +43,18 @@ class Player:
             self.health = self.max_health
         self.game.controller_manager.read_controller_inputs()
         self.controller_inputs()
+        self.check_door()
+
+    def check_door(self):
         if self.x > float(self.exit_x):
             self.game.sound_manager.play(16)
-            self.score += 250
+            r1 = 0
+            r2 = 120000
+            w1 = 1000
+            w2 = 0
+            time_bonus = ((w2 -w1) / (r2 -r1)) * (self.game.scene_manager.round_stopwatch.elapsed_time -r1) +w1
+            print(time_bonus * self.room_num)
+            self.score += max(0, int(time_bonus)) * self.room_num
             self.game.signal_manager.Permissions['joysticks'] = False
             self.game.new_round()
         

@@ -1,6 +1,7 @@
 import pygame as pg
 from settings import *
 from sprite_object import *
+from timer_handler import *
 
 path = 'resources/textures/'
 
@@ -379,6 +380,7 @@ class Header:
                     self.timer_start = time_now
             elif self.animation_phase == 2:
                 object_renderer.signal_manager.Permissions['joysticks'] = True
+                object_renderer.game.scene_manager.start_round_stopwatch()
                 blit(self.surface, (x, y))
                 if time_now -self.timer_start > stop_time:
                     self.animation_phase = 3
