@@ -54,6 +54,7 @@ class Game:
         del self.scene_manager
         del self.player
         del self.object_renderer
+        del self.powerup_handler
         del self.ray_casting
         del self.object_handler
         del self.pathfinding
@@ -63,6 +64,7 @@ class Game:
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
         self.ray_casting = RayCasting(self)
+        self.powerup_handler = Powerup_handler(self)
         self.object_handler = ObjectHandler(self)
         self.pathfinding = Pathfinding(self)
 

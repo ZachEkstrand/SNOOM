@@ -53,7 +53,6 @@ class Player:
             w1 = 1000
             w2 = 0
             time_bonus = ((w2 -w1) / (r2 -r1)) * (self.game.scene_manager.round_stopwatch.elapsed_time -r1) +w1
-            print(time_bonus * self.room_num)
             self.score += max(0, int(time_bonus)) * self.room_num
             self.game.signal_manager.Permissions['joysticks'] = False
             self.game.new_round()
@@ -195,6 +194,8 @@ class Player:
     def take_damage(self, damage):
         self.game.sound_manager.play(random.randint(5, 7)) 
         self.health -= damage
+        if self.powerup == 'CATCHER':
+            self.ammo += 1
         self.check_game_over()
 
     def check_game_over(self):

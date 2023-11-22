@@ -131,10 +131,12 @@ class NPC(AnimatedSprite): #elf cadet
     def map_pos(self):
         return int(self.x), int(self.y)
 
-    def take_damage(self, damage):
+    def take_damage(self, damage, powerup):
         self.pain = True
         self.health -= damage
         self.player.hit_streak += 1
+        if powerup == 'STUN':
+            self.pain_frame_time = 500
         self.check_health()
 
     def check_health(self):

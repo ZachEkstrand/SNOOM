@@ -11,6 +11,8 @@ class Weapon(AnimatedSprite):
         self.last_frame = pg.time.get_ticks()
 
     def update(self):
+        if self.player.powerup == 'PITCHER':
+            self.frame_time * 0.7
         if self.game.scene_manager.current_scene == 'pause_menu': pass
         else: self.animate()
 

@@ -7,6 +7,9 @@ class Projectile(SpriteObject):
         super().__init__(game, path, pos, scale, shift)
         self.alive = True
         self.speed = 0.005
+        self.powerup = self.player.powerup
+        if self.powerup == 'PITCHER':
+            self.speed *= 2
         self.entity = entity
         self.angle = angle
         self.damage = damage
@@ -32,7 +35,7 @@ class Projectile(SpriteObject):
                     break
 
     def check_powerup(self):
-        if self.player.powerup == 'GIANT' and self.entity == 'player':
+        if self.powerup == 'GIANT' and self.entity == 'player':
             self.SPRITE_SCALE = 0.5
             self.bonus = 5 / 70
         else:
@@ -44,7 +47,7 @@ class Projectile(SpriteObject):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
             if self.entity == 'player':
                 self.player.hit_streak = 0
-                if self.player.powerup == 'BOUNCE' and self.bounces < 3:
+                if self.powerup == 'BOUNCE' and self.bounces < 3:
                     if self.check_wall_angle() == 'horizontal':
                         self.angle = 2 * math.pi -self.angle
                     elif self.check_wall_angle() == 'vertical':
@@ -89,10 +92,14 @@ class Projectile(SpriteObject):
                 dist_from_enemy = math.hypot(dx, dy)
                 if dist_from_enemy <= enemy.hitbox +self.bonus:
                     if enemy not in self.ignore:
-                        enemy.take_damage(self.damage)
-                    if self.player.powerup == 'GIANT':
+                        enemy.take_damage(self.damage, self.powerup)
+                    if self.powerup == 'GIANT':
                         self.ignore.append(enemy)
                         return False
+                    if self.powerup == 'LEECH':
+                        self.player.health += 5
+                        if self.player.health > self.player.max_health:
+                            self.player.health = self.player.max_health
                     return True
         if self.target == 'player':
             if self.dist <= 0.7:
