@@ -36,7 +36,6 @@ class Powerup_handler:
 
     def pick_powerup(self):
         self.player_powerup = random.choice(self.powerups)
-        self.player_powerup = self.powerups[9]
         self.game.player.powerup = self.player_powerup
         self.check_powerup(self.player_powerup, just_aquired=True)
         self.game.object_renderer.create_header(self.player_powerup, 255, animation_type='slide')
