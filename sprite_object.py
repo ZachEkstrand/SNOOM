@@ -76,7 +76,7 @@ class Tree(SpriteObject):
         height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
         pos = self.screen_x -self.sprite_half_width, HALF_HEIGHT -proj_height // 2 +height_shift
 
-        if self.norm_dist > 3:
+        if self.dist > 3:
             self.game.ray_casting.objects_to_render.append((self.norm_dist, image, pos))
 
 class Snowpile(SpriteObject):
@@ -89,7 +89,7 @@ class Snowpile(SpriteObject):
         self.check_collision_on_player()
 
     def check_collision_on_player(self):
-        if self.norm_dist < 0.5:
+        if self.dist < 0.5:
             self.game.sound_manager.play(12)
             self.game.player.ammo += 3
             self.game.object_handler.del_queue.append(self)
@@ -104,7 +104,7 @@ class CandyCane(SpriteObject):
         self.check_collision_on_player()
 
     def check_collision_on_player(self):
-        if self.norm_dist < 0.5:
+        if self.dist < 0.5:
             self.game.sound_manager.play(18)
             self.game.player.candy_canes += 1
             self.game.object_handler.del_queue.append(self)
@@ -125,7 +125,7 @@ class Key(SpriteObject):
         super().update()
 
     def check_collision_on_player(self):
-        if self.norm_dist < 0.5:
+        if self.dist < 0.5:
             self.game.sound_manager.play(15)
             self.game.player.key = True
             self.game.object_handler.del_queue.append(self)
@@ -184,7 +184,7 @@ class PowerCane(AnimatedSprite):
         self.check_collision_on_player()
 
     def check_collision_on_player(self):
-        if self.norm_dist < 0.5:
+        if self.dist < 0.5:
             self.game.sound_manager.play(18)
             self.player.score += 50
             self.game.powerup_handler.pick_powerup()

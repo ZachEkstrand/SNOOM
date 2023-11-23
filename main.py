@@ -86,8 +86,8 @@ class Game:
         pg.display.flip()
         self.check_events()
         self.update()
-        #self.draw()
-        self.draw_flat()
+        self.draw()
+        #self.draw_flat()
 
     def check_events(self):
         for event in pg.event.get():

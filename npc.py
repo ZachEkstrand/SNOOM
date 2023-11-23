@@ -10,10 +10,10 @@ class NPC(AnimatedSprite): #elf cadet
         self.pain_images = self.get_images('resources/sprites/npc/elf/pain')
         self.walk_images = self.get_images('resources/sprites/npc/elf/walk')
 
-        self.attack_dist = random.randint(3, 6)
-        self.point_give = round(self.attack_dist * 3, -1)
+        self.attack_dist = random.randint(3, 4)
+        self.point_give = 10
         self.attack_delay = 180
-        self.speed = 0.1
+        self.speed = 0.076
         self.size = 5
         self.hitbox = 15 / 70
         self.health = 100
@@ -32,6 +32,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.destination = None
 
     def update(self):
+        print(self.game.delta_time)
         if self.game.scene_manager.current_scene == 'pause_menu': pass 
         else: 
             self.check_animation_time()
@@ -177,7 +178,6 @@ class NPC(AnimatedSprite): #elf cadet
     def movement(self):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.destination)
         next_x, next_y = next_pos
-
         
         angle = math.atan2(next_y +0.5 -self.y, next_x +0.5 -self.x)
         speed = self.speed# * self.game.delta_time
@@ -187,30 +187,15 @@ class NPC(AnimatedSprite): #elf cadet
         if self.map_pos == self.destination:
             self.destination = None
 
-        '''next_pos = self.game.pathfinding.get_path(self.map_pos, self.destination)
-        next_x, next_y = next_pos
-        self.game.e_lines['start_x'].append(self.x)
-        self.game.e_lines['start_y'].append(self.y)
-        self.game.e_lines['end_x'].append(self.destination[0] +0.5)
-        self.game.e_lines['end_y'].append(self.destination[1] +0.5)
-        self.game.e_lines['next_x'].append(next_x)
-        self.game.e_lines['next_y'].append(next_y)
-
-        if next_pos not in self.game.object_handler.npc_positions:
-            angle = math.atan2(next_y +0.5 -self.y, next_x +0.5 -self.x)
-            dx = math.cos(angle) * self.speed * self.game.delta_time
-            dy = math.sin(angle) * self.speed * self.game.delta_time
-            self.check_collision(dx, dy)
-        if self.map_pos == self.destination:
-            self.destination = None'''
-
     def check_collision(self, dx, dy):
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):
-            self.x += dx
-            self.game.object_handler.npc_positions[self] = self.pos
-            self.game.object_handler.npc_map_positions[self] = self.map_pos
+            if self.check_npcs(self.x +dx, self.y):
+                self.x += dx
+                self.game.object_handler.npc_positions[self] = self.pos
+                self.game.object_handler.npc_map_positions[self] = self.map_pos
         if self.check_wall(int(self.x), int(self.y +dy * self.size)):
-            self.y += dy
+            if self.check_npcs(self.x, self.y +dy):
+                self.y += dy
 
         self.game.object_handler.npc_positions[self] = self.pos
         self.game.object_handler.npc_map_positions[self] = self.map_pos
@@ -218,6 +203,17 @@ class NPC(AnimatedSprite): #elf cadet
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.map_diction
     
+    def check_npcs(self, x, y):
+        for enemy in self.game.object_handler.npc_positions:
+            if enemy == self:
+                continue
+            dx = x -enemy.x
+            dy = y -enemy.y
+            dist = math.hypot(dx, dy)
+            if dist <= 0.5:
+                return False
+        return True
+
     def animate_death(self):
         time_now = pg.time.get_ticks()
         if self.death_frame_counter == -1:
