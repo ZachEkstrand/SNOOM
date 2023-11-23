@@ -12,6 +12,7 @@ class ObjectHandler:
         self.npc_list = []
         self.del_queue = []
         self.npc_positions = {}
+        self.npc_map_positions = {}
         self.restricted_area = [(i, j) for i in range(int(self.game.player.x), int(self.game.player.x) +2) for j in range(int(self.game.player.y) -1, int(self.game.player.y) +2)]
         self.player_projectile_pos = {}
         self.enemy_projectile_pos = {}
@@ -31,6 +32,7 @@ class ObjectHandler:
         self.npc_list = []
         self.del_queue = []
         self.npc_positions = {}
+        self.npc_map_positions = {}
         self.player_projectile_pos = {}
         self.enemy_projectile_pos = {}
         self.npc_num += 1
@@ -89,6 +91,7 @@ class ObjectHandler:
                 npc_address.y = y +0.6
                 npc_address.get_sprite()
         self.npc_positions = {npc:npc.pos for npc in self.npc_list}
+        self.npc_map_positions = {npc:npc.map_pos for npc in self.npc_list}
 
     def add_npc(self, npc):
         self.npc_list.append(npc)
@@ -98,6 +101,7 @@ class ObjectHandler:
         self.check_ammo()
 
         self.npc_positions = {npc:npc.pos for npc in self.npc_list if npc.alive}
+        self.npc_map_positions = {npc:npc.map_pos for npc in self.npc_list if npc.alive}
         self.sprite_pos = [sprite.pos for sprite in self.sprite_list]
         [npc.update() for npc in self.npc_list]
         self.weapon.update()

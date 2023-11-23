@@ -13,9 +13,9 @@ class NPC(AnimatedSprite): #elf cadet
         self.attack_dist = random.randint(3, 6)
         self.point_give = round(self.attack_dist * 3, -1)
         self.attack_delay = 180
-        self.speed = 0.001
-        self.size = 15
-        self.hitbox = self.size / 70
+        self.speed = 0.1
+        self.size = 5
+        self.hitbox = 15 / 70
         self.health = 100
         self.attack_damage = 5
         self.last_attack_time = 0
@@ -177,6 +177,18 @@ class NPC(AnimatedSprite): #elf cadet
     def movement(self):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.destination)
         next_x, next_y = next_pos
+
+        
+        angle = math.atan2(next_y +0.5 -self.y, next_x +0.5 -self.x)
+        speed = self.speed# * self.game.delta_time
+        dx = math.cos(angle) * speed
+        dy = math.sin(angle) * speed
+        self.check_collision(dx, dy)
+        if self.map_pos == self.destination:
+            self.destination = None
+
+        '''next_pos = self.game.pathfinding.get_path(self.map_pos, self.destination)
+        next_x, next_y = next_pos
         self.game.e_lines['start_x'].append(self.x)
         self.game.e_lines['start_y'].append(self.y)
         self.game.e_lines['end_x'].append(self.destination[0] +0.5)
@@ -188,15 +200,20 @@ class NPC(AnimatedSprite): #elf cadet
             angle = math.atan2(next_y +0.5 -self.y, next_x +0.5 -self.x)
             dx = math.cos(angle) * self.speed * self.game.delta_time
             dy = math.sin(angle) * self.speed * self.game.delta_time
-            self.check_wall_collision(dx, dy)
+            self.check_collision(dx, dy)
         if self.map_pos == self.destination:
-            self.destination = None
+            self.destination = None'''
 
-    def check_wall_collision(self, dx, dy):
+    def check_collision(self, dx, dy):
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):
             self.x += dx
+            self.game.object_handler.npc_positions[self] = self.pos
+            self.game.object_handler.npc_map_positions[self] = self.map_pos
         if self.check_wall(int(self.x), int(self.y +dy * self.size)):
             self.y += dy
+
+        self.game.object_handler.npc_positions[self] = self.pos
+        self.game.object_handler.npc_map_positions[self] = self.map_pos
 
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.map_diction

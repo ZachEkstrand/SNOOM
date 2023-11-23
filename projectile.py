@@ -102,7 +102,7 @@ class Projectile(SpriteObject):
                             self.player.health = self.player.max_health
                     return True
         if self.target == 'player':
-            if self.dist <= 0.7:
+            if self.norm_dist <= 0.7:
                 self.game.signal_manager.emit_signal(self.game.player.take_damage, args=self.damage)
                 return True
         return False
