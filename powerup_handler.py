@@ -15,7 +15,8 @@ class Powerup_handler:
             'LEECH',#6
             'CATCHER',#7
             'PITCHER',#8
-            'STUN'#9
+            'STUN',#9
+            'COMBO',#10
         ]
         self.player_powerup = None
 

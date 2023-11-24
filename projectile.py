@@ -3,11 +3,11 @@ from sprite_object import *
 
 class Projectile(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/snowball.png',
-                 pos=(1, 1), scale=0.15, shift= -0.04, entity='player', angle=1, damage=50):
+                 pos=(1, 1), scale=0.15, shift= -0.04, entity='player', angle=1, damage=50, powerup=''):
         super().__init__(game, path, pos, scale, shift)
         self.alive = True
         self.speed = 0.005
-        self.powerup = self.player.powerup
+        self.powerup = powerup
         if self.powerup == 'PITCHER':
             self.speed *= 2
         self.entity = entity

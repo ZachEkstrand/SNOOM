@@ -32,7 +32,6 @@ class NPC(AnimatedSprite): #elf cadet
         self.destination = None
 
     def update(self):
-        print(self.game.delta_time)
         if self.game.scene_manager.current_scene == 'pause_menu': pass 
         else: 
             self.check_animation_time()
@@ -172,7 +171,7 @@ class NPC(AnimatedSprite): #elf cadet
         time_now = pg.time.get_ticks()
         if time_now -self.last_attack_time > self.attack_delay:
             self.game.sound_manager.play(4)
-            self.game.object_handler.spawn_projectile(self.pos, 'enemy', self.theta +math.pi +random.uniform(-0.3, 0.3), self.attack_damage)
+            self.game.object_handler.spawn_projectile(self.pos, 'enemy', self.theta +math.pi +random.uniform(-0.3, 0.3), self.attack_damage, '')
             self.last_attack_time = time_now
 
     def movement(self):
@@ -225,3 +224,6 @@ class NPC(AnimatedSprite): #elf cadet
                 self.death_frame_counter += 1
                 self.last_death_frame = time_now
         self.image = self.death_images[0]
+
+#class Boss(NPC):
+    #__init__()

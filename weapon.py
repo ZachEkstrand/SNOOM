@@ -1,5 +1,6 @@
 from sprite_object import *
 import math
+import random
 
 class Weapon(AnimatedSprite):
     def __init__(self, game, path='resources/sprites/player/00.png', scale=HEIGHT, animation_time=50):
@@ -9,9 +10,13 @@ class Weapon(AnimatedSprite):
         self.x, self.y = (0, (HEIGHT -self.image.get_height()))
         self.frame_time = animation_time
         self.last_frame = pg.time.get_ticks()
+        
 
     def update(self):
-        if self.player.powerup == 'PITCHER':
+        self.powerup = self.player.powerup
+        if self.powerup == 'COMBO':
+            self.powerup = random.choice(['TRIPLE', 'GIANT', '2X DAMAGE', 'BOUNCE', 'LEECH', 'PITCHER', 'STUN'])
+        if self.powerup == 'PITCHER':
             self.frame_time * 0.7
         if self.game.scene_manager.current_scene == 'pause_menu': pass
         else: self.animate()
@@ -33,10 +38,10 @@ class Weapon(AnimatedSprite):
                 if self.frame_counter == 2:
                     self.x, self.y = (0, 0)
                 if self.frame_counter == 4:
-                    self.game.object_handler.spawn_projectile(self.player.pos, 'player', (self.game.player.angle -0.00102), self.player.damage)
-                    if self.player.powerup == 'TRIPLE':
-                        self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) -math.pi / 16, self.player.damage)
-                        self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) +math.pi / 16, self.player.damage)
+                    self.game.object_handler.spawn_projectile(self.player.pos, 'player', (self.game.player.angle -0.00102), self.player.damage, self.powerup)
+                    if self.powerup == 'TRIPLE':
+                        self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) -math.pi / 16, self.player.damage, '')
+                        self.game.object_handler.spawn_projectile(self.game.player.pos, 'player', (self.game.player.angle -0.00102) +math.pi / 16, self.player.damage, '')
                 if self.frame_counter == len(self.images):
                     self.game.player.shooting = False
                     self.frame_counter = 0

@@ -66,11 +66,11 @@ class ObjectHandler:
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
 
-    def spawn_projectile(self, pos, entity, angle, damage):
+    def spawn_projectile(self, pos, entity, angle, damage, powerup):
         if entity == 'player':
-            self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle, damage=damage))
+            self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle, damage=damage, powerup=powerup))
         if entity == 'enemy':
-            self.add_sprite(Projectile(self.game, pos=pos, shift=1, entity=entity, angle=angle, damage=damage))
+            self.add_sprite(Projectile(self.game, pos=pos, shift=1, entity=entity, angle=angle, damage=damage, powerup=powerup))
     
     def spawn_key(self, pos):
         self.add_sprite(Key(self.game, pos=pos))
@@ -122,9 +122,9 @@ class ObjectHandler:
             self.respawn_snowpiles()
 
     def respawn_snowpiles(self):
-        for i in range(3):
+        for i in range(4):
             random_pos = random.choice(self.game.map.space_indexes)
-            while random_pos in self.sprite_list:
+            while random_pos in self.sprite_pos:
                 random_pos = random.choice(self.game.map.space_indexes)
             pos = (random_pos[0] +0.5, random_pos[1] +0.5)
             self.add_sprite(Snowpile(self.game, pos=pos))
