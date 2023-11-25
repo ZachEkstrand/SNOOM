@@ -18,7 +18,7 @@ class ObjectHandler:
         self.enemy_projectile_pos = {}
 
         self.npc_num = 5
-        self.sprite_weights = [1.0, 1.0, 1.0]
+        self.sprite_weights = [0.5, 1.0, 0.5]
         self.spawn_rate = 3.0
 
         self.key_pos = None
@@ -35,13 +35,19 @@ class ObjectHandler:
         self.npc_map_positions = {}
         self.player_projectile_pos = {}
         self.enemy_projectile_pos = {}
-        self.npc_num += 1
-        self.sprite_weights[0] *= 0.6
-        self.sprite_weights[2] *= 0.9
+        self.npc_num = self.game.player.room_num +4
+        self.sprite_weights[0] = self.game.player.room_num ** -0.9
+        self.sprite_weights[1] = self.game.player.room_num ** 1.1
+        self.sprite_weights[2] = self.game.player.room_num ** -0.2
         if self.spawn_rate < 50:
             self.spawn_rate += 0.5
         self.key_pos = None
         del self.weapon
+        if self.game.player.room_num % 5 == 0:
+            self.sprite_weights[0] = 0.5
+            self.sprite_weights[1] = 1.0
+            self.sprite_weights[2] = 0.5
+
         self.place_objects()
         self.spawn_npc()
 

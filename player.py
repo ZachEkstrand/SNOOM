@@ -33,7 +33,6 @@ class Player:
         self.x, self.y = self.game.map.player_pos
         self.angle = self.game.map.player_angle
         self.max_health = PLAYER_HEALTH
-        self.health += 20
         if self.health > self.max_health:
             self.health = self.max_health
         self.key = False
@@ -46,10 +45,6 @@ class Player:
             self.health = self.max_health
         self.game.controller_manager.read_controller_inputs()
         self.check_stun()
-        if self.stunned:
-            self.game.signal_manager.Permissions['joysticks'] = False
-            self.game.signal_manager.Permissions['X_button'] = False
-            self.game.signal_manager.Permissions['Player.attack'] = False
         self.controller_inputs()
         self.check_door()
 
@@ -57,7 +52,6 @@ class Player:
         time_now = pg.time.get_ticks()
         if time_now -self.stun_time >= 1000:
             self.stunned = False
-            self.game.signal_manager.Permissions['joysticks'] = True
 
     def check_door(self):
         if self.x > float(self.exit_x):
@@ -93,7 +87,7 @@ class Player:
         self.joy_str_2 = 0
 
         # joysticks
-        if self.game.signal_manager.Permissions['joysticks']:
+        if self.game.signal_manager.Permissions['joysticks'] and self.stunned == False:
             if self.controller_manager.inputs[1] < -rv1:
                 self.joy_str_1 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.controller_manager.inputs[1] +rv1) -wv1
                 dx += speed_cos * -self.joy_str_1
@@ -167,7 +161,7 @@ class Player:
                 self.game.scene_manager.B_button = False
                 self.game.signal_manager.Permissions['B_button'] = True
 
-            if self.game.signal_manager.Permissions['X_button'] and self.controller_manager.inputs[8] == 1:
+            if self.game.signal_manager.Permissions['X_button'] and self.controller_manager.inputs[8] == 1 and self.stunned == False:
                 self.game.scene_manager.X_down = True
                 self.game.signal_manager.Permissions['X_button'] = False
             if self.controller_manager.inputs[8] != 1:
@@ -182,7 +176,7 @@ class Player:
                 self.game.signal_manager.Permissions['menu_button'] = True
         
         # trigger
-        if round(self.controller_manager.inputs[3]) == 1:
+        if round(self.controller_manager.inputs[3]) == 1 and self.stunned == False:
             self.emit_signal(self.attack)
         if (round(self.controller_manager.inputs[3]) == -1) and (self.shooting == False) and (self.game.scene_manager.current_scene == 'arena'):
             self.game.signal_manager.Permissions['Player.attack'] = True

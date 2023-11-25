@@ -233,11 +233,11 @@ class Boss(NPC):
         self.pain_images = self.get_images('resources/sprites/npc/elf/pain')
         self.walk_images = self.get_images('resources/sprites/npc/elf/walk')
 
-        self.attack_dist = 6
+        self.attack_dist = 8
         self.point_give = 30
         self.speed = 0.06
         self.size = 5 #tbd
-        self.hitbox = 15 / 70 #tbd
+        self.hitbox = 15 / 60 #tbd
         self.health = 10
         self.max_health = self.health
         self.attack_damage = 5
@@ -254,7 +254,25 @@ class Boss(NPC):
         self.death_frame_counter = -1
         self.destination = None
         self.powerup = random.choice(['TRIPLE', 'GIANT', '2X DAMAGE', 'BOUNCE', 'LEECH', 'PITCHER', 'STUN', 'COMBO'])
-        print(self.powerup)
+
+    def run_logic(self):
+        if self.alive:
+            self.ray_cast_value = self.ray_cast_player_npc()
+            if self.pain:
+                self.animate_pain()
+            elif self.ray_cast_value:
+                if self.dist < self.attack_dist:
+                    self.attack()
+                if self.dist > 2:
+                    self.animate(self.walk_images)
+                    self.movement()
+            elif self.destination:
+                self.animate(self.walk_images)
+                self.movement()
+            else:
+                self.image = self.idle_image
+        else:
+            self.animate_death()
 
     def attack(self):
         time_now = pg.time.get_ticks()
