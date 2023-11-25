@@ -17,7 +17,7 @@ class ObjectHandler:
         self.player_projectile_pos = {}
         self.enemy_projectile_pos = {}
 
-        self.npc_num = 8
+        self.npc_num = 5
         self.sprite_weights = [1.0, 1.0, 1.0]
         self.spawn_rate = 3.0
 
@@ -67,9 +67,11 @@ class ObjectHandler:
         self.sprite_list.append(sprite)
 
     def spawn_projectile(self, pos, entity, angle, damage, powerup):
-        if entity == 'player':
+        if entity == self.game.player:
             self.add_sprite(Projectile(self.game, pos=pos, entity=entity, angle=angle, damage=damage, powerup=powerup))
-        if entity == 'enemy':
+        elif isinstance(entity, Boss):
+            self.add_sprite(Projectile(self.game, pos=pos, shift=0, entity=entity, angle=angle, damage=damage, powerup=powerup))
+        elif isinstance(entity, NPC):
             self.add_sprite(Projectile(self.game, pos=pos, shift=1, entity=entity, angle=angle, damage=damage, powerup=powerup))
     
     def spawn_key(self, pos):
@@ -77,19 +79,35 @@ class ObjectHandler:
         self.key_pos = pos
         
     def spawn_npc(self):
-        for i in range(int(self.npc_num)):
-            npc = NPC
-            pos = random.choice(self.game.map.space_indexes)
-            x, y = pos
-            npc_address = self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))
-            npc_address.get_sprite()
-            while npc_address.ray_cast_player_npc():
-                npc_address.destination = None
+        if self.game.player.room_num % 5 == 0:
+            num_bosses = self.game.player.room_num / 5
+            for i in range(int(num_bosses)):
                 pos = random.choice(self.game.map.space_indexes)
                 x, y = pos
-                npc_address.x = x +0.6
-                npc_address.y = y +0.6
+                boss_address = self.add_npc(Boss(self.game, pos=(x +0.6, y +0.6)))
+                boss_address.get_sprite()
+                while boss_address.ray_cast_player_npc():
+                    boss_address.destination = None
+                    pos = random.choice(self.game.map.space_indexes)
+                    x, y = pos
+                    boss_address.x = x +0.6
+                    boss_address.y = y +0.6
+                    boss_address.get_sprite()
+        else:
+            for i in range(int(self.npc_num)):
+                npc = NPC
+                pos = random.choice(self.game.map.space_indexes)
+                x, y = pos
+                npc_address = self.add_npc(npc(self.game, pos=(x +0.6, y +0.6)))
                 npc_address.get_sprite()
+                while npc_address.ray_cast_player_npc():
+                    npc_address.destination = None
+                    pos = random.choice(self.game.map.space_indexes)
+                    x, y = pos
+                    npc_address.x = x +0.6
+                    npc_address.y = y +0.6
+                    npc_address.get_sprite()
+
         self.npc_positions = {npc:npc.pos for npc in self.npc_list}
         self.npc_map_positions = {npc:npc.map_pos for npc in self.npc_list}
 

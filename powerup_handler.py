@@ -30,10 +30,6 @@ class Powerup_handler:
                 self.player.health = PLAYER_HEALTH * 2
         else:
             self.max_health = PLAYER_HEALTH
-        if powerup == '2X DAMAGE':
-            self.player.damage = PLAYER_DAMAGE * 2
-        else:
-            self.player.damage = PLAYER_DAMAGE
 
     def pick_powerup(self):
         self.player_powerup = random.choice(self.powerups)

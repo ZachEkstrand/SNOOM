@@ -12,11 +12,10 @@ class NPC(AnimatedSprite): #elf cadet
 
         self.attack_dist = random.randint(3, 4)
         self.point_give = 10
-        self.attack_delay = 180
         self.speed = 0.076
         self.size = 5
         self.hitbox = 15 / 70
-        self.health = 100
+        self.health = 2
         self.attack_damage = 5
         self.last_attack_time = 0
         self.attack_delay = 1000
@@ -171,7 +170,7 @@ class NPC(AnimatedSprite): #elf cadet
         time_now = pg.time.get_ticks()
         if time_now -self.last_attack_time > self.attack_delay:
             self.game.sound_manager.play(4)
-            self.game.object_handler.spawn_projectile(self.pos, 'enemy', self.theta +math.pi +random.uniform(-0.3, 0.3), self.attack_damage, '')
+            self.game.object_handler.spawn_projectile(self.pos, self, self.theta +math.pi +random.uniform(-0.3, 0.3), self.attack_damage, '')
             self.last_attack_time = time_now
 
     def movement(self):
@@ -225,5 +224,47 @@ class NPC(AnimatedSprite): #elf cadet
                 self.last_death_frame = time_now
         self.image = self.death_images[0]
 
-#class Boss(NPC):
-    #__init__()
+class Boss(NPC):
+    def __init__(self, game, path='resources/sprites/npc/elf/walk/7.png', pos=(1, 1),
+                 scale=1.2, shift=-0.1, animation_time=100):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+        self.idle_image = pg.image.load('resources/sprites/npc/elf/walk/7.png').convert_alpha()
+        self.death_images = self.get_images('resources/sprites/npc/elf/death')
+        self.pain_images = self.get_images('resources/sprites/npc/elf/pain')
+        self.walk_images = self.get_images('resources/sprites/npc/elf/walk')
+
+        self.attack_dist = 6
+        self.point_give = 30
+        self.speed = 0.06
+        self.size = 5 #tbd
+        self.hitbox = 15 / 70 #tbd
+        self.health = 10
+        self.max_health = self.health
+        self.attack_damage = 5
+        self.last_attack_time = 0
+        self.attack_delay = 1500
+        self.pain_frame_time = 80
+        self.last_pain_frame = pg.time.get_ticks()
+        self.death_frame_time = 40
+        self.last_death_frame = pg.time.get_ticks()
+        self.alive = True
+        self.pain = False
+        self.ray_cast_value = False
+        self.pain_frame_counter = -1
+        self.death_frame_counter = -1
+        self.destination = None
+        self.powerup = random.choice(['TRIPLE', 'GIANT', '2X DAMAGE', 'BOUNCE', 'LEECH', 'PITCHER', 'STUN', 'COMBO'])
+        print(self.powerup)
+
+    def attack(self):
+        time_now = pg.time.get_ticks()
+        if time_now -self.last_attack_time > self.attack_delay:
+            powerup = self.powerup
+            if powerup == 'COMBO':
+                powerup = random.choice(['TRIPLE', 'GIANT', '2X DAMAGE', 'BOUNCE', 'LEECH', 'PITCHER', 'STUN'])
+            self.game.sound_manager.play(4)
+            self.game.object_handler.spawn_projectile(self.pos, self, self.theta +math.pi +random.uniform(-0.3, 0.3), self.attack_damage, powerup)
+            if powerup == 'TRIPLE':
+                self.game.object_handler.spawn_projectile(self.pos, self, self.theta +math.pi +random.uniform(-0.3, 0.3), self.attack_damage, '')
+                self.game.object_handler.spawn_projectile(self.pos, self, self.theta +math.pi +random.uniform(-0.3, 0.3), self.attack_damage, '')
+            self.last_attack_time = time_now

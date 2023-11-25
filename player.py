@@ -1,6 +1,7 @@
 from settings import *
 import random
 import math
+import pygame as pg
 
 class Player:
     def __init__(self, game):
@@ -14,7 +15,7 @@ class Player:
         self.max_health = PLAYER_HEALTH
         self.score = 0
         self.ammo = PLAYER_STARTING_AMMO
-        self.damage = 50
+        self.damage = PLAYER_DAMAGE
         self.candy_canes = 0
         self.key = False
         self.rot_speed = 0
@@ -23,6 +24,8 @@ class Player:
         self.hit_streak = 0
         self.kill_streak = 0
         self.room_num = 1
+        self.stunned = False
+        self.stun_time = 0
 
         self.exit_x, self.exit_y = self.game.map.exit_pos
 
@@ -42,8 +45,19 @@ class Player:
         if self.health > self.max_health:
             self.health = self.max_health
         self.game.controller_manager.read_controller_inputs()
+        self.check_stun()
+        if self.stunned:
+            self.game.signal_manager.Permissions['joysticks'] = False
+            self.game.signal_manager.Permissions['X_button'] = False
+            self.game.signal_manager.Permissions['Player.attack'] = False
         self.controller_inputs()
         self.check_door()
+
+    def check_stun(self):
+        time_now = pg.time.get_ticks()
+        if time_now -self.stun_time >= 1000:
+            self.stunned = False
+            self.game.signal_manager.Permissions['joysticks'] = True
 
     def check_door(self):
         if self.x > float(self.exit_x):

@@ -1,9 +1,11 @@
 import pygame as pg
 from sprite_object import *
+from player import *
+from npc import *
 
 class Projectile(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/snowball.png',
-                 pos=(1, 1), scale=0.15, shift= -0.04, entity='player', angle=1, damage=50, powerup=''):
+                 pos=(1, 1), scale=0.15, shift= -0.04, entity='', angle=1, damage=1, powerup=''):
         super().__init__(game, path, pos, scale, shift)
         self.alive = True
         self.speed = 0.005
@@ -13,8 +15,10 @@ class Projectile(SpriteObject):
         self.entity = entity
         self.angle = angle
         self.damage = damage
+        if self.powerup == '2X DAMAGE':
+            self.damage *= 2
         self.target = 'enemy'
-        if self.entity == 'enemy':
+        if isinstance(self.entity, NPC) or isinstance(self.entity, Boss):
             self.target = 'player'
         self.bounces = 0
         self.ignore = []
@@ -35,9 +39,9 @@ class Projectile(SpriteObject):
                     break
 
     def check_powerup(self):
-        if self.powerup == 'GIANT' and self.entity == 'player':
+        if self.powerup == 'GIANT':
             self.SPRITE_SCALE = 0.5
-            self.bonus = 5 / 70
+            self.bonus = 0.1
         else:
             self.SPRITE_SCALE = 0.15
             self.bonus = 0
@@ -45,17 +49,17 @@ class Projectile(SpriteObject):
 
     def check_wall_collision(self):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
-            if self.entity == 'player':
+            if self.target == 'enemy':
                 self.player.hit_streak = 0
-                if self.powerup == 'BOUNCE' and self.bounces < 3:
-                    if self.check_wall_angle() == 'horizontal':
-                        self.angle = 2 * math.pi -self.angle
-                    elif self.check_wall_angle() == 'vertical':
-                        self.angle = math.pi -self.angle
-                    elif self.check_wall_angle() == 'corner':
-                        self.angle = math.pi +self.angle
-                    self.bounces += 1
-                    return False
+            if self.powerup == 'BOUNCE' and self.bounces < 3:
+                if self.check_wall_angle() == 'horizontal':
+                    self.angle = 2 * math.pi -self.angle
+                elif self.check_wall_angle() == 'vertical':
+                    self.angle = math.pi -self.angle
+                elif self.check_wall_angle() == 'corner':
+                    self.angle = math.pi +self.angle
+                self.bounces += 1
+                return False
             return True
         return False
     
@@ -97,13 +101,20 @@ class Projectile(SpriteObject):
                         self.ignore.append(enemy)
                         return False
                     if self.powerup == 'LEECH':
-                        self.player.health += 5
+                        self.player.health += 3
                         if self.player.health > self.player.max_health:
                             self.player.health = self.player.max_health
                     return True
         if self.target == 'player':
-            if self.dist <= 0.7:
+            if self.dist <= 0.7 +self.bonus:
                 self.game.signal_manager.emit_signal(self.game.player.take_damage, args=self.damage)
+                if self.powerup == 'STUN':
+                    self.player.stunned = True
+                    self.player.stun_time = pg.time.get_ticks()
+                if self.powerup == 'LEECH':
+                    self.entity.health += 1
+                    if self.entity.health > self.entity.max_health:
+                        self.entity.health = self.entity.max_health
                 return True
         return False
 
