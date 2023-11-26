@@ -100,7 +100,7 @@ class SceneManager:
             self.title_screen_update()
         elif self.current_scene == 'leaderboard':
             self.leaderboard_update()
-        elif self.current_scene == 'arena':
+        if self.current_scene == 'arena':
             self.arena_update()
         elif self.current_scene == 'pause_menu':
             self.pause_menu_update()

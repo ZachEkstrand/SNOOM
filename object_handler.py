@@ -17,7 +17,7 @@ class ObjectHandler:
         self.player_projectile_pos = {}
         self.enemy_projectile_pos = {}
 
-        self.npc_num = 5
+        self.npc_num = self.game.player.room_num +4
         self.sprite_weights = [0.5, 1.0, 0.5]
         self.spawn_rate = 3.0
 

@@ -43,6 +43,8 @@ class Projectile(SpriteObject):
             colored_surface = self.glow(root +'leech.png')
         if self.powerup == 'STUN':
             colored_surface = self.glow(root +'stun.png')
+        if self.powerup == 'PITCHER':
+            colored_surface = self.glow(root +'pitcher.png')
         if colored_surface:
             self.image = pg.image.load(self.path)
             self.image.blit(colored_surface, (0, 0))
@@ -138,6 +140,7 @@ class Projectile(SpriteObject):
                 self.game.signal_manager.emit_signal(self.game.player.take_damage, args=self.damage)
                 if self.powerup == 'STUN':
                     self.player.stunned = True
+                    self.game.controller_manager.rumble(1, 0, 1000)
                     self.player.stun_time = pg.time.get_ticks()
                 if self.powerup == 'LEECH':
                     self.entity.health += 1

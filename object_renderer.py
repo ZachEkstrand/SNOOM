@@ -3,10 +3,9 @@ from settings import *
 from sprite_object import *
 from timer_handler import *
 
-path = 'resources/textures/'
-
 class ObjectRenderer:
     def __init__(self, game):
+        path = 'resources/textures/'
         self.game = game
         self.screen = game.screen
         self.player = game.player

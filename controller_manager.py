@@ -28,3 +28,9 @@ class ControllerManager:
 
         # X-button
         self.inputs[8] = self.controller.get_button(2)
+
+    def rumble(self, low, high, duration):
+        self.controller.rumble(low, high, duration)
+
+    def stop_rumble(self):
+        self.controller.stop_rumble()

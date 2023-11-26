@@ -202,6 +202,7 @@ class Player:
     def take_damage(self, damage):
         self.game.sound_manager.play(random.randint(5, 7)) 
         self.health -= damage
+        self.controller_manager.rumble(0, 1, 100)
         if self.powerup == 'CATCHER':
             self.ammo += 1
         self.check_game_over()

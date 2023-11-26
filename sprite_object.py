@@ -90,6 +90,7 @@ class Snowpile(SpriteObject):
         if self.dist < 0.5:
             self.game.sound_manager.play(12)
             self.game.player.ammo += 3
+            self.game.controller_manager.rumble(1, 1, 1)
             self.game.object_handler.del_queue.append(self)
 
 class CandyCane(SpriteObject):
@@ -105,6 +106,7 @@ class CandyCane(SpriteObject):
         if self.dist < 0.5:
             self.game.sound_manager.play(18)
             self.game.player.candy_canes += 1
+            self.game.controller_manager.rumble(1, 1, 1)
             self.game.object_handler.del_queue.append(self)
 
 class Key(SpriteObject):
@@ -126,6 +128,7 @@ class Key(SpriteObject):
         if self.dist < 0.5:
             self.game.sound_manager.play(15)
             self.game.player.key = True
+            self.game.controller_manager.rumble(1, 1, 1)
             self.game.object_handler.del_queue.append(self)
 
     def move(self):
@@ -185,5 +188,6 @@ class PowerCane(AnimatedSprite):
         if self.dist < 0.5:
             self.game.sound_manager.play(18)
             self.player.score += 50
+            self.game.controller_manager.rumble(1, 1, 1)
             self.game.powerup_handler.pick_powerup()
             self.game.object_handler.del_queue.append(self)
