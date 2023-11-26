@@ -7,6 +7,7 @@ class Projectile(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/snowball.png',
                  pos=(1, 1), scale=0.15, shift= -0.04, entity='', angle=1, damage=1, powerup=''):
         super().__init__(game, path, pos, scale, shift)
+        self.path = path
         self.alive = True
         self.speed = 0.005
         self.powerup = powerup
@@ -22,12 +23,39 @@ class Projectile(SpriteObject):
             self.target = 'player'
         self.bounces = 0
         self.ignore = []
+        self.time_of_spawn = pg.time.get_ticks()
 
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass
-        else: 
+        else:
+            self.animate_color()
             self.run_logic()
         super().update()
+
+    def animate_color(self):
+        colored_surface = False
+        root = 'resources/sprites/static_sprites/'
+        if self.powerup == '2X DAMAGE':
+            colored_surface = self.glow(root +'2x_damage.png')
+        if self.powerup == 'BOUNCE':
+            colored_surface = self.glow(root +'bounce.png')
+        if self.powerup == 'LEECH':
+            colored_surface = self.glow(root +'leech.png')
+        if self.powerup == 'STUN':
+            colored_surface = self.glow(root +'stun.png')
+        if colored_surface:
+            self.image = pg.image.load(self.path)
+            self.image.blit(colored_surface, (0, 0))
+
+    def glow(self, path):
+        colored_surface = pg.image.load(path).convert_alpha()
+        freq = 16
+        amp = 255 / 2
+        time_since_spawn = pg.time.get_ticks() -self.time_of_spawn
+        x = time_since_spawn / 1000
+        color_alpha = math.cos(x * freq) * amp +(255 / 2)
+        colored_surface.set_alpha(color_alpha)
+        return colored_surface
 
     def run_logic(self):
         if self.alive:

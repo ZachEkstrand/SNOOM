@@ -3,10 +3,8 @@ import os
 from collections import deque
 from settings import *
 
-path = 'resources/sprites/'
-
 class SpriteObject:
-    def __init__(self, game, path=path +'static_sprites/candy_cane.png',
+    def __init__(self, game, path='resources/sprites/static_sprites/candy_cane.png',
                  pos=(10.5, 3.5), scale=0.6, shift=0.5):
         self.game = game
         self.x, self.y = pos
@@ -62,7 +60,7 @@ class SpriteObject:
         return (self.x, self.y)
 
 class Tree(SpriteObject):
-    def __init__(self, game, path=path +'static_sprites/tree.png',
+    def __init__(self, game, path='resources/sprites/static_sprites/tree.png',
                  pos=(1, 1), scale=2, shift=-0.2):
         super().__init__(game, path, pos, scale, shift)
 
@@ -80,7 +78,7 @@ class Tree(SpriteObject):
             self.game.ray_casting.objects_to_render.append((self.norm_dist, image, pos))
 
 class Snowpile(SpriteObject):
-    def __init__(self, game, path=path +'static_sprites/snowpile.png',
+    def __init__(self, game, path='resources/sprites/static_sprites/snowpile.png',
                  pos=(1, 1), scale=1, shift=0.12):
         super().__init__(game, path, pos, scale, shift)
 
@@ -95,7 +93,7 @@ class Snowpile(SpriteObject):
             self.game.object_handler.del_queue.append(self)
 
 class CandyCane(SpriteObject):
-    def __init__(self, game, path=path +'static_sprites/candy_cane.png',
+    def __init__(self, game, path='resources/sprites/static_sprites/candy_cane.png',
                  pos=(1, 1), scale=0.6, shift=0.5):
         super().__init__(game, path, pos, scale, shift)
 
@@ -110,7 +108,7 @@ class CandyCane(SpriteObject):
             self.game.object_handler.del_queue.append(self)
 
 class Key(SpriteObject):
-    def __init__(self, game, path=path +'static_sprites/key.png',
+    def __init__(self, game, path='resources/sprites/static_sprites/key.png',
                  pos=(1, 1), scale=0.3, shift=0):
         super().__init__(game, path, pos, scale, shift)
         self.time_of_spawn = pg.time.get_ticks()
@@ -138,7 +136,7 @@ class Key(SpriteObject):
         self.SPRITE_HEIGHT_SHIFT = math.cos(x * freq) * amp
 
 class AnimatedSprite(SpriteObject):
-    def __init__(self, game, path=path +'animated_sprites/power_cane/0.png',
+    def __init__(self, game, path='resources/sprites/animated_sprites/power_cane/0.png',
                  pos=(10.5, 3.5), scale=0.7, shift=0.27, animation_time=120):
         super().__init__(game, path, pos, scale, shift)
         self.animation_time = animation_time
@@ -175,7 +173,7 @@ class AnimatedSprite(SpriteObject):
             self.image = images[0]
 
 class PowerCane(AnimatedSprite):
-    def __init__(self, game, path=path +'animated_sprites/power_cane/0.png',
+    def __init__(self, game, path='resources/sprites/animated_sprites/power_cane/0.png',
                  pos=(0, 0), scale=0.6, shift=0.5, animation_time=120):
         super().__init__(game, path, pos, scale, shift, animation_time)
         
