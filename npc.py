@@ -257,6 +257,7 @@ class Boss(NPC):
         self.death_frame_counter = -1
         self.destination = None
         self.powerup = random.choice(['TRIPLE', 'GIANT', '2X DAMAGE', 'BOUNCE', 'LEECH', 'PITCHER', 'STUN', 'COMBO'])
+        self.time_of_last_step = 0
 
     def run_logic(self):
         if self.alive:
@@ -279,6 +280,18 @@ class Boss(NPC):
                 self.image = self.idle_image
         else:
             self.animate_death()
+
+    def check_collision(self, dx, dy):
+        if self.check_wall(int(self.x +dx * self.size), int(self.y)):
+            if self.check_npcs(self.x +dx, self.y):
+                self.x += dx
+                self.time_of_last_step = self.game.controller_manager.footstep(self.time_of_last_step)
+                self.game.object_handler.npc_positions[self] = self.pos
+                self.game.object_handler.npc_map_positions[self] = self.map_pos
+        if self.check_wall(int(self.x), int(self.y +dy * self.size)):
+            if self.check_npcs(self.x, self.y +dy):
+                self.y += dy
+                self.time_of_last_step = self.game.controller_manager.footstep(self.time_of_last_step)
 
     def attack(self):
         time_now = pg.time.get_ticks()

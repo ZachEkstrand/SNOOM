@@ -29,6 +29,13 @@ class ControllerManager:
         # X-button
         self.inputs[8] = self.controller.get_button(2)
 
+    def footstep(self, time_of_last_step):
+        time_now = pg.time.get_ticks()
+        if time_now -time_of_last_step > 600:
+            self.rumble(1, 0, 100)
+            time_of_last_step = time_now
+        return time_of_last_step
+
     def rumble(self, low, high, duration):
         self.controller.rumble(low, high, duration)
 
