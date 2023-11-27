@@ -81,7 +81,7 @@ class Projectile(SpriteObject):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
             if self.target == 'enemy':
                 self.player.hit_streak = 0
-            if self.powerup == 'BOUNCE' and self.bounces < 3:
+            if self.powerup == 'BOUNCE' and self.bounces < 4:
                 if self.check_wall_angle() == 'horizontal':
                     self.angle = 2 * math.pi -self.angle
                 elif self.check_wall_angle() == 'vertical':

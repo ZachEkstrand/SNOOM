@@ -41,6 +41,9 @@ class NPC(AnimatedSprite): #elf cadet
     def run_logic(self):
         if self.alive:
             self.ray_cast_value = self.ray_cast_player_npc()
+            if self.game.scene_manager.round_stopwatch != None:
+                if self.game.scene_manager.round_stopwatch.elapsed_time >= 60000:
+                    self.destination = self.player.map_pos
             if self.pain:
                 self.animate_pain()
             elif self.ray_cast_value:
@@ -233,7 +236,7 @@ class Boss(NPC):
         self.pain_images = self.get_images('resources/sprites/npc/elf/pain')
         self.walk_images = self.get_images('resources/sprites/npc/elf/walk')
 
-        self.attack_dist = 8
+        self.attack_dist = 32
         self.point_give = 30
         self.speed = 0.06
         self.size = 5 #tbd
@@ -258,6 +261,9 @@ class Boss(NPC):
     def run_logic(self):
         if self.alive:
             self.ray_cast_value = self.ray_cast_player_npc()
+            if self.game.scene_manager.round_stopwatch != None:
+                if self.game.scene_manager.round_stopwatch.elapsed_time >= 60000:
+                    self.destination = self.player.map_pos
             if self.pain:
                 self.animate_pain()
             elif self.ray_cast_value:
