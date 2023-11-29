@@ -11,17 +11,21 @@ class Projectile(SpriteObject):
         self.alive = True
         self.speed = 0.005
         self.powerup = powerup
-        if self.powerup == 'PITCHER':
-            self.speed *= 2
         self.entity = entity
         self.angle = angle
         self.damage = damage
-        if self.powerup == '2X DAMAGE':
-            self.damage *= 2
+        self.bounces = 0
+        self.bonus = 0
         self.target = 'enemy'
         if isinstance(self.entity, NPC) or isinstance(self.entity, Boss):
             self.target = 'player'
-        self.bounces = 0
+        if self.powerup == 'PITCHER':
+            self.speed *= 2
+        if self.powerup == '2X DAMAGE':
+            self.damage *= 2
+        if self.powerup == 'GIANT':
+            self.SPRITE_SCALE = 0.5
+            self.bonus = 0.1
         self.ignore = []
         self.time_of_spawn = pg.time.get_ticks()
 
@@ -61,21 +65,11 @@ class Projectile(SpriteObject):
 
     def run_logic(self):
         if self.alive:
-            self.check_powerup()
             for i in range(10):
                 self.movement()
                 if self.check_wall_collision() or self.check_target_collision():
                     self.die()
                     break
-
-    def check_powerup(self):
-        if self.powerup == 'GIANT':
-            self.SPRITE_SCALE = 0.5
-            self.bonus = 0.1
-        else:
-            self.SPRITE_SCALE = 0.15
-            self.bonus = 0
-
 
     def check_wall_collision(self):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:

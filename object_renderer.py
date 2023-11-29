@@ -107,15 +107,11 @@ class ObjectRenderer:
         self.draw_background()
         self.render_game_objects()
         self.draw_HUD()
+        self.del_headers()
 
-        del_indexes = []
-        for i, header in enumerate(self.header_list):
-            if header in self.del_queue:
-                del_indexes.append(i)
-        if del_indexes:
-            del_indexes.sort(reverse=True)
-        for i in del_indexes:
-            del self.header_list[i]
+    def del_headers(self):
+        for header in self.del_queue:
+            self.header_list.remove(header)
 
     def draw_background(self):
         pg.draw.rect(self.screen, FLOOR_COLOR, (0, 0, WIDTH, HEIGHT))

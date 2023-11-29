@@ -29,6 +29,7 @@ class NPC(AnimatedSprite): #elf cadet
         self.pain_frame_counter = -1
         self.death_frame_counter = -1
         self.destination = None
+        self.game
 
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass 
@@ -181,7 +182,7 @@ class NPC(AnimatedSprite): #elf cadet
         next_x, next_y = next_pos
         
         angle = math.atan2(next_y +0.5 -self.y, next_x +0.5 -self.x)
-        speed = self.speed# * self.game.delta_time
+        speed = self.speed
         dx = math.cos(angle) * speed
         dy = math.sin(angle) * speed
         self.check_collision(dx, dy)
@@ -239,8 +240,8 @@ class Boss(NPC):
         self.attack_dist = 32
         self.point_give = 30
         self.speed = 0.06
-        self.size = 5 #tbd
-        self.hitbox = 15 / 60 #tbd
+        self.size = 5
+        self.hitbox = 15 / 60
         self.health = 10
         self.max_health = self.health
         self.attack_damage = 5

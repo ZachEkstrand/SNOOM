@@ -27,4 +27,3 @@ class SignalManager:
                 method()
         else:
             pass
-            #print(self.Permissions[method.__qualname__])

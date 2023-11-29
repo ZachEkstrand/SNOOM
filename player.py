@@ -18,7 +18,6 @@ class Player:
         self.damage = PLAYER_DAMAGE
         self.candy_canes = 0
         self.key = False
-        self.rot_speed = 0
         self.shooting = False
         self.powerup = None
         self.hit_streak = 0
@@ -70,7 +69,6 @@ class Player:
         cos_a = math.cos(self.angle)
         dx, dy = 0, 0
         speed = PLAYER_SPEED * self.game.delta_time
-        self.rot_speed = 0
         speed_sin = speed * sin_a
         speed_cos = speed * cos_a
 

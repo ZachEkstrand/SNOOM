@@ -20,19 +20,11 @@ class Powerup_handler:
         ]
         self.player_powerup = None
 
-    def update(self):
-        self.check_powerup(self.player_powerup)
-
-    def check_powerup(self, powerup, just_aquired=False):
-        if powerup == 'ARMOR':
-            self.player.max_health = PLAYER_HEALTH * 2
-            if just_aquired:
-                self.player.health = PLAYER_HEALTH * 2
-        else:
-            self.max_health = PLAYER_HEALTH
-
     def pick_powerup(self):
         self.player_powerup = random.choice(self.powerups)
+        if self.player_powerup == 'ARMOR':
+            self.player.max_health = PLAYER_HEALTH * 2
+            self.player.health = PLAYER_HEALTH * 2
         self.game.player.powerup = self.player_powerup
         self.check_powerup(self.player_powerup, just_aquired=True)
         self.game.object_renderer.create_header(self.player_powerup, 255, animation_type='slide')

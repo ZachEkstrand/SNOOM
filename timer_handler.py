@@ -1,5 +1,3 @@
-import pygame as pg
-
 class Stopwatch:
     def __init__(self, time_now):
         self.time_of_start = time_now

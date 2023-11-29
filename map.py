@@ -17,7 +17,6 @@ class Map:
         self.cut_out_shapes()
         self.create_player_spawnpoint()
         self.create_exit_door()
-        #self.print_map()
 
     def create_blank_map(self):
         wall_weight = 30

@@ -133,14 +133,11 @@ class ObjectHandler:
         self.weapon.update()
         [sprite.update() for sprite in self.sprite_list]
 
-        del_indexes = []
-        for i, sprite in enumerate(self.sprite_list):
-            if sprite in self.del_queue:
-                del_indexes.append(i)
-        if del_indexes:
-            del_indexes.sort(reverse=True)
-        for i in del_indexes:
-            del self.sprite_list[i]
+        self.del_dead_objects()
+        
+    def del_dead_objects(self):
+        for sprite in self.del_queue:
+            self.sprite_list.remove(sprite)
     
     def check_ammo(self):
         snowpile_count = len([sprite for sprite in self.sprite_list if isinstance(sprite, Snowpile)])
