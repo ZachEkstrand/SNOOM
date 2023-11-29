@@ -29,7 +29,6 @@ class NPC(AnimatedSprite): #elf cadet
         self.pain_frame_counter = -1
         self.death_frame_counter = -1
         self.destination = None
-        self.game
 
     def update(self):
         if self.game.scene_manager.current_scene == 'pause_menu': pass 

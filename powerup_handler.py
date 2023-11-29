@@ -26,6 +26,5 @@ class Powerup_handler:
             self.player.max_health = PLAYER_HEALTH * 2
             self.player.health = PLAYER_HEALTH * 2
         self.game.player.powerup = self.player_powerup
-        self.check_powerup(self.player_powerup, just_aquired=True)
         self.game.object_renderer.create_header(self.player_powerup, 255, animation_type='slide')
         

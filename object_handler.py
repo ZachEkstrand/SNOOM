@@ -138,6 +138,7 @@ class ObjectHandler:
     def del_dead_objects(self):
         for sprite in self.del_queue:
             self.sprite_list.remove(sprite)
+        self.del_queue = []
     
     def check_ammo(self):
         snowpile_count = len([sprite for sprite in self.sprite_list if isinstance(sprite, Snowpile)])

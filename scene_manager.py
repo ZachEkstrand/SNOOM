@@ -1,3 +1,4 @@
+import pygame as pg
 import random
 from timer_handler import *
 

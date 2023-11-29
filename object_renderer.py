@@ -112,6 +112,7 @@ class ObjectRenderer:
     def del_headers(self):
         for header in self.del_queue:
             self.header_list.remove(header)
+        self.del_queue = []
 
     def draw_background(self):
         pg.draw.rect(self.screen, FLOOR_COLOR, (0, 0, WIDTH, HEIGHT))
