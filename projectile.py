@@ -64,12 +64,11 @@ class Projectile(SpriteObject):
         return colored_surface
 
     def run_logic(self):
-        if self.alive:
-            for i in range(10):
-                self.movement()
-                if self.check_wall_collision() or self.check_target_collision():
-                    self.die()
-                    break
+        for i in range(10):
+            self.movement()
+            if self.check_wall_collision() or self.check_target_collision():
+                self.die()
+                break
 
     def check_wall_collision(self):
         if (int(self.x), int(self.y)) in self.game.map.map_diction:
@@ -109,12 +108,11 @@ class Projectile(SpriteObject):
         if self.dist < 10:
             self.game.sound_manager.play(13)
         self.alive = False
-        self.game.object_handler.del_queue.append(self)
 
     def check_target_collision(self):
         if self.target == 'enemy':
-            for enemy in self.game.object_handler.npc_positions:
-                enemy_x, enemy_y = self.game.object_handler.npc_positions[enemy]
+            for enemy in self.game.object_handler.npc_list.keys():
+                enemy_x, enemy_y = self.game.object_handler.npc_list[enemy]
                 dx = self.x -enemy_x
                 dy = self.y -enemy_y
                 dist_from_enemy = math.hypot(dx, dy)

@@ -199,8 +199,8 @@ class ObjectRenderer:
         if self.player.powerup == 'SIGHT':
             [pg.draw.circle(mini_map, 'red', (enemy.x * scale, enemy.y * scale), 2) for enemy in self.game.object_handler.npc_list if enemy.alive]
             [pg.draw.circle(mini_map, 'white', (sprite.x * scale, sprite.y * scale), 2) for sprite in self.game.object_handler.sprite_list if isinstance(sprite, Snowpile)]
-        if self.game.object_handler.key_pos and self.player.key == False:
-            pg.draw.circle(mini_map, 'yellow', (self.game.object_handler.key_pos[0] * scale, self.game.object_handler.key_pos[1] * scale), 1)
+        if self.game.object_handler.key and self.player.key == False:
+            pg.draw.circle(mini_map, 'yellow', (self.game.object_handler.key[0].pos[0] * scale, self.game.object_handler.key[0].pos[1] * scale), 1)
         pg.draw.line(mini_map, 'orange', (scale * player_line[0], scale * player_line[1]), (scale * player_line[0] + scale * player_line[2] * player_line[3], scale * player_line[1] + scale * player_line[2] * player_line[4]), 1)
         self.screen.blit(mini_map, (10, 300))
 

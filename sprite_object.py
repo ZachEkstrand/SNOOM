@@ -7,6 +7,7 @@ class SpriteObject:
     def __init__(self, game, path='resources/sprites/static_sprites/candy_cane.png',
                  pos=(10.5, 3.5), scale=0.6, shift=0.5):
         self.game = game
+        self.alive = True
         self.x, self.y = pos
         self.player = game.player
         self.image = pg.image.load(path).convert_alpha()
@@ -58,6 +59,10 @@ class SpriteObject:
     @property
     def pos(self):
         return (self.x, self.y)
+    
+    @property
+    def map_pos(self):
+        return (int(self.x), int(self.y))
 
 class Tree(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/tree.png',
@@ -88,10 +93,10 @@ class Snowpile(SpriteObject):
 
     def check_collision_on_player(self):
         if self.dist < 0.5:
+            self.alive = False
             self.game.sound_manager.play(12)
             self.game.player.ammo += 3
             self.game.controller_manager.rumble(1, 1, 1)
-            self.game.object_handler.del_queue.append(self)
 
 class CandyCane(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/candy_cane.png',
@@ -104,10 +109,10 @@ class CandyCane(SpriteObject):
 
     def check_collision_on_player(self):
         if self.dist < 0.5:
+            self.alive = False
             self.game.sound_manager.play(18)
             self.game.player.candy_canes += 1
             self.game.controller_manager.rumble(1, 1, 1)
-            self.game.object_handler.del_queue.append(self)
 
 class Key(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/key.png',
@@ -126,10 +131,10 @@ class Key(SpriteObject):
 
     def check_collision_on_player(self):
         if self.dist < 0.5:
+            self.alive = False
             self.game.sound_manager.play(15)
             self.game.player.key = True
             self.game.controller_manager.rumble(1, 1, 1)
-            self.game.object_handler.del_queue.append(self)
 
     def move(self):
         freq = 2
@@ -186,8 +191,8 @@ class PowerCane(AnimatedSprite):
 
     def check_collision_on_player(self):
         if self.dist < 0.5:
+            self.alive = False
             self.game.sound_manager.play(18)
             self.player.score += 50
             self.game.controller_manager.rumble(1, 1, 1)
             self.game.powerup_handler.pick_powerup()
-            self.game.object_handler.del_queue.append(self)

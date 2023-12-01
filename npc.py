@@ -23,7 +23,6 @@ class NPC(AnimatedSprite): #elf cadet
         self.last_pain_frame = pg.time.get_ticks()
         self.death_frame_time = 40
         self.last_death_frame = pg.time.get_ticks()
-        self.alive = True
         self.pain = False
         self.ray_cast_value = False
         self.pain_frame_counter = -1
@@ -39,26 +38,23 @@ class NPC(AnimatedSprite): #elf cadet
         self.get_sprite()
 
     def run_logic(self):
-        if self.alive:
-            self.ray_cast_value = self.ray_cast_player_npc()
-            if self.game.scene_manager.round_stopwatch != None:
-                if self.game.scene_manager.round_stopwatch.elapsed_time >= 60000:
-                    self.destination = self.player.map_pos
-            if self.pain:
-                self.animate_pain()
-            elif self.ray_cast_value:
-                if self.dist < self.attack_dist:
-                    self.attack()
-                else:
-                    self.animate(self.walk_images)
-                    self.movement()
-            elif self.destination:
+        self.ray_cast_value = self.ray_cast_player_npc()
+        if self.game.scene_manager.round_stopwatch != None:
+            if self.game.scene_manager.round_stopwatch.elapsed_time >= 60000:
+                self.destination = self.player.map_pos
+        if self.pain:
+            self.animate_pain()
+        elif self.ray_cast_value:
+            if self.dist <= self.attack_dist:
+                self.attack()
+            else:
                 self.animate(self.walk_images)
                 self.movement()
-            else:
-                self.image = self.idle_image
+        elif self.destination:
+            self.animate(self.walk_images)
+            self.movement()
         else:
-            self.animate_death()
+            self.image = self.idle_image
 
     def ray_cast_player_npc(self):
         if self.game.player.map_pos == self.map_pos:
@@ -124,14 +120,6 @@ class NPC(AnimatedSprite): #elf cadet
             self.destination = self.player.map_pos
             return True
         return False
-    
-    @property
-    def pos(self):
-        return self.x, self.y
-
-    @property
-    def map_pos(self):
-        return int(self.x), int(self.y)
 
     def take_damage(self, damage, powerup):
         self.pain = True
@@ -147,7 +135,7 @@ class NPC(AnimatedSprite): #elf cadet
             self.alive = False
             self.player.kill_streak += 1
             self.game.player.score += self.point_give +self.player.kill_streak * self.player.room_num +self.player.hit_streak * self.player.room_num
-            if len([npc for npc in self.game.object_handler.npc_list if npc.alive]) == 0:
+            if len([npc for npc in self.game.object_handler.npc_list.keys() if npc.alive]) == 0:
                 self.game.object_handler.spawn_key(self.pos)
         else:
             self.game.sound_manager.play(random.randint(8, 10))
@@ -192,20 +180,18 @@ class NPC(AnimatedSprite): #elf cadet
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):
             if self.check_npcs(self.x +dx, self.y):
                 self.x += dx
-                self.game.object_handler.npc_positions[self] = self.pos
-                self.game.object_handler.npc_map_positions[self] = self.map_pos
+                self.game.object_handler.npc_list[self] = self.pos
         if self.check_wall(int(self.x), int(self.y +dy * self.size)):
             if self.check_npcs(self.x, self.y +dy):
                 self.y += dy
 
-        self.game.object_handler.npc_positions[self] = self.pos
-        self.game.object_handler.npc_map_positions[self] = self.map_pos
+        self.game.object_handler.npc_list[self] = self.pos
 
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.map_diction
     
     def check_npcs(self, x, y):
-        for enemy in self.game.object_handler.npc_positions:
+        for enemy in self.game.object_handler.npc_list.keys():
             if enemy == self:
                 continue
             dx = x -enemy.x
@@ -239,59 +225,43 @@ class Boss(NPC):
         self.attack_dist = 32
         self.point_give = 30
         self.speed = 0.06
-        self.size = 5
         self.hitbox = 15 / 60
         self.health = 10
         self.max_health = self.health
-        self.attack_damage = 5
-        self.last_attack_time = 0
         self.attack_delay = 1500
-        self.pain_frame_time = 80
-        self.last_pain_frame = pg.time.get_ticks()
-        self.death_frame_time = 40
-        self.last_death_frame = pg.time.get_ticks()
-        self.alive = True
-        self.pain = False
-        self.ray_cast_value = False
-        self.pain_frame_counter = -1
-        self.death_frame_counter = -1
-        self.destination = None
         self.powerup = random.choice(['TRIPLE', 'GIANT', '2X DAMAGE', 'BOUNCE', 'LEECH', 'PITCHER', 'STUN', 'COMBO'])
         self.time_of_last_step = 0
 
     def run_logic(self):
-        if self.alive:
-            self.ray_cast_value = self.ray_cast_player_npc()
-            if self.game.scene_manager.round_stopwatch != None:
-                if self.game.scene_manager.round_stopwatch.elapsed_time >= 60000:
-                    self.destination = self.player.map_pos
-            if self.pain:
-                self.animate_pain()
-            elif self.ray_cast_value:
-                if self.dist < self.attack_dist:
-                    self.attack()
-                if self.dist > 2:
-                    self.animate(self.walk_images)
-                    self.movement()
-            elif self.destination:
+        self.ray_cast_value = self.ray_cast_player_npc()
+        if self.game.scene_manager.round_stopwatch != None:
+            if self.game.scene_manager.round_stopwatch.elapsed_time >= 60000:
+                self.destination = self.player.map_pos
+        if self.pain:
+            self.animate_pain()
+        elif self.ray_cast_value:
+            if self.dist <= self.attack_dist:
+                self.attack()
+            if self.dist > 2:
                 self.animate(self.walk_images)
                 self.movement()
-            else:
-                self.image = self.idle_image
+        elif self.destination:
+            self.animate(self.walk_images)
+            self.movement()
         else:
-            self.animate_death()
+            self.image = self.idle_image
 
     def check_collision(self, dx, dy):
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):
             if self.check_npcs(self.x +dx, self.y):
                 self.x += dx
                 self.time_of_last_step = self.game.controller_manager.footstep(self.time_of_last_step)
-                self.game.object_handler.npc_positions[self] = self.pos
-                self.game.object_handler.npc_map_positions[self] = self.map_pos
+                self.game.object_handler.npc_list[self] = self.pos
         if self.check_wall(int(self.x), int(self.y +dy * self.size)):
             if self.check_npcs(self.x, self.y +dy):
                 self.y += dy
                 self.time_of_last_step = self.game.controller_manager.footstep(self.time_of_last_step)
+        self.game.object_handler.npc_list[self] = self.pos
 
     def attack(self):
         time_now = pg.time.get_ticks()

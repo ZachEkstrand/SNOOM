@@ -79,7 +79,7 @@ class Game:
         self.check_events()
         self.update()
         self.draw()
-        #self.draw_flat()
+        #self.draw_flat() # round timer doesn't start
 
     def check_events(self):
         for event in pg.event.get():
