@@ -46,7 +46,9 @@ class ObjectRenderer:
         self.done_button_image = self.get_texture(path +'done.png', (60 * 1.5, 19 * 1.5))
         self.selected_letter_highlight = self.get_texture(path +'select.png', (40 * self.general_font_size, 46 * self.general_font_size))
 
+        self.dead_npcs_slices = []
         self.del_queue = []
+        self.pop_queue = []
         self.new_round()
     
     @staticmethod
@@ -108,11 +110,19 @@ class ObjectRenderer:
         self.render_game_objects()
         self.draw_HUD()
         self.del_headers()
+        self.pop_slices()
+        self.draw_dead()
 
     def del_headers(self):
         for header in self.del_queue:
             self.header_list.remove(header)
         self.del_queue = []
+    
+    def pop_slices(self):
+        self.pop_queue.sort(reverse=True)
+        for slices in self.pop_queue:
+            self.dead_npcs_slices.pop(slices)
+        self.pop_queue = []
 
     def draw_background(self):
         pg.draw.rect(self.screen, FLOOR_COLOR, (0, 0, WIDTH, HEIGHT))
@@ -132,6 +142,7 @@ class ObjectRenderer:
         self.draw_candy_canes()
         self.draw_key()
         self.draw_mini_map()
+        self.animate_dead()
         [header.update() for header in self.header_list]
 
     def draw_health(self):
@@ -204,11 +215,35 @@ class ObjectRenderer:
         pg.draw.line(mini_map, 'orange', (scale * player_line[0], scale * player_line[1]), (scale * player_line[0] + scale * player_line[2] * player_line[3], scale * player_line[1] + scale * player_line[2] * player_line[4]), 1)
         self.screen.blit(mini_map, (10, 300))
 
+    def draw_dead(self):
+        for slices in self.dead_npcs_slices:
+            for slice in slices:
+                self.screen.blit(slice[0], slice[1])
+
+    def animate_dead(self):
+        speed = 100
+        for i, slices in enumerate(self.dead_npcs_slices):
+            exceeded_right = False
+            exceeded_left = False
+            for j, slice in enumerate(slices):
+                x, y = slice[1]
+                if j % 2:
+                    self.dead_npcs_slices[i][j][1] = (x +speed, y)
+                    if x +speed > WIDTH:
+                        exceeded_right = True
+                else:
+                    self.dead_npcs_slices[i][j][1] = (x -speed, y)
+                    if x -speed < 0:
+                        exceeded_left = True
+            if exceeded_right and exceeded_left:
+                self.pop_queue.append(i)
+
     def draw_pause_menu(self):
         blit = self.screen.blit
 
         self.draw_background()
         self.render_game_objects()
+        self.draw_dead()
         blit(self.background_shade, (0, 0))
         if self.scene_manager.selected_button == 0:
             blit(self.resume_shadow, (self.center_on_x(98 * self.button_font_size), 237))

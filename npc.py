@@ -21,12 +21,9 @@ class NPC(AnimatedSprite): #elf cadet
         self.attack_delay = 1000
         self.pain_frame_time = 80
         self.last_pain_frame = pg.time.get_ticks()
-        self.death_frame_time = 40
-        self.last_death_frame = pg.time.get_ticks()
         self.pain = False
         self.ray_cast_value = False
         self.pain_frame_counter = -1
-        self.death_frame_counter = -1
         self.destination = None
 
     def update(self):
@@ -133,12 +130,31 @@ class NPC(AnimatedSprite): #elf cadet
         if self.health < 1:
             self.game.sound_manager.play(11)
             self.alive = False
+            self.image = self.pain_images[0]
+            self.get_sprite()
+            slices = self.slice_image(self.screen_image)
+            self.game.object_renderer.dead_npcs_slices.append(slices)
             self.player.kill_streak += 1
             self.game.player.score += self.point_give +self.player.kill_streak * self.player.room_num +self.player.hit_streak * self.player.room_num
             if len([npc for npc in self.game.object_handler.npc_list.keys() if npc.alive]) == 0:
                 self.game.object_handler.spawn_key(self.pos)
         else:
             self.game.sound_manager.play(random.randint(8, 10))
+
+    def slice_image(self, full_image):
+        slices = []
+        num_slices = 30
+        for i in range(num_slices):
+            slice = []
+            slice_image = pg.Surface((full_image.get_width(), full_image.get_height() / num_slices))
+            slice_image.fill(0xFFFF00)
+            slice_image.set_colorkey(0xFFFF00)
+            slice_image.blit(full_image, (0, -(i * (full_image.get_height() / num_slices))))
+            x, y = self.screen_pos
+            slice.append(slice_image)
+            slice.append((x, y +(i * (full_image.get_height() / num_slices))))
+            slices.append(slice)
+        return slices
 
     def animate_pain(self):
         time_now = pg.time.get_ticks()
@@ -200,18 +216,6 @@ class NPC(AnimatedSprite): #elf cadet
             if dist <= 0.5:
                 return False
         return True
-
-    def animate_death(self):
-        time_now = pg.time.get_ticks()
-        if self.death_frame_counter == -1:
-            self.death_frame_counter += 1
-            self.last_death_frame = time_now
-        if time_now -self.last_death_frame > self.death_frame_time:
-            if self.death_frame_counter < 8: 
-                self.death_images.rotate(-1)
-                self.death_frame_counter += 1
-                self.last_death_frame = time_now
-        self.image = self.death_images[0]
 
 class Boss(NPC):
     def __init__(self, game, path='resources/sprites/npc/elf/walk/7.png', pos=(1, 1),

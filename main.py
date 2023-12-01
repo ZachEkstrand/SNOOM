@@ -41,15 +41,6 @@ class Game:
         self.leaderboard = Leaderboard(self)
 
     def reset_game(self):
-        del self.map
-        del self.signal_manager
-        del self.scene_manager
-        del self.player
-        del self.object_renderer
-        del self.powerup_handler
-        del self.ray_casting
-        del self.object_handler
-        del self.pathfinding
         self.map = Map(self)
         self.signal_manager = SignalManager(self)
         self.scene_manager = SceneManager(self)
@@ -62,10 +53,6 @@ class Game:
 
     def new_round(self):
         self.scene_manager.round_stopwatch = None
-        del self.map
-        del self.ray_casting
-        del self.powerup_handler
-        del self.pathfinding
         self.map = Map(self)
         self.player.new_round()
         self.ray_casting = RayCasting(self)
