@@ -5,7 +5,6 @@ from timer_handler import *
 
 class ObjectRenderer:
     def __init__(self, game):
-        path = 'resources/textures/'
         self.game = game
         self.screen = game.screen
         self.player = game.player
@@ -15,36 +14,35 @@ class ObjectRenderer:
         self.selected_button = 0
         self.title_image_scale = 3
         self.button_font_size = 3
-        self.background_image = self.get_texture(path +'background.png', RES)
-        self.title = self.get_texture(path +'title.png', (149 * self.title_image_scale, 72 * self.title_image_scale))
-        self.start_button_image = self.get_texture(path +'start_game.png', (130 * self.button_font_size, 19 * self.button_font_size))
-        self.start_button_shadow = self.get_texture(path +'start_game_shadow.png', (132 * self.button_font_size, 20 * self.button_font_size))
-        self.leaderboard_button_image = self.get_texture(path +'leaderboard.png', (155 * self.button_font_size, 19 * self.button_font_size))
-        self.leaderboard_button_shadow = self.get_texture(path +'leaderboard_shadow.png', (157 * self.button_font_size, 20 * self.button_font_size))
+        self.background_image = self.load('background.png')
+        self.title = self.load('title.png', scale=3)
+        self.start_button_image = self.load('start_game.png', scale=self.button_font_size)
+        self.start_button_shadow = self.load('start_game_shadow.png', scale=self.button_font_size)
+        self.leaderboard_button_image = self.load('leaderboard.png', scale=self.button_font_size)
+        self.leaderboard_button_shadow = self.load('leaderboard_shadow.png', scale=self.button_font_size)
         # arena
-        self.digit_size = 90
-        self.wall_textures = {i:self.get_texture(path +f'{i}.png') for i in range(1, 10)}
-        self.char_sprites_36x38 = [self.get_texture(f'{path}chars/doom-nightmare-{i}.png', (36 * 2.5, 38 * 2.5)) for i in range(41)]
-        self.crosshair_image = self.get_texture(path +'crosshair.png', (31, 31))
-        self.snowball_image = self.get_texture('resources/sprites/static_sprites/snowball.png', (64, 64))
-        self.candy_cane_image = self.get_texture('resources/sprites/static_sprites/candy_cane_item.png', (64 // 2, 143 // 2))
-        self.key_image = self.get_texture('resources/sprites/static_sprites/key.png', (59, 60))
-        self.game_over_image = self.get_texture(path +'game_over.png', (260 * self.title_image_scale, 73 * self.title_image_scale))
+        self.general_font_size = 2.5
+        self.wall_textures = {i:self.load(f'{i}.png', size_overide=(TEXTURE_SIZE, TEXTURE_SIZE)) for i in range(1, 10)}
+        self.char_sprites_36x38 = [self.load(f'chars/doom-nightmare-{i}.png', scale=self.general_font_size * 2) for i in range(41)]
+        self.crosshair_image = self.load('crosshair.png')
+        self.snowball_image = self.load('snowball.png', directory='resources/sprites/static_sprites/', size_overide=(64, 64))
+        self.candy_cane_image = self.load('candy_cane_item.png', directory='resources/sprites/static_sprites/', scale=0.5)
+        self.key_image = self.load('key.png', directory='resources/sprites/static_sprites/', scale=0.5)
+        self.game_over_image = self.load('game_over.png', size_overide=(780, 219))
         self.mini_map_player_angle = [0, 0, 0, 0, 0]
         # pause_menu
-        self.background_shade = self.get_texture(path +'background_shade.png', RES)
-        self.quit_image = self.get_texture(path +'quit.png', (55 * self.button_font_size, 19 * self.button_font_size))
-        self.quit_shadow = self.get_texture(path +'quit_shadow.png', (57 * self.button_font_size, 21 * self.button_font_size))
-        self.resume_image = self.get_texture(path +'resume.png', (96 * self.button_font_size, 19 * self.button_font_size))
-        self.resume_shadow = self.get_texture(path +'resume_shadow.png', (98 * self.button_font_size, 21 * self.button_font_size))
-        # leaderboard
-        self.general_font_size = 2.5
         self.header_font_size = 3.4
-        self.highscores_image = self.get_texture(path +'highscores.png', (152 * self.header_font_size, 19 * self.header_font_size))
-        self.char_sprites_18x19 = [self.get_texture(f'{path}chars/doom-nightmare-{i}.png', (18 * self.general_font_size, 19 * self.general_font_size)) for i in range(41)]
+        self.background_shade = self.load('background_shade.png')
+        self.quit_image = self.load('quit.png', scale=self.button_font_size)
+        self.quit_shadow = self.load('quit_shadow.png', scale=self.button_font_size)
+        self.resume_image = self.load('resume.png', scale=self.button_font_size)
+        self.resume_shadow = self.load('resume_shadow.png', scale=self.button_font_size)
+        # leaderboard
+        self.highscores_image = self.load('highscores.png', scale=3.4)
+        self.char_sprites_18x19 = [self.load(f'chars/doom-nightmare-{i}.png', scale=self.general_font_size) for i in range(41)]
         # username input
-        self.done_button_image = self.get_texture(path +'done.png', (60 * 1.5, 19 * 1.5))
-        self.selected_letter_highlight = self.get_texture(path +'select.png', (40 * self.general_font_size, 46 * self.general_font_size))
+        self.done_button_image = self.load('done.png', scale=1.5)
+        self.selected_letter_highlight = self.load('select.png', scale=self.general_font_size)
 
         self.dead_npcs_slices = []
         self.del_queue = []
@@ -52,9 +50,11 @@ class ObjectRenderer:
         self.new_round()
     
     @staticmethod
-    def get_texture(path, res=(TEXTURE_SIZE, TEXTURE_SIZE)):
-        texture = pg.image.load(path).convert_alpha()
-        return pg.transform.scale(texture, res)
+    def load(filename, directory='resources/textures/', scale=1, size_overide=False):
+        texture = pg.image.load(directory +filename).convert_alpha()
+        if size_overide:
+            return pg.transform.scale(texture, size_overide)
+        return pg.transform.scale_by(texture, scale)
     
     def new_round(self):
         self.header_list = []
