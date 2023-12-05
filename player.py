@@ -42,15 +42,24 @@ class Player:
         if self.health > self.max_health:
             self.health = self.max_health
         self.check_stun()
-        if self.game.controller_manager:
-            self.game.controller_manager.read_controller_inputs()
-            self.controller_inputs()
+        self.check_inputs()
         self.check_door()
 
     def check_stun(self):
         time_now = pg.time.get_ticks()
         if time_now -self.stun_time >= 1000:
             self.stunned = False
+
+    def check_inputs(self):
+        sin_a = math.sin(self.angle)
+        cos_a = math.cos(self.angle)
+        dx, dy = 0, 0
+        speed = PLAYER_SPEED * self.game.delta_time
+        speed_sin = speed * sin_a
+        speed_cos = speed * cos_a
+        if self.game.controller_manager:
+            self.game.controller_manager.read_controller_inputs()
+            self.controller_inputs(dx, dy, speed_sin, speed_cos)
 
     def check_door(self):
         if self.x > float(self.exit_x):
@@ -64,123 +73,89 @@ class Player:
             self.game.signal_manager.Permissions['joysticks'] = False
             self.game.new_round()
         
-    def controller_inputs(self):
-        self.controller_manager = self.game.controller_manager
-        sin_a = math.sin(self.angle)
-        cos_a = math.cos(self.angle)
-        dx, dy = 0, 0
-        speed = PLAYER_SPEED * self.game.delta_time
-        speed_sin = speed * sin_a
-        speed_cos = speed * cos_a
-
-        rv1 = 0.11
-        rv2 = 0.99
-        wv1 = 0.00000025
-        wv2 = 0.05
-
-        wv3 = 0.0000000025
-        wv4 = 0.03
-
-        self.joy_str_0 = 0
-        self.joy_str_1 = 0
-        self.joy_str_2 = 0
-
-        # joysticks
-        if self.game.signal_manager.Permissions['joysticks'] and self.stunned == False:
-            if self.controller_manager.inputs[1] < -rv1:
-                self.joy_str_1 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.controller_manager.inputs[1] +rv1) -wv1
-                dx += speed_cos * -self.joy_str_1
-                dy += speed_sin * -self.joy_str_1
-            if self.controller_manager.inputs[1] > rv1:
-                self.joy_str_1 = ((wv2 -wv1) / (rv2 -rv1)) * (self.controller_manager.inputs[1] -rv1) +wv1
-                dx += -speed_cos * self.joy_str_1
-                dy += -speed_sin * self.joy_str_1
-            if self.controller_manager.inputs[0] < -rv1:
-                self.joy_str_0 = (-(wv2 -wv1) / -(rv2 -rv1)) * (self.controller_manager.inputs[0] +rv1) -wv1
-                dx += speed_sin * -self.joy_str_0
-                dy += -speed_cos * -self.joy_str_0
-            if self.controller_manager.inputs[0] > rv1:
-                self.joy_str_0 = ((wv2 -wv1) / (rv2 -rv1)) * (self.controller_manager.inputs[0] -rv1) +wv1
-                dx += -speed_sin * self.joy_str_0
-                dy += speed_cos * self.joy_str_0
-
-            if self.controller_manager.inputs[2] > rv1:
-                self.joy_str_2 = ((wv4 -wv3) / (rv2 -rv1)) * (self.controller_manager.inputs[2] -rv1) +wv3
-                self.angle += self.joy_str_2 * LOOK_SENSITIVITY * self.game.delta_time
-
-            if self.controller_manager.inputs[2] < -rv1:
-                self.joy_str_2 = (-(wv4 -wv3) / -(rv2 -rv1)) * (self.controller_manager.inputs[2] +rv1) -wv3
-                self.angle += self.joy_str_2 * LOOK_SENSITIVITY * self.game.delta_time
-
+    def controller_inputs(self, dx, dy, speed_sin, speed_cos):
+        controller_manager = self.game.controller_manager
+        dx, dy = self.controller_movement(dx, dy, speed_sin, speed_cos)
         self.angle %= math.tau
 
-        # D-pad
-        if self.game.signal_manager.Permissions['D-pad']:
-            if self.game.signal_manager.Permissions['up_pad'] and self.controller_manager.inputs[4][1] == 1:
-                self.game.scene_manager.selected_button -= 1
-                self.game.signal_manager.Permissions['up_pad'] = False
-                self.sound_manager.play(2)
-            if self.controller_manager.inputs[4][1] != 1:
-                self.game.signal_manager.Permissions['up_pad'] = True
+        self.check_hat('up_pad', -1, 1, 1)
+        self.check_hat('down_pad', 1, 1, -1)
+        self.check_hat('right_pad', 1, 0, 1)
+        self.check_hat('left_pad', -1, 0, -1)
 
-            if self.game.signal_manager.Permissions['down_pad'] and self.controller_manager.inputs[4][1] == -1:
-                self.game.scene_manager.selected_button += 1
-                self.game.signal_manager.Permissions['down_pad'] = False
-                self.sound_manager.play(2)
-            if self.controller_manager.inputs[4][1] != -1:
-                self.game.signal_manager.Permissions['down_pad'] = True
-
-            if self.game.signal_manager.Permissions['right_pad'] and self.controller_manager.inputs[4][0] == 1:
-                self.game.scene_manager.column += 1
-                self.game.signal_manager.Permissions['right_pad'] = False
-                self.sound_manager.play(2)
-            if self.controller_manager.inputs[4][0] != 1:
-                self.game.signal_manager.Permissions['right_pad'] = True
-
-            if self.game.signal_manager.Permissions['left_pad'] and self.controller_manager.inputs[4][0] == -1:
-                self.game.scene_manager.column -= 1
-                self.game.signal_manager.Permissions['left_pad'] = False
-                self.sound_manager.play(2)
-            if self.controller_manager.inputs[4][0] != -1:
-                self.game.signal_manager.Permissions['left_pad'] = True
-
-        # buttons
-        if self.game.signal_manager.Permissions['main_buttons']:
-            if self.game.signal_manager.Permissions['A_button'] and self.controller_manager.inputs[5] == 1:
-                self.game.scene_manager.A_down = True
-                self.game.signal_manager.Permissions['A_button'] = False
-            if self.controller_manager.inputs[5] != 1:
-                self.game.scene_manager.A_down = False
-                self.game.signal_manager.Permissions['A_button'] = True
-
-            if self.game.signal_manager.Permissions['B_button'] and self.controller_manager.inputs[6] == 1:
-                self.game.scene_manager.B_down = True
-                self.game.signal_manager.Permissions['B_button'] = False
-            if self.controller_manager.inputs[6] != 1:
-                self.game.scene_manager.B_button = False
-                self.game.signal_manager.Permissions['B_button'] = True
-
-            if self.game.signal_manager.Permissions['X_button'] and self.controller_manager.inputs[8] == 1 and self.stunned == False:
-                self.game.scene_manager.X_down = True
-                self.game.signal_manager.Permissions['X_button'] = False
-            if self.controller_manager.inputs[8] != 1:
-                self.game.scene_manager.X_down = False
-                self.game.signal_manager.Permissions['X_button'] = True
+        self.check_button('A_button', 5)
+        self.check_button('B_button', 6)
+        self.check_button('X_button', 7)
+        self.check_button('menu_button', 8)
         
-            if self.game.signal_manager.Permissions['menu_button'] and self.controller_manager.inputs[7] == 1:
-                self.game.scene_manager.menu_button_down = True
-                self.game.signal_manager.Permissions['menu_button'] = False
-            if self.controller_manager.inputs[7] != 1:
-                self.game.scene_manager.menu_button_down = False
-                self.game.signal_manager.Permissions['menu_button'] = True
-        
-        # trigger
-        if round(self.controller_manager.inputs[3]) == 1 and self.stunned == False:
+        if round(controller_manager.inputs[3]) == 1 and self.stunned == False:
             self.emit_signal(self.attack)
-        if (round(self.controller_manager.inputs[3]) == -1) and (self.shooting == False) and (self.game.scene_manager.current_scene == 'arena'):
+        if (round(controller_manager.inputs[3]) == -1) and (self.shooting == False) and (self.game.scene_manager.current_scene == 'arena'):
             self.game.signal_manager.Permissions['Player.attack'] = True
 
         self.check_wall_collision(dx, dy)
+
+    def controller_movement(self, dx, dy, speed_sin, speed_cos):
+        controller_manager = self.game.controller_manager
+        if self.game.signal_manager.Permissions['joysticks'] and self.stunned == False:
+            left = self.get_joy_str(1, controller_manager.inputs[0])
+            right = self.get_joy_str(2, controller_manager.inputs[0])
+            forward = self.get_joy_str(1, controller_manager.inputs[1])
+            backward = self.get_joy_str(2, controller_manager.inputs[1])
+            if left:
+                dx += speed_sin * -left
+                dy += -speed_cos * -left
+            if right:
+                dx += -speed_sin * right
+                dy += speed_cos * right
+            if forward:
+                dx += speed_cos * -forward
+                dy += speed_sin * -forward
+            if backward:
+                dx += -speed_cos * backward
+                dy += -speed_sin * backward
+
+            look_left = self.get_joy_str(1, controller_manager.inputs[2], w1=0.0000000025, w2=0.03)
+            look_right = self.get_joy_str(2, controller_manager.inputs[2], w1=0.0000000025, w2=0.03)
+            if look_left:
+                self.angle += look_left * LOOK_SENSITIVITY * self.game.delta_time
+
+            if look_right:
+                self.angle += look_right * LOOK_SENSITIVITY * self.game.delta_time
+        return dx, dy
+
+    def get_joy_str(self, mode, vi, r1=0.11, r2=0.99, w1=0.00000025, w2=0.05):
+        if mode == 1:
+            if vi > -r1:
+                return False
+            return (-(w2 -w1) / -(r2 -r1)) * (vi +r1) -w1
+        if mode == 2:
+            if vi < r1:
+                return False
+            return ((w2 -w1) / (r2 -r1)) * (vi -r1) +w1
+
+    def check_hat(self, name, val, id, active):
+        if self.game.signal_manager.Permissions[name] and self.game.controller_manager.inputs[4][id] == active:
+            self.game.signal_manager.Permissions[name] = False
+            self.sound_manager.play(2)
+            if id == 1: self.game.scene_manager.selected_button += val
+            else: self.game.scene_manager.column += val
+        if self.game.controller_manager.inputs[4][id] != active and self.game.scene_manager.current_scene != 'arena':
+            self.game.signal_manager.Permissions[name] = True
+
+    def check_button(self, name, id):
+        if self.game.signal_manager.Permissions[name] and self.game.controller_manager.inputs[id] == 1:
+            self.game.signal_manager.Permissions[name] = False
+            if name == 'A_button':
+                self.game.scene_manager.A_down = True
+            if name == 'B_button':
+                self.game.scene_manager.B_down = True
+            if name == 'X_button' and self.stunned == False:
+                self.game.scene_manager.X_down = True
+            if name == 'menu_button':
+                self.game.scene_manager.menu_button_down = True
+        if self.game.controller_manager.inputs[id] != 1:
+            self.game.signal_manager.Permissions[name] = True
 
     def attack(self):
         if self.ammo > 0:
@@ -201,7 +176,7 @@ class Player:
     def take_damage(self, damage):
         self.game.sound_manager.play(random.randint(5, 7)) 
         self.health -= damage
-        self.controller_manager.rumble(0, 1, 100)
+        self.game.controller_manager.rumble(0, 1, 100)
         if self.powerup == 'CATCHER':
             self.ammo += 1
         self.check_game_over()

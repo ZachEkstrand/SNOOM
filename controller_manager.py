@@ -22,12 +22,12 @@ class ControllerManager:
         
         # B-button
         self.inputs[6] = self.controller.get_button(1)
-        
-        # menu-button
-        self.inputs[7] = self.controller.get_button(7)
 
         # X-button
-        self.inputs[8] = self.controller.get_button(2)
+        self.inputs[7] = self.controller.get_button(2)
+        
+        # menu-button
+        self.inputs[8] = self.controller.get_button(7)
 
     def footstep(self, time_of_last_step):
         time_now = pg.time.get_ticks()

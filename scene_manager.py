@@ -32,23 +32,19 @@ class SceneManager:
         if scene_name == 'title_screen':
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
-            self.game.signal_manager.Permissions['D-pad'] = True
             self.game.signal_manager.Permissions['up_pad'] = True
             self.game.signal_manager.Permissions['down_pad'] = True
             self.game.signal_manager.Permissions['right_pad'] = False
             self.game.signal_manager.Permissions['left_pad'] = False
-            self.game.signal_manager.Permissions['main_buttons'] = True
             if reset_game:
                 self.game.reset_game()
         if scene_name == 'leaderboard':
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
-            self.game.signal_manager.Permissions['D-pad'] = True
             self.game.signal_manager.Permissions['up_pad'] = True
             self.game.signal_manager.Permissions['down_pad'] = True
             self.game.signal_manager.Permissions['right_pad'] = False
             self.game.signal_manager.Permissions['left_pad'] = False
-            self.game.signal_manager.Permissions['main_buttons'] = True
             if reset_game:
                 self.game.reset_game()
         if scene_name == 'arena':
@@ -61,18 +57,18 @@ class SceneManager:
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['Player.take_damage'] = True
             self.game.signal_manager.Permissions['joysticks'] = True
-            self.game.signal_manager.Permissions['D-pad'] = False
             self.game.signal_manager.Permissions['up_pad'] = False
             self.game.signal_manager.Permissions['down_pad'] = False
-            self.game.signal_manager.Permissions['main_buttons'] = True
+            self.game.signal_manager.Permissions['right_pad'] = False
+            self.game.signal_manager.Permissions['left_pad'] = False
         if scene_name == 'pause_menu':
             self.sound_manager.pause()
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
-            self.game.signal_manager.Permissions['D-pad'] = True
             self.game.signal_manager.Permissions['up_pad'] = True
             self.game.signal_manager.Permissions['down_pad'] = True
-            self.game.signal_manager.Permissions['main_buttons'] = True
+            self.game.signal_manager.Permissions['right_pad'] = False
+            self.game.signal_manager.Permissions['left_pad'] = False
         if scene_name == 'game_over':
             self.sound_manager.set_sfx_volume(0.25)
             self.sound_manager.queue(6)
@@ -80,21 +76,19 @@ class SceneManager:
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['Player.take_damage'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
-            self.game.signal_manager.Permissions['D-pad'] = False
             self.game.signal_manager.Permissions['up_pad'] = False
             self.game.signal_manager.Permissions['down_pad'] = False
-            self.game.signal_manager.Permissions['main_buttons'] = True
+            self.game.signal_manager.Permissions['right_pad'] = False
+            self.game.signal_manager.Permissions['left_pad'] = False
         if scene_name == 'keyboard':
             self.sound_manager.queue(5)
             self.sound_manager.fade_music()
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
-            self.game.signal_manager.Permissions['D-pad'] = True
             self.game.signal_manager.Permissions['up_pad'] = True
             self.game.signal_manager.Permissions['down_pad'] = True
             self.game.signal_manager.Permissions['right_pad'] = True
             self.game.signal_manager.Permissions['left_pad'] = True
-            self.game.signal_manager.Permissions['main_buttons'] = True
 
     def update_scene(self):
         if self.current_scene == 'title_screen':
