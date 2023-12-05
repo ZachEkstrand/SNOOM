@@ -28,7 +28,7 @@ class Game:
 
     def new_game(self):
         self.map = Map(self)
-        self.controller_manager = ControllerManager(self)
+        self.controller_manager = False
         self.sound_manager = SoundManager(self)
         self.signal_manager = SignalManager(self)
         self.scene_manager = SceneManager(self)
@@ -73,6 +73,8 @@ class Game:
             if event.type == pg.QUIT or self.scene_manager.quit or(event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 pg.quit()
                 sys.exit()
+            elif event.type == pg.JOYDEVICEADDED:
+                self.controller_manager = ControllerManager(self)
 
     def update(self):
         self.player.update()

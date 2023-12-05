@@ -8,7 +8,6 @@ class Player:
         self.game = game
         self.emit_signal = game.signal_manager.emit_signal
         self.sound_manager = game.sound_manager
-        self.controller_manager = game.controller_manager
         self.x, self.y = game.map.player_pos
         self.angle = game.map.player_angle
         self.health = PLAYER_HEALTH
@@ -42,9 +41,10 @@ class Player:
     def update(self):
         if self.health > self.max_health:
             self.health = self.max_health
-        self.game.controller_manager.read_controller_inputs()
         self.check_stun()
-        self.controller_inputs()
+        if self.game.controller_manager:
+            self.game.controller_manager.read_controller_inputs()
+            self.controller_inputs()
         self.check_door()
 
     def check_stun(self):
@@ -65,6 +65,7 @@ class Player:
             self.game.new_round()
         
     def controller_inputs(self):
+        self.controller_manager = self.game.controller_manager
         sin_a = math.sin(self.angle)
         cos_a = math.cos(self.angle)
         dx, dy = 0, 0
