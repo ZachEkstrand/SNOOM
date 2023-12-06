@@ -22,6 +22,7 @@ class Game:
         flags = DOUBLEBUF #| FULLSCREEN | SCALED
         self.screen = pg.display.set_mode(RES, flags, 8)
         pg.mouse.set_visible(False)
+        pg.event.set_grab(True)
         self.clock = pg.time.Clock()
         self.delta_time = 1
         self.new_game()
@@ -70,10 +71,12 @@ class Game:
 
     def check_events(self):
         for event in pg.event.get():
-            if event.type == pg.QUIT or self.scene_manager.quit or(event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+            if event.type == pg.QUIT or self.scene_manager.quit:
                 pg.quit()
                 sys.exit()
-            elif event.type == pg.JOYDEVICEADDED:
+            if event.type == pg.JOYDEVICEREMOVED:
+                self.controller_manager = False
+            if event.type == pg.JOYDEVICEADDED:
                 self.controller_manager = ControllerManager(self)
 
     def update(self):

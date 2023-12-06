@@ -53,6 +53,10 @@ class SpriteObject:
         if -self.IMAGE_HALF_WIDTH < self.screen_x < (WIDTH +self.IMAGE_HALF_WIDTH) and self.norm_dist > 0.5:
             self.get_sprite_projection()
 
+    def rumble(self, low=1, high=1, duration=1):
+        if self.game.controller_manager:
+            self.game.controller_manager.rumble(low, high, duration)
+
     def update(self):
         self.get_sprite()
 
@@ -96,7 +100,7 @@ class Snowpile(SpriteObject):
             self.alive = False
             self.game.sound_manager.play(12)
             self.game.player.ammo += 3
-            self.game.controller_manager.rumble(1, 1, 1)
+            self.rumble(1, 1, 1)
 
 class CandyCane(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/candy_cane.png',
@@ -112,7 +116,7 @@ class CandyCane(SpriteObject):
             self.alive = False
             self.game.sound_manager.play(18)
             self.game.player.candy_canes += 1
-            self.game.controller_manager.rumble(1, 1, 1)
+            self.rumble(1, 1, 1)
 
 class Key(SpriteObject):
     def __init__(self, game, path='resources/sprites/static_sprites/key.png',
@@ -134,7 +138,7 @@ class Key(SpriteObject):
             self.alive = False
             self.game.sound_manager.play(15)
             self.game.player.key = True
-            self.game.controller_manager.rumble(1, 1, 1)
+            self.rumble(1, 1, 1)
 
     def move(self):
         freq = 2
@@ -194,5 +198,5 @@ class PowerCane(AnimatedSprite):
             self.alive = False
             self.game.sound_manager.play(18)
             self.player.score += 50
-            self.game.controller_manager.rumble(1, 1, 1)
+            self.rumble(1, 1, 1)
             self.game.powerup_handler.pick_powerup()
