@@ -10,3 +10,7 @@ The goal is pretty simple; kill elves and dont die.
 - download this repos zip file
 - extract files
 - run main.py in python
+
+## Credits
+- Title Screen background art - [Stephan Hövelbrinks](https://twitter.com/talecrafter)
+- Music - [Beej](https://www.youtube.com/watch?v=_QERbepXCsw&t=1168s) & [Seth Everman](https://youtu.be/WmWxsyIXcDs?si=2M3IWrXqwj9lh7Ip)

@@ -6,7 +6,6 @@ class NPC(AnimatedSprite): #elf cadet
                  scale=0.6, shift=0.38, animation_time=100):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.idle_image = pg.image.load('resources/sprites/npc/elf/walk/7.png').convert_alpha()
-        self.death_images = self.get_images('resources/sprites/npc/elf/death')
         self.pain_images = self.get_images('resources/sprites/npc/elf/pain')
         self.walk_images = self.get_images('resources/sprites/npc/elf/walk')
 
@@ -222,7 +221,6 @@ class Boss(NPC):
                  scale=1.2, shift=-0.1, animation_time=100):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.idle_image = pg.image.load('resources/sprites/npc/elf/walk/7.png').convert_alpha()
-        self.death_images = self.get_images('resources/sprites/npc/elf/death')
         self.pain_images = self.get_images('resources/sprites/npc/elf/pain')
         self.walk_images = self.get_images('resources/sprites/npc/elf/walk')
 
