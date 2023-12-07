@@ -13,4 +13,4 @@ The goal is pretty simple; kill elves and dont die.
 
 ## Credits
 - Title Screen background art - [Stephan Hövelbrinks](https://twitter.com/talecrafter)
-- Music - [Beej](https://www.youtube.com/watch?v=_QERbepXCsw&t=1168s) & [Seth Everman](https://youtu.be/WmWxsyIXcDs?si=2M3IWrXqwj9lh7Ip)
+- Music - [Beej](https://youtu.be/_QERbepXCsw?si=aV8TXRfu5N4w-M3j) & [Seth Everman](https://youtu.be/WmWxsyIXcDs?si=2M3IWrXqwj9lh7Ip)
