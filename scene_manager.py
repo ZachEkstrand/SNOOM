@@ -52,8 +52,8 @@ class SceneManager:
             self.sound_manager.set_sfx_volume(1)
             if unpause:
                 self.sound_manager.unpause()
-            if self.sound_manager.get_busy(1) == False or self.sound_manager.get_track() == self.sound_manager.tracks[6]:
-                self.sound_manager.play(random.randint(0, 4), sfx=False, fade_ms=500)
+            if self.sound_manager.get_busy(1) == False or self.sound_manager.get_track() == self.sound_manager.tracks[11]:
+                self.sound_manager.play(random.randint(0, 8), sfx=False, fade_ms=500)
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['Player.take_damage'] = True
             self.game.signal_manager.Permissions['joysticks'] = True
@@ -71,7 +71,7 @@ class SceneManager:
             self.game.signal_manager.Permissions['left_pad'] = False
         if scene_name == 'game_over':
             self.sound_manager.set_sfx_volume(0.25)
-            self.sound_manager.queue(6)
+            self.sound_manager.queue(11)
             self.sound_manager.fade_music()
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['Player.take_damage'] = False
@@ -81,7 +81,7 @@ class SceneManager:
             self.game.signal_manager.Permissions['right_pad'] = False
             self.game.signal_manager.Permissions['left_pad'] = False
         if scene_name == 'keyboard':
-            self.sound_manager.queue(5)
+            self.sound_manager.queue(10)
             self.sound_manager.fade_music()
             self.game.signal_manager.Permissions['Player.attack'] = False
             self.game.signal_manager.Permissions['joysticks'] = False
@@ -131,7 +131,10 @@ class SceneManager:
         if self.round_stopwatch:
             self.round_stopwatch.update(game.delta_time)
         if self.sound_manager.get_queue() == None:
-            self.sound_manager.queue(random.randint(0, 4))
+            if self.sound_manager.get_track() == self.sound_manager.tracks[9]:
+                self.sound_manager.queue(9)
+            else:
+                self.sound_manager.queue(random.randint(0, 8))
         if self.X_down:
             self.game.player.eat()
             self.X_down = False
@@ -162,7 +165,7 @@ class SceneManager:
         game.ray_casting.update()
         game.object_handler.update()
         if self.sound_manager.get_busy(1) == False:
-            self.sound_manager.play(6, sfx=False, loops=-1)
+            self.sound_manager.play(11, sfx=False, loops=-1)
         if self.A_down:
             if game.player.new_highscore:
                 self.change_scene('keyboard')
@@ -179,7 +182,7 @@ class SceneManager:
         if self.column < 0:
             self.column = 8
         if self.sound_manager.get_busy(1) == False:
-            self.sound_manager.play(5, sfx=False, loops=-1)
+            self.sound_manager.play(10, sfx=False, loops=-1)
         if self.A_down:
             self.sound_manager.play(3)
             self.A_down = False

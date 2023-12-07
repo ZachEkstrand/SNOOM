@@ -132,7 +132,8 @@ class Projectile(SpriteObject):
                 self.game.signal_manager.emit_signal(self.game.player.take_damage, args=self.damage)
                 if self.powerup == 'STUN':
                     self.player.stunned = True
-                    self.game.controller_manager.rumble(1, 0, 1000)
+                    if self.game.controller_manager:
+                        self.game.controller_manager.rumble(1, 0, 1000)
                     self.player.stun_time = pg.time.get_ticks()
                 if self.powerup == 'LEECH':
                     self.entity.health += 1

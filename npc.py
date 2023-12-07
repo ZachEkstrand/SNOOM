@@ -259,12 +259,14 @@ class Boss(NPC):
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):
             if self.check_npcs(self.x +dx, self.y):
                 self.x += dx
-                self.time_of_last_step = self.game.controller_manager.footstep(self.time_of_last_step)
+                if self.game.controller_manager:
+                    self.time_of_last_step = self.game.controller_manager.footstep(self.time_of_last_step)
                 self.game.object_handler.npc_list[self] = self.pos
         if self.check_wall(int(self.x), int(self.y +dy * self.size)):
             if self.check_npcs(self.x, self.y +dy):
                 self.y += dy
-                self.time_of_last_step = self.game.controller_manager.footstep(self.time_of_last_step)
+                if self.game.controller_manager:
+                    self.time_of_last_step = self.game.controller_manager.footstep(self.time_of_last_step)
         self.game.object_handler.npc_list[self] = self.pos
 
     def attack(self):

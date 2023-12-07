@@ -76,6 +76,8 @@ class ObjectHandler:
         
     def spawn_npc(self):
         if self.game.player.room_num % 5 == 0:
+            self.game.sound_manager.queue(9)
+            self.game.sound_manager.fade_music()
             num_bosses = self.game.player.room_num / 5
             for i in range(int(num_bosses)):
                 pos = random.choice(self.game.map.space_indexes)
@@ -90,6 +92,9 @@ class ObjectHandler:
                     boss_address.y = y +0.6
                     boss_address.get_sprite()
         else:
+            if self.game.sound_manager.get_track() == self.game.sound_manager.tracks[9]:
+                self.game.sound_manager.queue(random.randint(0, 8))
+                self.game.sound_manager.fade_music()
             for i in range(int(self.npc_num)):
                 npc = NPC
                 pos = random.choice(self.game.map.space_indexes)

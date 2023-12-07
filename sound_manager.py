@@ -16,8 +16,13 @@ class SoundManager:
             audio(path +'dawn_of_the_final_day.mp3'),           # 2
             audio(path +'deck_the_castle_walls.mp3'),           # 3
             audio(path +'the_legend_of_santa.mp3'),             # 4
-            audio(path +'the_end.mp3'),                         # 5
-            audio(path +'game_over.mp3')                        # 6
+            audio(path +'xmasmix.mp3'),                         # 5
+            audio(path +'december.mp3'),                        # 6
+            audio(path +'christmas_time.mp3'),                  # 7
+            audio(path +'christmas_hits.mp3'),                  # 8
+            audio(path +'carol_of_the_bells.mp3'),              # 9
+            audio(path +'the_end.mp3'),                         # 10
+            audio(path +'game_over.mp3')                        # 11
         ]
 
         self.sfx = [
