@@ -83,7 +83,7 @@ class Tree(SpriteObject):
         height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
         pos = self.screen_x -self.sprite_half_width, HALF_HEIGHT -proj_height // 2 +height_shift
 
-        if self.dist > 3:
+        if self.dist > 3 and self.dist < 15:
             self.game.ray_casting.objects_to_render.append((self.norm_dist, image, pos))
 
 class Snowpile(SpriteObject):

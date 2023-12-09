@@ -19,7 +19,7 @@ from powerup_handler import *
 class Game:
     def __init__(self):
         pg.init()
-        flags = DOUBLEBUF #| FULLSCREEN | SCALED
+        flags = DOUBLEBUF | FULLSCREEN | SCALED
         self.screen = pg.display.set_mode(RES, flags, 8)
         pg.mouse.set_visible(False)
         pg.event.set_grab(True)
