@@ -216,7 +216,6 @@ class Player:
 
     def check_wall_collision(self, dx, dy):
         dx, dy = self.normalize(dx, dy)
-        print(math.hypot(dx, dy))
         scale = PLAYER_SIZE_SCALE / self.game.delta_time
         if self.check_wall(int(self.x +dx * scale), int(self.y)):
             self.x += dx

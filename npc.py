@@ -192,6 +192,7 @@ class NPC(AnimatedSprite): #elf cadet
             self.destination = None
 
     def check_collision(self, dx, dy):
+        dx, dy = self.normalize(dx, dy)
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):
             if self.check_npcs(self.x +dx, self.y):
                 self.x += dx
@@ -215,6 +216,14 @@ class NPC(AnimatedSprite): #elf cadet
             if dist <= 0.5:
                 return False
         return True
+    
+    def normalize(self, dx, dy):
+        vec = math.hypot(dx, dy)
+        if vec > self.speed:
+            mag = self.speed / vec
+            dx *= mag
+            dy *= mag
+        return dx, dy
 
 class Boss(NPC):
     def __init__(self, game, path='resources/sprites/npc/elf/walk/7.png', pos=(1, 1),
@@ -254,6 +263,7 @@ class Boss(NPC):
             self.image = self.idle_image
 
     def check_collision(self, dx, dy):
+        dx, dy = self.normalize(dx, dy)
         if self.check_wall(int(self.x +dx * self.size), int(self.y)):
             if self.check_npcs(self.x +dx, self.y):
                 self.x += dx
