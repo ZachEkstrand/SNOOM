@@ -215,6 +215,8 @@ class Player:
             self.shooting = True
 
     def check_wall_collision(self, dx, dy):
+        dx, dy = self.normalize(dx, dy)
+        print(math.hypot(dx, dy))
         scale = PLAYER_SIZE_SCALE / self.game.delta_time
         if self.check_wall(int(self.x +dx * scale), int(self.y)):
             self.x += dx
@@ -223,6 +225,15 @@ class Player:
     
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.map_diction or ((x, y) == self.game.map.exit_pos and self.key)
+    
+    def normalize(self, dx, dy):
+        vec = math.hypot(dx, dy)
+        max_dist = PLAYER_SPEED * self.game.delta_time * 0.050568178977272726
+        if vec > max_dist:
+            mag = max_dist / vec
+            dx *= mag
+            dy *= mag
+        return dx, dy
     
     def take_damage(self, damage):
         self.game.sound_manager.play(random.randint(5, 7)) 
