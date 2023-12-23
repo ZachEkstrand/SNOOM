@@ -22,13 +22,13 @@ class ObjectRenderer:
         self.leaderboard_button_shadow = self.load('leaderboard_shadow.png', scale=self.button_font_size)
         # arena
         self.general_font_size = 2.5
-        self.wall_textures = {i:self.load(f'{i}.png', size_overide=(TEXTURE_SIZE, TEXTURE_SIZE)) for i in range(1, 10)}
+        self.wall_textures = {i:self.load(f'{i}.png', size_override=(TEXTURE_SIZE, TEXTURE_SIZE)) for i in range(1, 10)}
         self.char_sprites_36x38 = [self.load(f'chars/doom-nightmare-{i}.png', scale=self.general_font_size * 2) for i in range(41)]
         self.crosshair_image = self.load('crosshair.png')
-        self.snowball_image = self.load('snowball.png', directory='resources/sprites/static_sprites/', size_overide=(64, 64))
+        self.snowball_image = self.load('snowball.png', directory='resources/sprites/static_sprites/', size_override=(64, 64))
         self.candy_cane_image = self.load('candy_cane_item.png', directory='resources/sprites/static_sprites/', scale=0.5)
         self.key_image = self.load('key.png', directory='resources/sprites/static_sprites/', scale=0.5)
-        self.game_over_image = self.load('game_over.png', size_overide=(780, 219))
+        self.game_over_image = self.load('game_over.png', size_override=(780, 219))
         self.mini_map_player_angle = [0, 0, 0, 0, 0]
         # pause_menu
         self.header_font_size = 3.4
@@ -50,10 +50,10 @@ class ObjectRenderer:
         self.new_round()
     
     @staticmethod
-    def load(filename, directory='resources/textures/', scale=1, size_overide=False):
+    def load(filename, directory='resources/textures/', scale=1, size_override=False):
         texture = pg.image.load(directory +filename).convert_alpha()
-        if size_overide:
-            return pg.transform.scale(texture, size_overide)
+        if size_override:
+            return pg.transform.scale(texture, size_override)
         return pg.transform.scale_by(texture, scale)
     
     def new_round(self):

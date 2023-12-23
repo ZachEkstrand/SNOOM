@@ -1,7 +1,7 @@
 import pygame as pg
 
 class ControllerManager:
-    def __init__(self, game):
+    def __init__(self):
         self.joysticks = [pg.joystick.Joystick(i) for i in range(pg.joystick.get_count())]
         self.controller = self.joysticks[0]
         self.inputs = [0 for i in range(9)]

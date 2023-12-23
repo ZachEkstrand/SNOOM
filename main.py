@@ -77,7 +77,7 @@ class Game:
             if event.type == pg.JOYDEVICEREMOVED:
                 self.controller_manager = False
             if event.type == pg.JOYDEVICEADDED:
-                self.controller_manager = ControllerManager(self)
+                self.controller_manager = ControllerManager()
 
     def update(self):
         self.player.update()
